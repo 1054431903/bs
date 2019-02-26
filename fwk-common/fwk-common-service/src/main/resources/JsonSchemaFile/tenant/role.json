@@ -1,0 +1,40 @@
+{
+  "title": "角色",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "title": "ID"
+    },
+    "tenant": {
+      "type": "string",
+      "$id": "#sys.tenant",
+      "description": "所属租户"
+    },
+    "name": {
+      "type": "string",
+      "title": "名称"
+    },
+    "authorities": {
+      "type": "array",
+      "title": "权限",
+      "description": "权限",
+      "items": {
+        "type": "string",
+        "$id": "#sys.authority"
+      }
+    },
+    "status": {
+      "$ref": "common/definitions/status"
+    },
+    "remark": {
+      "title": "备注",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "status",
+    "authorities"
+  ]
+}

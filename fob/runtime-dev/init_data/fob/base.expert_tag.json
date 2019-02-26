@@ -1,0 +1,31 @@
+{ 
+    "_id" : ObjectId("5afa8bc930c49e00010bdb85"), 
+    "level" : NumberInt(1), 
+    "name" : "专家擅长领域", 
+    "createdOn" : NumberLong(1526369225025), 
+    "updatedOn" : NumberLong(1526369255025)
+}
+{ 
+    "_id" : ObjectId("5afa8bf230c49e00010bdb86"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5afa8bc930c49e00010bdb85"), 
+    "name" : "病虫害防治", 
+    "createdOn" : NumberLong(1526369266502), 
+    "updatedOn" : NumberLong(1526369266502)
+}
+{ 
+    "_id" : ObjectId("5afa8c0430c49e00010bdb87"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5afa8bc930c49e00010bdb85"), 
+    "name" : "土壤营养", 
+    "createdOn" : NumberLong(1526369284728), 
+    "updatedOn" : NumberLong(1526369284728)
+}
+{ 
+    "_id" : ObjectId("5afa8c1030c49e00010bdb88"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5afa8bc930c49e00010bdb85"), 
+    "name" : "有机栽培", 
+    "createdOn" : NumberLong(1526369296975), 
+    "updatedOn" : NumberLong(1526369296975)
+}

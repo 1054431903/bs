@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fwk.common.dao.TFpestMapper">
+  <resultMap id="BaseResultMap" type="com.fwk.common.entity.TFpest">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="creattime" jdbcType="TIMESTAMP" property="creattime" />
+    <result column="edittime" jdbcType="TIMESTAMP" property="edittime" />
+    <result column="delstate" jdbcType="INTEGER" property="delstate" />
+    <result column="producttypeid" jdbcType="INTEGER" property="producttypeid" />
+    <result column="describe" jdbcType="VARCHAR" property="describe" />
+    <result column="addresscode" jdbcType="VARCHAR" property="addresscode" />
+    <result column="addressdetail" jdbcType="VARCHAR" property="addressdetail" />
+    <result column="parcelid" jdbcType="INTEGER" property="parcelid" />
+    <result column="taketime" jdbcType="TIMESTAMP" property="taketime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fwk.common.entity.TFpest">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, creattime, edittime, delstate, producttypeid, describe, addresscode, addressdetail, 
+    parcelid, taketime
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.fwk.common.entity.TFpestExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_f_pest
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.fwk.common.entity.TFpestExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_f_pest
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_f_pest
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_f_pest
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fwk.common.entity.TFpestExample">
+    delete from t_f_pest
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fwk.common.entity.TFpest">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_f_pest (creattime, edittime, delstate, 
+      producttypeid, describe, addresscode, 
+      addressdetail, parcelid, taketime, 
+      content)
+    values (#{creattime,jdbcType=TIMESTAMP}, #{edittime,jdbcType=TIMESTAMP}, #{delstate,jdbcType=INTEGER}, 
+      #{producttypeid,jdbcType=INTEGER}, #{describe,jdbcType=VARCHAR}, #{addresscode,jdbcType=VARCHAR}, 
+      #{addressdetail,jdbcType=VARCHAR}, #{parcelid,jdbcType=INTEGER}, #{taketime,jdbcType=TIMESTAMP}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fwk.common.entity.TFpest">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_f_pest
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        creattime,
+      </if>
+      <if test="edittime != null">
+        edittime,
+      </if>
+      <if test="delstate != null">
+        delstate,
+      </if>
+      <if test="producttypeid != null">
+        producttypeid,
+      </if>
+      <if test="describe != null">
+        describe,
+      </if>
+      <if test="addresscode != null">
+        addresscode,
+      </if>
+      <if test="addressdetail != null">
+        addressdetail,
+      </if>
+      <if test="parcelid != null">
+        parcelid,
+      </if>
+      <if test="taketime != null">
+        taketime,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="producttypeid != null">
+        #{producttypeid,jdbcType=INTEGER},
+      </if>
+      <if test="describe != null">
+        #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="addresscode != null">
+        #{addresscode,jdbcType=VARCHAR},
+      </if>
+      <if test="addressdetail != null">
+        #{addressdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="parcelid != null">
+        #{parcelid,jdbcType=INTEGER},
+      </if>
+      <if test="taketime != null">
+        #{taketime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fwk.common.entity.TFpestExample" resultType="java.lang.Integer">
+    select count(*) from t_f_pest
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_f_pest
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.creattime != null">
+        creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.edittime != null">
+        edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delstate != null">
+        delstate = #{record.delstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.producttypeid != null">
+        producttypeid = #{record.producttypeid,jdbcType=INTEGER},
+      </if>
+      <if test="record.describe != null">
+        describe = #{record.describe,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addresscode != null">
+        addresscode = #{record.addresscode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addressdetail != null">
+        addressdetail = #{record.addressdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parcelid != null">
+        parcelid = #{record.parcelid,jdbcType=INTEGER},
+      </if>
+      <if test="record.taketime != null">
+        taketime = #{record.taketime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update t_f_pest
+    set id = #{record.id,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      producttypeid = #{record.producttypeid,jdbcType=INTEGER},
+      describe = #{record.describe,jdbcType=VARCHAR},
+      addresscode = #{record.addresscode,jdbcType=VARCHAR},
+      addressdetail = #{record.addressdetail,jdbcType=VARCHAR},
+      parcelid = #{record.parcelid,jdbcType=INTEGER},
+      taketime = #{record.taketime,jdbcType=TIMESTAMP},
+      content = #{record.content,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_f_pest
+    set id = #{record.id,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      producttypeid = #{record.producttypeid,jdbcType=INTEGER},
+      describe = #{record.describe,jdbcType=VARCHAR},
+      addresscode = #{record.addresscode,jdbcType=VARCHAR},
+      addressdetail = #{record.addressdetail,jdbcType=VARCHAR},
+      parcelid = #{record.parcelid,jdbcType=INTEGER},
+      taketime = #{record.taketime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fwk.common.entity.TFpest">
+    update t_f_pest
+    <set>
+      <if test="creattime != null">
+        creattime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="edittime != null">
+        edittime = #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        delstate = #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="producttypeid != null">
+        producttypeid = #{producttypeid,jdbcType=INTEGER},
+      </if>
+      <if test="describe != null">
+        describe = #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="addresscode != null">
+        addresscode = #{addresscode,jdbcType=VARCHAR},
+      </if>
+      <if test="addressdetail != null">
+        addressdetail = #{addressdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="parcelid != null">
+        parcelid = #{parcelid,jdbcType=INTEGER},
+      </if>
+      <if test="taketime != null">
+        taketime = #{taketime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.fwk.common.entity.TFpest">
+    update t_f_pest
+    set creattime = #{creattime,jdbcType=TIMESTAMP},
+      edittime = #{edittime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      producttypeid = #{producttypeid,jdbcType=INTEGER},
+      describe = #{describe,jdbcType=VARCHAR},
+      addresscode = #{addresscode,jdbcType=VARCHAR},
+      addressdetail = #{addressdetail,jdbcType=VARCHAR},
+      parcelid = #{parcelid,jdbcType=INTEGER},
+      taketime = #{taketime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fwk.common.entity.TFpest">
+    update t_f_pest
+    set creattime = #{creattime,jdbcType=TIMESTAMP},
+      edittime = #{edittime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      producttypeid = #{producttypeid,jdbcType=INTEGER},
+      describe = #{describe,jdbcType=VARCHAR},
+      addresscode = #{addresscode,jdbcType=VARCHAR},
+      addressdetail = #{addressdetail,jdbcType=VARCHAR},
+      parcelid = #{parcelid,jdbcType=INTEGER},
+      taketime = #{taketime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

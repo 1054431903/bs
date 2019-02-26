@@ -1,0 +1,38 @@
+<template lang="pug">
+div.pa-2
+  v-flex(xs12 sm12 md12 lg12)
+    v-card
+      v-container(fluid)
+        v-layout(row)
+          div(v-if="opflag === 0" class="tips") 合作协议信息添加完成，&nbsp;&nbsp;
+            v-btn(flat color="primary" class="btntips" :to="{name: 'viewagreement', query: {id: id}}") 点击查看
+          div(v-else class="tips") 合作协议信息修改完成，&nbsp;&nbsp;
+            v-btn(flat color="primary" class="btntips" :to="{name: 'viewagreement', query: {id: id}}") 点击查看
+</template>
+<script>
+export default {
+  data () {
+    return {
+      id: null,
+      opflag: 0
+    }
+  },
+  watch: {},
+  methods: {},
+  computed: {},
+  created () {
+    this.id = this.$route.query.id
+    this.opflag = this.$route.query.opflag
+  }
+}
+</script>
+<style scoped>
+.tips {
+  padding: 180px;
+  margin-left: auto; 
+  margin-right: auto;
+}
+.btntips {
+  left: -20px;
+}
+</style>

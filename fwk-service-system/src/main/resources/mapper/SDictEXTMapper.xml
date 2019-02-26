@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.system.dao.SDictDao">
+
+	<select id="queryTSdict" parameterType="map" resultType="com.fwk.service.system.entity.SDictEXT">
+		select * from t_s_dict d
+		where 1=1
+		<include refid="where_sql" />
+		<include refid="order_sql" />
+		<include refid="limit_sql" />
+	</select>
+	
+	<select id="queryTSdictCount" parameterType="map" resultType="int">
+		select count(*) from t_s_dict d
+		where 1=1
+		<include refid="where_sql" />
+	</select>
+	
+	<select id="queryTSdictNotExist" parameterType="map" resultType="int">
+		select count(*) from t_s_dict d
+		where 1=1
+		<include refid="where_no_sql" />
+	</select>
+
+	<insert id="saveTSdict" parameterType="map">
+		insert into t_s_dict (name, descript, parentcode,parentid,userid)
+	    values (#{name}, #{descript}, #{parentcode},#{parentid},#{userid}) 
+	</insert>
+	
+	
+	<update id="updateTSdict" parameterType="map">
+		update t_s_dict
+	    <set>
+	      <if test="delstate != null" >
+	        delstate = #{delstate},
+	      </if>
+	      <if test="name != null and name != ''" >
+	        name = #{name},
+	      </if>
+	        descript = #{descript},
+	      <if test="parentcode != null and parentcode != ''" >
+	        parentcode = #{parentcode},
+	      </if>
+	      <if test="parentid != null and parentid != ''" >
+	        parentid = #{parentid},
+	      </if>
+	    </set>
+	    where id = #{id}
+	</update>
+	
+	<sql id="where_sql">
+		<if test="name != null and name != ''">
+			<!-- and (name like CONCAT('%',#{name},'%') or descript like CONCAT('%',#{name},'%')) -->
+			and name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="descript != null and descript != ''">
+			and descript like CONCAT('%',#{descript},'%')
+		</if>
+		<if test="parentcode != null and parentcode != ''">
+			and parentcode = #{parentcode}
+		</if>
+		<if test="parentid != null and parentid != ''">
+			and parentid = #{parentid}
+		</if>
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<choose>
+			<when test="delstate != null">
+				and delstate = #{delstate}
+			</when>
+			<otherwise>
+				and delstate = 1
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<sql id="where_no_sql">
+		<if test="name != null and name != ''">
+			and name = #{name}
+		</if>
+		<if test="noid != null">
+			and id != #{noid}
+		</if>
+		<choose>
+			<when test="delstate != null">
+				and delstate = #{delstate}
+			</when>
+			<otherwise>
+				and delstate = 1
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<sql id="order_sql">
+		<choose>
+			<when test="order != null and order != ''">
+				order by #{order}
+				<choose>
+					<when test="desc != null and desc != ''">
+						#{desc}
+					</when>
+					<otherwise>
+						desc
+					</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				order by creattime desc
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<sql id="limit_sql">
+		<choose>
+			<when test="pageSize !=null and currentPage !=null">
+				limit ${(currentPage-1)*pageSize},${pageSize}
+			</when>
+			<otherwise>
+				limit 0,99999
+			</otherwise>
+		</choose>
+	</sql>
+	
+</mapper>

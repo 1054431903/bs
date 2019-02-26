@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fwk.common.dao.TPparcelMapper">
+  <resultMap id="BaseResultMap" type="com.fwk.common.entity.TPparcel">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="creattime" jdbcType="TIMESTAMP" property="creattime" />
+    <result column="delstate" jdbcType="INTEGER" property="delstate" />
+    <result column="parcelno" jdbcType="VARCHAR" property="parcelno" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="provincecode" jdbcType="VARCHAR" property="provincecode" />
+    <result column="citycode" jdbcType="VARCHAR" property="citycode" />
+    <result column="countycode" jdbcType="VARCHAR" property="countycode" />
+    <result column="towncode" jdbcType="VARCHAR" property="towncode" />
+    <result column="villagecode" jdbcType="VARCHAR" property="villagecode" />
+    <result column="addresscode" jdbcType="VARCHAR" property="addresscode" />
+    <result column="addressdetail" jdbcType="VARCHAR" property="addressdetail" />
+    <result column="elevation" jdbcType="DOUBLE" property="elevation" />
+    <result column="dependenceid" jdbcType="VARCHAR" property="dependenceid" />
+    <result column="orgid" jdbcType="VARCHAR" property="orgid" />
+    <result column="departmentid" jdbcType="VARCHAR" property="departmentid" />
+    <result column="belongpeasantid" jdbcType="INTEGER" property="belongpeasantid" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="area" jdbcType="DOUBLE" property="area" />
+    <result column="longitude" jdbcType="DOUBLE" property="longitude" />
+    <result column="latitude" jdbcType="DOUBLE" property="latitude" />
+    <result column="insurance" jdbcType="VARCHAR" property="insurance" />
+    <result column="edittime" jdbcType="TIMESTAMP" property="edittime" />
+    <result column="supportid" jdbcType="VARCHAR" property="supportid" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, creattime, delstate, parcelno, name, type, provincecode, citycode, countycode, 
+    towncode, villagecode, addresscode, addressdetail, elevation, dependenceid, orgid, 
+    departmentid, belongpeasantid, introduce, area, longitude, latitude, insurance, edittime, 
+    supportid
+  </sql>
+  <select id="selectByExample" parameterType="com.fwk.common.entity.TPparcelExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_p_parcel
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_p_parcel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_p_parcel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fwk.common.entity.TPparcelExample">
+    delete from t_p_parcel
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fwk.common.entity.TPparcel">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_p_parcel (creattime, delstate, parcelno, 
+      name, type, provincecode, 
+      citycode, countycode, towncode, 
+      villagecode, addresscode, addressdetail, 
+      elevation, dependenceid, orgid, 
+      departmentid, belongpeasantid, introduce, 
+      area, longitude, latitude, 
+      insurance, edittime, supportid
+      )
+    values (#{creattime,jdbcType=TIMESTAMP}, #{delstate,jdbcType=INTEGER}, #{parcelno,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{provincecode,jdbcType=VARCHAR}, 
+      #{citycode,jdbcType=VARCHAR}, #{countycode,jdbcType=VARCHAR}, #{towncode,jdbcType=VARCHAR}, 
+      #{villagecode,jdbcType=VARCHAR}, #{addresscode,jdbcType=VARCHAR}, #{addressdetail,jdbcType=VARCHAR}, 
+      #{elevation,jdbcType=DOUBLE}, #{dependenceid,jdbcType=VARCHAR}, #{orgid,jdbcType=VARCHAR}, 
+      #{departmentid,jdbcType=VARCHAR}, #{belongpeasantid,jdbcType=INTEGER}, #{introduce,jdbcType=VARCHAR}, 
+      #{area,jdbcType=DOUBLE}, #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, 
+      #{insurance,jdbcType=VARCHAR}, #{edittime,jdbcType=TIMESTAMP}, #{supportid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fwk.common.entity.TPparcel">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_p_parcel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        creattime,
+      </if>
+      <if test="delstate != null">
+        delstate,
+      </if>
+      <if test="parcelno != null">
+        parcelno,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="provincecode != null">
+        provincecode,
+      </if>
+      <if test="citycode != null">
+        citycode,
+      </if>
+      <if test="countycode != null">
+        countycode,
+      </if>
+      <if test="towncode != null">
+        towncode,
+      </if>
+      <if test="villagecode != null">
+        villagecode,
+      </if>
+      <if test="addresscode != null">
+        addresscode,
+      </if>
+      <if test="addressdetail != null">
+        addressdetail,
+      </if>
+      <if test="elevation != null">
+        elevation,
+      </if>
+      <if test="dependenceid != null">
+        dependenceid,
+      </if>
+      <if test="orgid != null">
+        orgid,
+      </if>
+      <if test="departmentid != null">
+        departmentid,
+      </if>
+      <if test="belongpeasantid != null">
+        belongpeasantid,
+      </if>
+      <if test="introduce != null">
+        introduce,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="insurance != null">
+        insurance,
+      </if>
+      <if test="edittime != null">
+        edittime,
+      </if>
+      <if test="supportid != null">
+        supportid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="parcelno != null">
+        #{parcelno,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="provincecode != null">
+        #{provincecode,jdbcType=VARCHAR},
+      </if>
+      <if test="citycode != null">
+        #{citycode,jdbcType=VARCHAR},
+      </if>
+      <if test="countycode != null">
+        #{countycode,jdbcType=VARCHAR},
+      </if>
+      <if test="towncode != null">
+        #{towncode,jdbcType=VARCHAR},
+      </if>
+      <if test="villagecode != null">
+        #{villagecode,jdbcType=VARCHAR},
+      </if>
+      <if test="addresscode != null">
+        #{addresscode,jdbcType=VARCHAR},
+      </if>
+      <if test="addressdetail != null">
+        #{addressdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="elevation != null">
+        #{elevation,jdbcType=DOUBLE},
+      </if>
+      <if test="dependenceid != null">
+        #{dependenceid,jdbcType=VARCHAR},
+      </if>
+      <if test="orgid != null">
+        #{orgid,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentid != null">
+        #{departmentid,jdbcType=VARCHAR},
+      </if>
+      <if test="belongpeasantid != null">
+        #{belongpeasantid,jdbcType=INTEGER},
+      </if>
+      <if test="introduce != null">
+        #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=DOUBLE},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="insurance != null">
+        #{insurance,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supportid != null">
+        #{supportid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fwk.common.entity.TPparcelExample" resultType="java.lang.Integer">
+    select count(*) from t_p_parcel
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_p_parcel
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.creattime != null">
+        creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delstate != null">
+        delstate = #{record.delstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.parcelno != null">
+        parcelno = #{record.parcelno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.provincecode != null">
+        provincecode = #{record.provincecode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.citycode != null">
+        citycode = #{record.citycode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countycode != null">
+        countycode = #{record.countycode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.towncode != null">
+        towncode = #{record.towncode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.villagecode != null">
+        villagecode = #{record.villagecode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addresscode != null">
+        addresscode = #{record.addresscode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addressdetail != null">
+        addressdetail = #{record.addressdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.elevation != null">
+        elevation = #{record.elevation,jdbcType=DOUBLE},
+      </if>
+      <if test="record.dependenceid != null">
+        dependenceid = #{record.dependenceid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgid != null">
+        orgid = #{record.orgid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentid != null">
+        departmentid = #{record.departmentid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.belongpeasantid != null">
+        belongpeasantid = #{record.belongpeasantid,jdbcType=INTEGER},
+      </if>
+      <if test="record.introduce != null">
+        introduce = #{record.introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="record.area != null">
+        area = #{record.area,jdbcType=DOUBLE},
+      </if>
+      <if test="record.longitude != null">
+        longitude = #{record.longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="record.latitude != null">
+        latitude = #{record.latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="record.insurance != null">
+        insurance = #{record.insurance,jdbcType=VARCHAR},
+      </if>
+      <if test="record.edittime != null">
+        edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.supportid != null">
+        supportid = #{record.supportid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_p_parcel
+    set id = #{record.id,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      parcelno = #{record.parcelno,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      provincecode = #{record.provincecode,jdbcType=VARCHAR},
+      citycode = #{record.citycode,jdbcType=VARCHAR},
+      countycode = #{record.countycode,jdbcType=VARCHAR},
+      towncode = #{record.towncode,jdbcType=VARCHAR},
+      villagecode = #{record.villagecode,jdbcType=VARCHAR},
+      addresscode = #{record.addresscode,jdbcType=VARCHAR},
+      addressdetail = #{record.addressdetail,jdbcType=VARCHAR},
+      elevation = #{record.elevation,jdbcType=DOUBLE},
+      dependenceid = #{record.dependenceid,jdbcType=VARCHAR},
+      orgid = #{record.orgid,jdbcType=VARCHAR},
+      departmentid = #{record.departmentid,jdbcType=VARCHAR},
+      belongpeasantid = #{record.belongpeasantid,jdbcType=INTEGER},
+      introduce = #{record.introduce,jdbcType=VARCHAR},
+      area = #{record.area,jdbcType=DOUBLE},
+      longitude = #{record.longitude,jdbcType=DOUBLE},
+      latitude = #{record.latitude,jdbcType=DOUBLE},
+      insurance = #{record.insurance,jdbcType=VARCHAR},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      supportid = #{record.supportid,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fwk.common.entity.TPparcel">
+    update t_p_parcel
+    <set>
+      <if test="creattime != null">
+        creattime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        delstate = #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="parcelno != null">
+        parcelno = #{parcelno,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="provincecode != null">
+        provincecode = #{provincecode,jdbcType=VARCHAR},
+      </if>
+      <if test="citycode != null">
+        citycode = #{citycode,jdbcType=VARCHAR},
+      </if>
+      <if test="countycode != null">
+        countycode = #{countycode,jdbcType=VARCHAR},
+      </if>
+      <if test="towncode != null">
+        towncode = #{towncode,jdbcType=VARCHAR},
+      </if>
+      <if test="villagecode != null">
+        villagecode = #{villagecode,jdbcType=VARCHAR},
+      </if>
+      <if test="addresscode != null">
+        addresscode = #{addresscode,jdbcType=VARCHAR},
+      </if>
+      <if test="addressdetail != null">
+        addressdetail = #{addressdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="elevation != null">
+        elevation = #{elevation,jdbcType=DOUBLE},
+      </if>
+      <if test="dependenceid != null">
+        dependenceid = #{dependenceid,jdbcType=VARCHAR},
+      </if>
+      <if test="orgid != null">
+        orgid = #{orgid,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentid != null">
+        departmentid = #{departmentid,jdbcType=VARCHAR},
+      </if>
+      <if test="belongpeasantid != null">
+        belongpeasantid = #{belongpeasantid,jdbcType=INTEGER},
+      </if>
+      <if test="introduce != null">
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=DOUBLE},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="insurance != null">
+        insurance = #{insurance,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        edittime = #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supportid != null">
+        supportid = #{supportid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fwk.common.entity.TPparcel">
+    update t_p_parcel
+    set creattime = #{creattime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      parcelno = #{parcelno,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      provincecode = #{provincecode,jdbcType=VARCHAR},
+      citycode = #{citycode,jdbcType=VARCHAR},
+      countycode = #{countycode,jdbcType=VARCHAR},
+      towncode = #{towncode,jdbcType=VARCHAR},
+      villagecode = #{villagecode,jdbcType=VARCHAR},
+      addresscode = #{addresscode,jdbcType=VARCHAR},
+      addressdetail = #{addressdetail,jdbcType=VARCHAR},
+      elevation = #{elevation,jdbcType=DOUBLE},
+      dependenceid = #{dependenceid,jdbcType=VARCHAR},
+      orgid = #{orgid,jdbcType=VARCHAR},
+      departmentid = #{departmentid,jdbcType=VARCHAR},
+      belongpeasantid = #{belongpeasantid,jdbcType=INTEGER},
+      introduce = #{introduce,jdbcType=VARCHAR},
+      area = #{area,jdbcType=DOUBLE},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      insurance = #{insurance,jdbcType=VARCHAR},
+      edittime = #{edittime,jdbcType=TIMESTAMP},
+      supportid = #{supportid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

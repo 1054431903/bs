@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>文件上传</title>
+<script type="text/javascript" src="../js/lib/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/fileupload.js"></script>
+
+</head>
+<body>
+	<form id="upload_form"
+		action="http://10.88.20.66:5762/fwk-service-archives/common/fileservice/upload"
+		method="post" enctype="multipart/form-data">
+		<input type="file" name="uploadfile">
+		<button type="submit">上传文件</button>
+	</form>
+	<br>
+	<br>
+	<button type="button" onclick="javascript:history.go(-1);">返回</button>
+</body>
+</html>

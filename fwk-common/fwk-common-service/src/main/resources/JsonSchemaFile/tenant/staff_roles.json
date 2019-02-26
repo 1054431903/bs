@@ -1,0 +1,35 @@
+{
+    "title": "用户权限",
+    "type": "object",
+    "properties": {
+      "staff": {
+        "type": "string",
+        "title": "用户",
+        "$id": "#tenant.staff"
+      },
+      "tenant": {
+        "type": "string",
+        "$id": "#sys.tenant"
+      },
+      "loginOn": {
+        "type": "number",
+        "title": "最近登录时间",
+        "format": "datetime",
+        "readOnly": true,
+        "description": "登录本平台时间"
+      },
+      "roles": {
+        "type": "array",
+        "title": "角色",
+        "items": {
+          "type": "string",
+          "$id": "#tenant.role"
+        }
+      }
+    },
+    "required": [
+      "staff",
+      "tenant",
+      "roles"
+    ]
+  }

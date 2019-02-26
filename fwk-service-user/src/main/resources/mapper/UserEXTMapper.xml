@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.user.dao.UserDao">
+
+	<select id="login" parameterType="map" resultType="com.fwk.service.user.entity.UserEXT">
+		select * from t_u_users u
+		where 1=1
+		<include refid="login_where_sql" />
+	</select>
+	
+	<select id="queryCheckUserExist" parameterType="map" resultType="int">
+		select count(*) from t_u_users u
+		where 1=1
+		<include refid="where_sql" />
+	</select>
+	
+	<!-- 通过组织下的所有组织 -->
+	<select id="queryUsersByOrgId" parameterType="map" resultType="com.fwk.service.user.entity.UserEXT">
+		select * from t_u_users u
+		left join t_u_user_org_depart uod on uod.userid = u.id
+		where uod.orgid = #{orgid} and u.delstate = 1 and uod.delstate = 1
+	</select>
+	
+	<select id="queryUser" parameterType="map" resultType="com.fwk.service.user.entity.UserEXT">
+		select * 
+		,(select GROUP_CONCAT(r.id) from t_u_role r left join t_u_user_role urole on urole.roleid = r.id where urole.userid = u.id and r.delstate = 1) as roleid
+		,(select GROUP_CONCAT(r.rolename) from t_u_role r left join t_u_user_role urole on urole.roleid = r.id where urole.userid = u.id and r.delstate = 1) as rolename
+		from t_u_users u
+		where 1=1
+		<include refid="where_sql" />
+	</select>
+	
+	<select id="queryUserBuOrgDepartment" parameterType="map" resultType="com.fwk.service.user.entity.UserEXT">
+		select u.*
+		,(select GROUP_CONCAT(r.id) from t_u_role r left join t_u_user_role urole on urole.roleid = r.id where urole.userid = u.id and r.delstate = 1) as roleid
+		,(select GROUP_CONCAT(r.rolename) from t_u_role r left join t_u_user_role urole on urole.roleid = r.id where urole.userid = u.id and r.delstate = 1) as rolename 
+		,(select GROUP_CONCAT(d.id) from t_u_department d where d.id = uod.departmentid and d.delstate = 1) as departmentid
+		,(select GROUP_CONCAT(d.`name`) from t_u_department d where d.id = uod.departmentid and d.delstate = 1) as departmentname
+		,(select r.resourcepath from t_c_resource r left join t_c_resource_history rh on rh.currentResource = r.id where rh.id = u.photo and r.delstate = 1) as photoURL
+		,(select (case d.chargeuserid=u.id when true then 1 else 0 end) from t_u_department d where d.id = uod.departmentid and d.delstate = 1) as isdepartmentbelong
+		from t_u_users u 
+		left join t_u_user_org_depart uod on u.id=uod.userid
+		<if test="roleid != null and roleid != ''">
+			left join t_u_user_role ur on ur.userid = u.id
+		</if>
+		where 1=1 
+		<include refid="queryUserBuOrgDepartment_where_sql" />
+		<include refid="limit_sql" />
+	</select>
+	
+	<select id="queryUserBuOrgDepartmentCount" parameterType="map" resultType="int">
+		select count(*) from t_u_users u 
+		left join t_u_user_org_depart uod on u.id=uod.userid
+		<if test="roleid != null and roleid != ''">
+			left join t_u_user_role ur on ur.userid = u.id
+		</if>
+		where 1=1 
+		<include refid="queryUserBuOrgDepartment_where_sql" />
+	</select>
+	
+	<select id="getUserTree" parameterType="map" resultType="com.fwk.service.user.entity.OrgDepartUserTreeDefine">
+		select u.id,u.`name`,u.phone,u.nickname,u.jobnumber,'3' as sign
+		,(select r.resourcepath from t_c_resource r left join t_c_resource_history rh on rh.currentResource = r.id where rh.id = u.photo and r.delstate = 1) as phoneurl
+		 ,u.name as 'title', false as 'expanded'	
+		 from t_u_users u
+		 left join t_u_user_org_depart uod on uod.userid = u.id
+		 where 1=1
+		 and u.delstate = 1
+		 and uod.delstate = 1
+		 <if test="orgid != null">
+		 	and uod.orgid = #{orgid}
+		 </if>
+		 <choose>
+			<when test="departmentids != null">
+				and uod.departmentid in 
+				<foreach item="item" index="index" collection="departmentids" open="(" separator="," close=")">
+                        #{item}
+                </foreach>
+			</when>
+			<otherwise>
+				<if test="departmentid != null and departmentid != ''">
+					and uod.departmentid = #{departmentid}
+				</if>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<sql id="queryUserBuOrgDepartment_where_sql">
+		<if test="orgid != null and orgid != ''">
+			and uod.orgid = #{orgid}
+		</if>
+		and uod.delstate = 1
+		<choose>
+			<when test="departmentids != null">
+				and uod.departmentid in 
+				<foreach item="item" index="index" collection="departmentids" open="(" separator="," close=")">
+                        #{item}
+                </foreach>
+			</when>
+			<otherwise>
+				<if test="departmentid != null and departmentid != ''">
+					and uod.departmentid = #{departmentid}
+				</if>
+			</otherwise>
+		</choose>
+		
+		<if test="roleid != null and roleid != ''">
+			and ur.roleid = #{roleid}
+		</if>
+		<if test="name != null and name != ''">
+			and u.name like CONCAT('%',#{name},'%')
+		</if>
+		<choose>
+			<when test="delstate != null">
+				and u.delstate = #{delstate}
+			</when>
+			<otherwise>
+				and u.delstate = 1
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="queryUserDetail" parameterType="map" resultType="com.fwk.service.user.entity.UserEXT">
+		select u.*
+		,(select GROUP_CONCAT(d.id) from t_u_department d left join t_u_user_org_depart uod on uod.departmentid = d.id where uod.userid=u.id and d.delstate = 1 and uod.delstate = 1 and uod.orgid = #{orgid}) as departmentid
+		,(select GROUP_CONCAT(d.name) from t_u_department d left join t_u_user_org_depart uod on uod.departmentid = d.id where uod.userid=u.id and d.delstate = 1 and uod.delstate = 1 and uod.orgid = #{orgid}) as departmentname
+		,(select GROUP_CONCAT(case when d.chargeuserid = u.id then true else false end) from t_u_department d left join t_u_user_org_depart uod on uod.departmentid = d.id where uod.userid=u.id and d.delstate = 1 and uod.delstate = 1) as isdepartmentbelong
+		,(select GROUP_CONCAT(r.rolename) from t_u_role r left join t_u_user_role urole on urole.roleid = r.id where urole.userid = u.id and r.delstate = 1 and urole.delstate = 1) as rolename
+		,(select GROUP_CONCAT(r.id) from t_u_role r left join t_u_user_role urole on urole.roleid = r.id where urole.userid = u.id and r.delstate = 1 and urole.delstate = 1) as roleid
+		,(select r.resourcepath from t_c_resource r left join t_c_resource_history rh on rh.currentResource = r.id where rh.id = u.photo and r.delstate = 1) as photoURL
+		from t_u_users u 
+		where 1=1 
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="phone != null and phone != ''">
+			and phone = #{phone}
+		</if>
+		 <choose>
+			<when test="delstate != null">
+				and delstate = #{delstate}
+			</when>
+			<otherwise>
+				and delstate = 1
+			</otherwise>
+		</choose>
+		order by u.edittime desc
+	</select>
+	
+	<select id="queryUserDetailBySupportId" parameterType="java.lang.String" resultType="com.fwk.service.user.entity.UserEXT">
+		select * from t_u_users where delstate = 1 and supportid = #{supportId} order by edittime desc
+	</select>
+	
+	<select id="queryUserOrgDepart" parameterType="map" resultType="com.fwk.service.user.entity.UserOrgDepartEXT">
+		select * from t_u_user_org_depart uod
+		where 1=1
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="orgid != null and orgid != ''">
+			and orgid = #{orgid}
+		</if>
+		<if test="userid != null and userid != ''">
+			and userid = #{userid}
+		</if>
+		<if test="departmentid != null and departmentid != ''">
+			and departmentid = #{departmentid}
+		</if>
+		<choose>
+			<when test="delstate != null">
+				and delstate = #{delstate}
+			</when>
+			<otherwise>
+				and delstate = 1
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getUserByDepartment" parameterType="map" resultType="com.fwk.service.user.entity.UserEXT">
+		select * from t_u_users u
+		left join t_u_user_org_depart uod on uod.userid = u.id
+		where uod.delstate = 1 and u.delstate = 1 
+		<if test="departmentid != null and departmentid != ''">
+			and uod.departmentid = #{departmentid}
+		</if>
+		<if test="orgid != null and orgid != ''">
+			and uod.orgid = #{orgid}
+		</if>
+	</select>
+	
+	<select id="getUserByDepartmentCount" parameterType="map">
+		select count(*) from t_u_users u
+		left join t_u_user_org_depart uod on uod.userid = u.id
+		where uod.delstate = 1 and u.delstate = 1 
+		<if test="departmentid != null and departmentid != ''">
+			and uod.departmentid = #{departmentid}
+		</if>
+		<if test="orgid != null and orgid != ''">
+			and uod.orgid = #{orgid}
+		</if>
+	</select>
+	
+	<update id="removeUserFromOrg" parameterType="map">
+		update t_u_user_org_depart set delstate = 0
+	    where orgid = #{orgid} and userid = #{userid}
+	</update>
+	
+	<update id="updateUserSupportid" parameterType="com.fwk.service.user.entity.UserEXT">
+		update t_u_users set supportid = #{supportid}
+	    where id = #{id}
+	</update>
+	
+	
+	<update id="updatePasswordByPhone" parameterType="map">
+		update t_u_users set password = #{password}
+	    where phone = #{phone}
+	</update>
+	
+	<insert id="registe" parameterType="map">
+		<if test="phone != null and phone != ''">
+			insert into t_u_users (phone,password)
+	    	values (#{phone,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR})
+		</if>
+		<if test="email != null and email != ''">
+			insert into t_u_users (email,password)
+	    	values (#{email,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR})
+		</if>
+	</insert>
+	
+	<update id="updateUser" parameterType="map">
+		update t_u_users
+	    <set>
+	      <if test="phone != null and phone != ''">
+	        phone = #{phone,jdbcType=VARCHAR},
+	      </if>
+	      <if test="password != null">
+	        password = #{password,jdbcType=VARCHAR},
+	      </if>
+	      <if test="status != null">
+	        status = #{status,jdbcType=VARCHAR},
+	      </if>
+	      <if test="name != null  and name != ''">
+	        name = #{name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="email != null">
+	        email = #{email,jdbcType=VARCHAR},
+	      </if>
+	      <if test="lastlogin != null">
+	        lastLogin = #{lastlogin,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="loginaddress != null">
+	        loginAddress = #{loginaddress,jdbcType=VARCHAR},
+	      </if>
+	      <if test="latestidentifyingcode != null">
+	        latestidentifyingcode = #{latestidentifyingcode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="lastlogincode != null">
+	        lastlogincode = #{lastlogincode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="creattime != null">
+	        creattime = #{creattime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="edittime != null">
+	        edittime = #{edittime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="delstate != null">
+	        delstate = #{delstate,jdbcType=INTEGER},
+	      </if>
+	      <if test="sex != null  and sex != ''">
+	        sex = #{sex,jdbcType=VARCHAR},
+	      </if>
+	      <if test="birthday != null and birthday != ''">
+	        birthday = #{birthday,jdbcType=DATE},
+	      </if>
+	      <if test="nickname != null and nickname != ''">
+	        nickname = #{nickname,jdbcType=VARCHAR},
+	      </if>
+	      <if test="photo != null and photo != ''">
+	        photo = #{photo,jdbcType=INTEGER},
+	      </if>
+	      <if test="jobnumber != null  and jobnumber != ''">
+	        jobnumber = #{jobnumber,jdbcType=VARCHAR},
+	      </if>
+	      <if test="addresscode != null">
+	        addresscode = #{addresscode,jdbcType=BIGINT},
+	      </if>
+	      <if test="addressdetail != null">
+	        addressdetail = #{addressdetail,jdbcType=VARCHAR},
+	      </if>
+	      <if test="loginorgid != null">
+	      	<choose>
+	      		<when test="loginorgid == ''">
+	      			loginorgid = null,
+	      		</when>
+	      		<otherwise>
+	      			loginorgid = #{loginorgid,jdbcType=INTEGER},
+	      		</otherwise>
+	      	</choose>
+	      </if>
+	    </set>
+	    where id = #{id}
+	</update>
+	
+	<insert id="insertUser" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+		insert into t_u_users (id, phone, password,name, email, 
+	      lastLogin, loginAddress, latestidentifyingcode, 
+	      lastlogincode,sex, birthday, nickname, 
+	      photo, jobnumber, loginorgid,addresscode, addressdetail,supportid,edittime)
+	    values (#{id,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+	      #{lastlogin,jdbcType=TIMESTAMP}, #{loginaddress,jdbcType=VARCHAR}, #{latestidentifyingcode,jdbcType=VARCHAR}, 
+	      #{lastlogincode,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, #{nickname,jdbcType=VARCHAR}, 
+	      #{photo,jdbcType=INTEGER}, #{jobnumber,jdbcType=VARCHAR}, #{loginorgid,jdbcType=INTEGER},#{addresscode,jdbcType=BIGINT}, #{addressdetail,jdbcType=VARCHAR}, #{supportid,jdbcType=VARCHAR},#{edittime,jdbcType=DATE})
+	</insert>
+	
+	<insert id="insertUserSupport" parameterType="com.fwk.service.user.entity.UserEXT" useGeneratedKeys="true" keyProperty="id">
+		insert into t_u_users (id, phone, password,name, email, 
+	      lastLogin, loginAddress, latestidentifyingcode, 
+	      lastlogincode,sex, birthday, nickname, 
+	      photo, jobnumber, loginorgid,addresscode, addressdetail,supportid)
+	    values (#{id,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+	      #{lastlogin,jdbcType=TIMESTAMP}, #{loginaddress,jdbcType=VARCHAR}, #{latestidentifyingcode,jdbcType=VARCHAR}, 
+	      #{lastlogincode,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, #{nickname,jdbcType=VARCHAR}, 
+	      #{photo,jdbcType=INTEGER}, #{jobnumber,jdbcType=VARCHAR}, #{loginorgid,jdbcType=INTEGER},#{addresscode,jdbcType=BIGINT}, #{addressdetail,jdbcType=VARCHAR}, #{supportid,jdbcType=VARCHAR})
+	</insert>
+	
+	
+	<insert id="insertUserOrgDepart" parameterType="map">
+		insert into t_u_user_org_depart (orgid, userid, departmentid)
+	    values (#{orgid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{departmentid,jdbcType=INTEGER})
+	</insert>
+	
+	<update id="updateUserOrgDepart" parameterType="map">
+		update t_u_user_org_depart
+	    <set>
+	      <if test="delstate != null">
+	        delstate = #{delstate,jdbcType=INTEGER},
+	      </if>
+	      <if test="orgid != null">
+	        orgid = #{orgid,jdbcType=INTEGER},
+	      </if>
+	      <if test="userid != null">
+	        userid = #{userid,jdbcType=INTEGER},
+	      </if>
+	      <if test="departmentid != null">
+	        departmentid = #{departmentid,jdbcType=INTEGER},
+	      </if>
+	    </set>
+	    where id = #{id}
+	</update>
+	
+	<sql id="login_where_sql">
+		<if test="account != null and account != ''">
+			and (phone = #{account} or email = #{account})
+		</if>
+		<choose>
+			<when test="delstate != null">
+				and delstate = #{delstate}
+			</when>
+			<otherwise>
+				and delstate = 1
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<sql id="where_sql">
+		<if test="phone != null and phone != ''">
+			and phone = #{phone}
+		</if>
+		<if test="email != null and email != ''">
+			and email = #{email}
+		</if>
+		<choose>
+			<when test="delstate != null">
+				and delstate = #{delstate}
+			</when>
+			<otherwise>
+				and delstate = 1
+			</otherwise>
+		</choose>
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="noid != null and noid != ''">
+			and id != #{noid}
+		</if>
+		<if test="password != null and password != ''">
+			and password = #{password}
+		</if>
+		<if test="supportid != null and supportid != ''">
+			and supportid = #{supportid}
+		</if>
+	</sql>
+	
+	<sql id="limit_sql">
+		<choose>
+			<when test="pageSize !=null and currentPage !=null">
+				limit ${(currentPage-1)*pageSize},${pageSize}
+			</when>
+			<otherwise>
+				limit 0,99999
+			</otherwise>
+		</choose>
+	</sql>
+	
+</mapper>

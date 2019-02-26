@@ -1,0 +1,10 @@
+on:
+  port: 8101
+http:
+  cors:
+    allowedOrigins: "*"
+    allowedHttpMethods: "DELETE, PUT, POST, GET, OPTIONS"
+youzan:
+  clientId: "94d2f1816864311b88"
+  clientSecret: "c4159d9f15cd7f0873f2c7f3d249c8c7"
+  kdtId: "18903226"

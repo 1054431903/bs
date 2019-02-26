@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.user.dao.OrgDao">
+
+	<select id="queryOrg" parameterType="map" resultType="com.fwk.service.user.entity.OrgEXT">
+		select *, 
+		(select r.resourcepath from t_c_resource r left join t_c_resource_history rh on rh.currentResource = r.id where rh.id = o.logo) as logourl,
+		(select r.resourcepath from t_c_resource r left join t_c_resource_history rh on rh.currentResource = r.id where rh.id = o.permit) as permiturl,
+		(select d.dictname from t_c_dict d where d.dictvalue = o.nature and d.dicttype='org-nature') as naturename,
+		(select d.dictname from t_c_dict d where d.dictvalue = o.scale and d.dicttype='org-scale') as scalename  
+		from t_u_org o
+		where 1=1 
+		<include refid="where_sql"/>
+	</select>
+	
+	<select id="queryOrgByCond" parameterType="map" resultType="com.fwk.service.user.entity.OrgEXT">
+		select *		
+		from t_u_org o
+		where 1=1 
+		<include refid="where_sql"/>
+	</select>
+	
+	<select id="queryOrgAllByOperateid" parameterType="map" resultType="com.fwk.service.user.entity.OrgEXT">
+		select * from t_u_org o
+		left join t_u_user_org_depart uod on uod.orgid = o.id
+		where uod.userid = #{userid}
+	</select>
+	
+	<!-- 获取当前登录人的组织信息 -->
+	<select id="queryOrgByOperateid" parameterType="map" resultType="com.fwk.service.user.entity.OrgEXT">
+		select *, 
+		(select r.resourcepath from t_c_resource r left join t_c_resource_history rh on rh.currentResource = r.id where rh.id = o.logo) as logourl,
+		(select r.resourcepath from t_c_resource r left join t_c_resource_history rh on rh.currentResource = r.id where rh.id = o.permit) as permiturl,
+		(select d.dictname from t_c_dict d where d.dictvalue = o.nature and d.dicttype='org-nature') as naturename,
+		(select d.dictname from t_c_dict d where d.dictvalue = o.scale and d.dicttype='org-scale') as scalename   
+		from t_u_org o
+		left join t_u_user_org_depart uod on uod.orgid = o.id
+		where uod.userid = #{operateid}
+		<choose>
+			<when test="delstate != null">
+				and o.delstate = #{delstate}
+			</when>
+			<otherwise>
+				and o.delstate = 1
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getOrgToTree" parameterType="map" resultType="com.fwk.service.user.entity.OrgDepartUserTreeDefine">
+		select o.id,o.name,'1' as sign, true as expanded, o.name as title from t_u_org o
+		where id = #{id} and o.delstate = 1 
+	</select>
+	
+	<insert id="saveOrg" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+		insert into t_u_org (name, nature, legal,eastablishtime, logo, regisfund, 
+	      scale, addresscode, addressdetail,belonguserid, introduce, scope,permit,supportid)
+	    values (#{name,jdbcType=VARCHAR}, #{nature,jdbcType=VARCHAR}, #{legal,jdbcType=VARCHAR},
+	      #{eastablishtime,jdbcType=TIMESTAMP}, #{logo,jdbcType=INTEGER}, #{regisfund,jdbcType=DOUBLE}, 
+	      #{scale,jdbcType=VARCHAR}, #{addresscode,jdbcType=BIGINT}, #{addressdetail,jdbcType=VARCHAR},
+	      #{belonguserid,jdbcType=INTEGER}, #{introduce,jdbcType=LONGVARCHAR}, #{scope,jdbcType=LONGVARCHAR},#{permit,jdbcType=INTEGER}, #{supportid,jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="saveOrgByEXT" parameterType="com.fwk.service.user.entity.OrgEXT" useGeneratedKeys="true" keyProperty="id">
+		insert into t_u_org (name, nature, legal,eastablishtime, logo, regisfund, 
+	      scale, addresscode, addressdetail,belonguserid, introduce, scope,permit,supportid)
+	    values (#{name,jdbcType=VARCHAR}, #{nature,jdbcType=VARCHAR}, #{legal,jdbcType=VARCHAR},
+	      #{eastablishtime,jdbcType=TIMESTAMP}, #{logo,jdbcType=INTEGER}, #{regisfund,jdbcType=DOUBLE}, 
+	      #{scale,jdbcType=VARCHAR}, #{addresscode,jdbcType=BIGINT}, #{addressdetail,jdbcType=VARCHAR},
+	      #{belonguserid,jdbcType=INTEGER}, #{introduce,jdbcType=LONGVARCHAR}, #{scope,jdbcType=LONGVARCHAR},#{permit,jdbcType=INTEGER}, #{supportid,jdbcType=VARCHAR})
+	</insert>
+	
+	<update id="updateOrg" parameterType="map">
+		update t_u_org
+	    <set>
+	      <if test="delstate != null">
+	        delstate = #{delstate,jdbcType=INTEGER},
+	      </if>
+	      <if test="name != null">
+	        name = #{name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="nature != null">
+	        nature = #{nature,jdbcType=VARCHAR},
+	      </if>
+	      <if test="legal != null">
+	        legal = #{legal,jdbcType=VARCHAR},
+	      </if>
+	      <choose>
+	      	<when test="eastablishtime == null or eastablishtime == ''">
+	      		eastablishtime = null,
+	      	</when>
+	      	<otherwise>
+	      		eastablishtime = #{eastablishtime,jdbcType=TIMESTAMP},
+	      	</otherwise>
+	      </choose>
+	      <if test="logo != null">
+	        logo = #{logo,jdbcType=INTEGER},
+	      </if>
+	      <choose>
+	      	<when test="regisfund == null or regisfund == ''">
+	      		regisfund = null,
+	      	</when>
+	      	<otherwise>
+	      		regisfund = #{regisfund,jdbcType=DOUBLE},
+	      	</otherwise>
+	      </choose>
+	      <if test="scale != null">
+	        scale = #{scale,jdbcType=VARCHAR},
+	      </if>
+	      <if test="addresscode != null">
+	        addresscode = #{addresscode,jdbcType=BIGINT},
+	      </if>
+	      <if test="addressdetail != null">
+	        addressdetail = #{addressdetail,jdbcType=VARCHAR},
+	      </if>
+	      <if test="belonguserid != null">
+	        belonguserid = #{belonguserid,jdbcType=INTEGER},
+	      </if>
+	      <if test="introduce != null">
+	        introduce = #{introduce,jdbcType=LONGVARCHAR},
+	      </if>
+	      <if test="scope != null">
+	        scope = #{scope,jdbcType=LONGVARCHAR},
+	      </if>
+	      <if test="permit != null">
+	        permit = #{permit,jdbcType=LONGVARCHAR},
+	      </if>
+	    </set>
+	    where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<delete id="deleteOrg" parameterType="map">
+		delete from t_u_org
+    	where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<sql id="where_sql">
+		<if test="operateid != null and operateid != ''">
+			and belonguserid = #{operateid}
+		</if>
+		<if test="belonguserid != null and belonguserid != ''">
+			and belonguserid = #{belonguserid}
+		</if>
+		<if test="name != null and name != ''">
+			and name = #{name}
+		</if>
+		<if test="noid != null and noid != ''">
+			and id != #{noid}
+		</if>
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="supportid != null and supportid != ''">
+			and supportid = #{supportid}
+		</if>
+		<choose>
+			<when test="delstate != null">
+				and delstate = #{delstate}
+			</when>
+			<otherwise>
+				and delstate = 1
+			</otherwise>
+		</choose>
+	</sql>
+	
+</mapper>

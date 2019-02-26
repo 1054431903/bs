@@ -1,0 +1,15 @@
+*.iml
+.iml
+.gradle
+.classpath
+.project
+.settings
+/local.properties
+.idea
+.DS_Store
+/build
+/captures
+/other
+target
+logs
+data

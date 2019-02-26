@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fwk.common.dao.TCresourcehistoryMapper">
+  <resultMap id="BaseResultMap" type="com.fwk.common.entity.TCresourcehistory">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="maname" jdbcType="VARCHAR" property="maname" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="orderno" jdbcType="INTEGER" property="orderno" />
+    <result column="resourceid" jdbcType="VARCHAR" property="resourceid" />
+    <result column="currentResource" jdbcType="INTEGER" property="currentresource" />
+    <result column="creattime" jdbcType="TIMESTAMP" property="creattime" />
+    <result column="delstate" jdbcType="INTEGER" property="delstate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, maname, description, orderno, resourceid, currentResource, creattime, delstate
+  </sql>
+  <select id="selectByExample" parameterType="com.fwk.common.entity.TCresourcehistoryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_c_resource_history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_c_resource_history
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_c_resource_history
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fwk.common.entity.TCresourcehistoryExample">
+    delete from t_c_resource_history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fwk.common.entity.TCresourcehistory">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_c_resource_history (maname, description, orderno, 
+      resourceid, currentResource, creattime, 
+      delstate)
+    values (#{maname,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{orderno,jdbcType=INTEGER}, 
+      #{resourceid,jdbcType=VARCHAR}, #{currentresource,jdbcType=INTEGER}, #{creattime,jdbcType=TIMESTAMP}, 
+      #{delstate,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fwk.common.entity.TCresourcehistory">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_c_resource_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="maname != null">
+        maname,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="orderno != null">
+        orderno,
+      </if>
+      <if test="resourceid != null">
+        resourceid,
+      </if>
+      <if test="currentresource != null">
+        currentResource,
+      </if>
+      <if test="creattime != null">
+        creattime,
+      </if>
+      <if test="delstate != null">
+        delstate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="maname != null">
+        #{maname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="orderno != null">
+        #{orderno,jdbcType=INTEGER},
+      </if>
+      <if test="resourceid != null">
+        #{resourceid,jdbcType=VARCHAR},
+      </if>
+      <if test="currentresource != null">
+        #{currentresource,jdbcType=INTEGER},
+      </if>
+      <if test="creattime != null">
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        #{delstate,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fwk.common.entity.TCresourcehistoryExample" resultType="java.lang.Integer">
+    select count(*) from t_c_resource_history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_c_resource_history
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.maname != null">
+        maname = #{record.maname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderno != null">
+        orderno = #{record.orderno,jdbcType=INTEGER},
+      </if>
+      <if test="record.resourceid != null">
+        resourceid = #{record.resourceid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentresource != null">
+        currentResource = #{record.currentresource,jdbcType=INTEGER},
+      </if>
+      <if test="record.creattime != null">
+        creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delstate != null">
+        delstate = #{record.delstate,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_c_resource_history
+    set id = #{record.id,jdbcType=INTEGER},
+      maname = #{record.maname,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      orderno = #{record.orderno,jdbcType=INTEGER},
+      resourceid = #{record.resourceid,jdbcType=VARCHAR},
+      currentResource = #{record.currentresource,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fwk.common.entity.TCresourcehistory">
+    update t_c_resource_history
+    <set>
+      <if test="maname != null">
+        maname = #{maname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="orderno != null">
+        orderno = #{orderno,jdbcType=INTEGER},
+      </if>
+      <if test="resourceid != null">
+        resourceid = #{resourceid,jdbcType=VARCHAR},
+      </if>
+      <if test="currentresource != null">
+        currentResource = #{currentresource,jdbcType=INTEGER},
+      </if>
+      <if test="creattime != null">
+        creattime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        delstate = #{delstate,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fwk.common.entity.TCresourcehistory">
+    update t_c_resource_history
+    set maname = #{maname,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      orderno = #{orderno,jdbcType=INTEGER},
+      resourceid = #{resourceid,jdbcType=VARCHAR},
+      currentResource = #{currentresource,jdbcType=INTEGER},
+      creattime = #{creattime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

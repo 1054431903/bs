@@ -1,0 +1,167 @@
+{
+  "title": "组织",
+  "type": "object",
+  "properties": {
+    "inner": {
+      "type": "boolean",
+      "title": "是否内部"
+    },
+    "type": {
+      "type": "integer",
+      "enum": [
+        1,
+        2
+      ],
+      "enumNames": [
+        "组织",
+        "部门"
+      ],
+      "title": "类型"
+    },
+    "parent": {
+      "type": "string",
+      "$id": "#sys.tenant",
+      "title": "上级"
+    },
+    "name": {
+      "type": "string",
+      "title": "名称",
+      "maxLength": 20
+    },
+    "status": {
+      "$ref": "common/definitions/status"
+    },
+    "audit": {
+      "type": "integer",
+      "title": "审核",
+      "enum": [
+        0,
+        1,
+        2
+      ],
+      "enumNames": [
+        "不限",
+        "未审核",
+        "已审核"
+      ],
+      "default": 0
+    },
+    "manager": {
+      "type": "string",
+      "title": "负责人",
+      "$id": "#tenant.staff"
+    },
+    "createdOn": {
+      "type": "number",
+      "title": "添加时间",
+      "format": "datetime"
+    }
+  },
+  "required": [
+    "inner",
+    "type",
+    "name",
+    "status",
+    "audit"
+  ],
+  "dependencies": {
+    "type": {
+      "oneOf": [
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                1
+              ]
+            },
+            "businessEntity": {
+              "type": "string",
+              "title": "法人"
+            },
+            "foundingTime": {
+              "type": "number",
+              "title": "成立时间",
+              "format": "date"
+            },
+            "businessType": {
+              "type": "integer",
+              "title": "组织性质",
+              "enum": [
+                1,
+                2,
+                3,
+                4
+              ],
+              "enumNames": [
+                "事业单位",
+                "公司",
+                "合作社",
+                "个人"
+              ]
+            },
+            "logo": {
+              "type": "string",
+              "title": "Logo",
+              "format": "img"
+            },
+            "registeredCapital": {
+              "type": "number",
+              "title": "注册资金(万元)",
+              "pattern": "^\\d+(\\.{0,1}\\d+){0,1}$"
+            },
+            "staffSize": {
+              "type": "integer",
+              "title": "人员规模(人)",
+              "enum": [
+                1,
+                2,
+                3
+              ],
+              "enumNames": [
+                "100人以内",
+                "100-500人",
+                "500人以上"
+              ]
+            },
+            "businessLicense": {
+              "type": "string",
+              "title": "营业执照",
+              "format": "img"
+            },
+            "registeredAddress": {
+              "$ref": "common/definitions/address"
+            },
+            "remark": {
+              "type": "string",
+              "title": "简介",
+              "maxLength": 2000
+            },
+            "businessScope": {
+              "type": "string",
+              "title": "业务范围",
+              "maxLength": 100
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                2
+              ]
+            },
+            "code": {
+              "type": "string",
+              "title": "部门编号"
+            },
+            "director": {
+              "type": "string",
+              "$id": "#tenant.staff",
+              "title": "部门主管"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

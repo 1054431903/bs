@@ -1,0 +1,75 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo:3.6
+    volumes:
+      - ./docker_data/mongo:/data/db
+    ports:
+      - 27017:27017
+  redis:
+    image: redis:4.0.1-alpine
+    volumes:
+      - ./docker_data/redis:/data
+    ports:
+      - 6379:6379
+    command: redis-server --appendonly yes
+  mongo-rest:
+    image: rc.ami-tek.com.cn:9082/vehiclecloud/mongo-rest:1.0.0
+    ports:
+      - 9000:9000
+    environment:
+      - mongodb.uri=mongodb://mongodb:27017
+    links:
+     - mongodb
+    depends_on:
+     - mongodb
+  redis-rest:
+    image: rc.ami-tek.com.cn:9082/vehiclecloud/redis-rest:1.0.0
+    ports:
+      - 9100:9100
+    environment:
+      - redis.uri=redis://redis:6379
+    links:
+     - redis
+    depends_on:
+     - redis
+  oauth2-server-api:
+    image: rc.ami-tek.com.cn:9082/vehiclecloud/oauth2-server-api:1.0.0
+    ports:
+      - 9300:9300
+    links:
+      - mongodb
+      - redis
+    depends_on:
+      - mongodb
+      - redis
+  file-server:
+    image: rc.ami-tek.com.cn:9082/vehiclecloud/file-server:1.0.0
+    ports:
+      - 9400:9400
+  iss-server:
+    image: rc.ami-tek.com.cn:9082/agrithings/iss-server:1.0.0
+    ports:
+      - 8100:8100
+  yz-server:
+    image: rc.ami-tek.com.cn:9082/agrithings/yz-server:1.0.0
+    ports:
+      - 8101:8101
+  fob-server:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile.prod
+    ports:
+     - "8080:80"
+    environment:
+      - AG_MONGO_ISS_DATABASE=iov
+      - AG_MONGO_ISS_BASE=http://localhost:9000
+      - AG_MONGO_APP_DATABASE=fob
+      - AG_MONGO_APP_BASE=http://localhost:9000
+      - AG_REDIS_BASE=http://localhost:9100
+      - AG_OAUTH2_CLIENT_ID=10
+      - AG_OAUTH2_COOKIE_NAME=fob-token
+      - AG_OAUTH2_SERVER=http://localhost:9300
+      - AG_FILE_SERVER=http://localhost:9400
+      - AG_ISS_SERVER=http://localhost:8100
+      - AG_YZ_SERVER=http://localhost:8101

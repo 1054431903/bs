@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.user.dao.PermissionDao">
+
+	<select id="queryPermissionList" parameterType="map" resultType="com.fwk.service.user.entity.PermissionEXT">
+		select * from t_u_permission p
+		where 1=1
+		<include refid="where_sql" />
+	</select>
+	
+	<select id="queryPermissionByLoginUser" parameterType="map" resultType="com.fwk.service.user.entity.PermissionEXT">
+		select p.* from t_u_permission p
+		left join t_u_role_permission rp on rp.permissionid = p.id
+		left join t_u_user_role ur on ur.roleid = rp.roleid
+		where 1=1 
+		<if test="loginuserid != null">
+			and ur.userid = #{loginuserid}
+		</if>
+		<if test="typecode != null">
+			and p.typecode = #{typecode}
+		</if>
+		<if test="rootid != null">
+			and p.rootid = #{rootid}
+		</if>
+		GROUP BY p.id
+	</select>
+	
+	<insert id="saveRolePermission" parameterType="map">
+		insert into t_u_role_permission (id, roleid, permissionid)
+	    values (#{id,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER}, #{permissionid,jdbcType=INTEGER})
+	</insert>
+	
+	<delete id="deleteRolePermission" parameterType="map">
+		delete from t_u_role_permission where roleid = #{roleid}
+	</delete>
+	
+	<sql id="where_sql">
+		<if test="rootid != null">
+			and rootid = #{rootid}
+		</if>
+		<if test="typecode != null and typecode != ''">
+			and typecode = #{typecode}
+		</if>
+		<if test="solecode != null and solecode != ''">
+			and solecode = #{solecode}
+		</if>
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<choose>
+			<when test="delstate != null">
+				and delstate = #{delstate}
+			</when>
+			<otherwise>
+				and delstate = 1
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<sql id="leftjoin_sql">
+		<if test="userid != null and userid != ''">
+			left join 
+		</if>
+	</sql>
+	
+</mapper>

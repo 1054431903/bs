@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    fwk-service-svc: fwk-service-farm
+  name: fwk-service-farm
+  namespace: default
+spec:
+  ports:
+  - name: service
+    port: 5763
+    protocol: TCP
+    targetPort: 5763
+  selector:
+    fwk-service-po: fwk-service-farm
+  sessionAffinity: None
+  type: ClusterIP

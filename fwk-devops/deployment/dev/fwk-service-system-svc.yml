@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    fwk-service-svc: fwk-service-system
+  name: fwk-service-system
+  namespace: default
+spec:
+  ports:
+  - name: service
+    port: 5765
+    protocol: TCP
+    targetPort: 5765
+  selector:
+    fwk-service-po: fwk-service-system
+  sessionAffinity: None
+  type: ClusterIP

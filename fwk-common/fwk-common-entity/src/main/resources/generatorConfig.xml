@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<!-- classPathEntry:数据库的JDBC驱动的jar包地址 -->
+	<!-- <classPathEntry location="mysql-connector-java-5.1.38.jar" /> -->
+	<context id="MysqlTables" targetRuntime="MyBatis3">
+		<commentGenerator>
+			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		<!-- 数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://10.88.20.127:3306/farmwork"
+			userId="root" password="Flzx_3kc">
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!-- targetProject:自动生成代码的位置 -->
+		<javaModelGenerator targetPackage="com.fwk.common.entity"
+			targetProject="src/main/java">
+			<!-- enableSubPackages:是否让schema作为包的后缀 -->
+			<property name="enableSubPackages" value="true" />
+			<!-- 从数据库返回的值被清理前后的空格 -->
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="com.fwk.common.dao"
+			targetProject="src/main/resources">
+			<property name="enableSubPackages" value="false" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.fwk.common.dao" targetProject="src/main/java">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		
+		<!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
+		<!-- No:1 -->
+		<table tableName="t_a_agricname" domainObjectName="TAagricname">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:2 -->
+		<table tableName="t_a_medicine_into" domainObjectName="TAmedicineinto">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:3 -->
+		<table tableName="t_a_medicine_send" domainObjectName="TAmedicinesend">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:4 -->
+		<table tableName="t_a_peasant" domainObjectName="TApeasant">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:5 -->
+		<table tableName="t_a_peasant_protocol" domainObjectName="TApeasantprotocol">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:6 -->
+		<table tableName="t_a_peasant_protocol_resource" domainObjectName="TApeasantprotocolresource">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:7 -->
+		<table tableName="t_a_plant" domainObjectName="TAplant">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:8 -->
+		<table tableName="t_a_productive" domainObjectName="TAproductive">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:9 -->
+		<table tableName="t_c_category" domainObjectName="TCcategory">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:10 -->
+		<table tableName="t_c_dict" domainObjectName="TCdict">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:11 -->
+		<table tableName="t_c_log" domainObjectName="TClog">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:12 -->
+		<table tableName="t_c_position" domainObjectName="TCposition">
+		</table>
+		
+		<!-- No:13 -->
+		<table tableName="t_c_resource" domainObjectName="TCresource">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:14 -->
+		<table tableName="t_c_resource_history" domainObjectName="TCresourcehistory">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:15 -->
+		<table tableName="t_f_communion" domainObjectName="TFcommunion">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:16 -->
+		<table tableName="t_f_communion_category" domainObjectName="TFcommunioncategory">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:17 -->
+		<table tableName="t_f_communion_comment" domainObjectName="TFcommunioncomment">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:18 -->
+		<table tableName="t_f_communion_comment_reversion" domainObjectName="TFcommunioncommentreversion">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:19 -->
+		<table tableName="t_f_communion_parcel" domainObjectName="TFcommunionparcel">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:20 -->
+		<table tableName="t_f_communion_resource" domainObjectName="TFcommunionresource">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:21 -->
+		<table tableName="t_f_communion_userpermisions" domainObjectName="TFcommunionuserpermisions">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:22 -->
+		<table tableName="t_f_output" domainObjectName="TFoutput">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:23 -->
+		<table tableName="t_f_pest" domainObjectName="TFpest">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:24 -->
+		<table tableName="t_f_pest_comment" domainObjectName="TFpestcomment">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:25 -->
+		<table tableName="t_f_pest_resource" domainObjectName="TFpestresource">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:26 -->
+		<table tableName="t_f_plan" domainObjectName="TFplan">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:27 -->
+		<table tableName="t_f_plan_parcel" domainObjectName="TFplanparcel">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:28 -->
+		<table tableName="t_f_plan_partics" domainObjectName="TFplanpartics">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:29 -->
+		<table tableName="t_f_plan_resources" domainObjectName="TFplanresources">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:30 -->
+		<table tableName="t_f_plan_warn" domainObjectName="TFplanwarn">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:31 -->
+		<table tableName="t_f_plan_userpermisions" domainObjectName="TFplanuserpermisions">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:32 -->
+		<table tableName="t_f_record_userpermisions" domainObjectName="TFrecorduserpermisions">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:33 -->
+		<table tableName="t_f_task_userpermisions" domainObjectName="TFtaskuserpermisions">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:34 -->
+		<table tableName="t_f_record" domainObjectName="TFrecord">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:35 -->
+		<table tableName="t_f_record_output" domainObjectName="TFrecordoutput">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:36 -->
+		<table tableName="t_f_record_parcel" domainObjectName="TFrecordparcel">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:37 -->
+		<table tableName="t_f_record_partuser" domainObjectName="TFrecordpartuser">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:38 -->
+		<table tableName="t_f_record_resource" domainObjectName="TFrecordresource">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:39 -->
+		<table tableName="t_f_record_farmtype" domainObjectName="TFrecordfarmtype">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:40 -->
+		<table tableName="t_f_task" domainObjectName="TFtask">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:41 -->
+		<table tableName="t_f_task_comment" domainObjectName="TFtaskcomment">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:42 -->
+		<table tableName="t_f_task_comment_resource" domainObjectName="TFtaskcommentresource">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:43 -->
+		<table tableName="t_f_task_copy" domainObjectName="TFtaskcopy">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:44 -->
+		<table tableName="t_f_task_execute" domainObjectName="TFtaskexecute">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:45 -->
+		<table tableName="t_f_task_log" domainObjectName="TFtasklog">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:46 -->
+		<table tableName="t_f_task_partics" domainObjectName="TFtaskpartics">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:47 -->
+		<table tableName="t_f_task_plan" domainObjectName="TFtaskplan">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+			
+		<!-- No:48 -->
+		<table tableName="t_f_task_parcel" domainObjectName="TFtaskparcel">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:49 -->
+		<table tableName="t_f_task_resources" domainObjectName="TFtaskresources">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:50 -->
+		<table tableName="t_f_task_warn" domainObjectName="TFtaskwarn">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:51 -->
+		<table tableName="t_p_parcel" domainObjectName="TPparcel">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:52 -->
+		<table tableName="t_p_parcel_user" domainObjectName="TPparceluser">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:53 -->
+		<table tableName="t_p_parcel_plant" domainObjectName="TPparcelplant">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:54 -->
+		<table tableName="t_p_parcel_coord" domainObjectName="TPparcelcoord">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:55 -->
+		<table tableName="t_p_parcel_meassoil" domainObjectName="TPparcelmeassoil">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:56 -->
+		<table tableName="t_p_parcel_meassoil_resource" domainObjectName="TPparcelmeassoilresource">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:57 -->
+		<table tableName="t_p_parcel_type" domainObjectName="TPparceltype">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:58 -->
+		<table tableName="t_s_dict" domainObjectName="TSdict">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:59 -->
+		<table tableName="t_s_dict_type" domainObjectName="TSdicttype">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:60 -->
+		<table tableName="t_s_information" domainObjectName="TSinformation">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:61 -->
+		<table tableName="t_s_information_content" domainObjectName="TSinformationcontent">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:62 -->
+		<table tableName="t_s_information_content_resource" domainObjectName="TSinformationcontentresource">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:63 -->
+		<table tableName="t_s_information_resource" domainObjectName="TSinformationresource">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:64 -->
+		<table tableName="t_s_product_type" domainObjectName="TSproducttype">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:65 -->
+		<table tableName="t_s_logger" domainObjectName="TSlogger">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:66 -->
+		<table tableName="t_u_department" domainObjectName="TUdepartment">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:67 -->
+		<table tableName="t_u_function_module" domainObjectName="TUfunctionmodule">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:68 -->
+		<table tableName="t_u_function_module_point" domainObjectName="TUfunctionmodulepoint">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:69 -->
+		<table tableName="t_u_function_point" domainObjectName="TUfunctionpoint">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:70 -->
+		<table tableName="t_u_org" domainObjectName="TUorg">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:71 -->
+		<table tableName="t_u_permission" domainObjectName="TUpermission">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:72 -->
+		<table tableName="t_u_role" domainObjectName="TUrole">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:73 -->
+		<table tableName="t_u_role_permission" domainObjectName="TUrolepermission">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:74 -->
+		<table tableName="t_u_user_org_depart" domainObjectName="TUuserorgdepart">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:75 -->
+		<table tableName="t_u_user_role" domainObjectName="TUuserrole">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:76 -->
+		<table tableName="t_u_users" domainObjectName="TUusers">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:77 -->
+		<table tableName="t_u_userverificode" domainObjectName="TUuserverificode">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+
+		<!-- No:78 -->
+		<table tableName="t_p_parcel_area_stats" domainObjectName="TPparcelareastats">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:79 -->
+		<table tableName="t_p_parcel_resource" domainObjectName="TPparcelresource">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:80 -->
+		<table tableName="t_p_parcel_plant_resource" domainObjectName="TPparcelplantresource">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:81 -->
+		<table tableName="t_p_parcel_plant_yield" domainObjectName="TPparcelplantyield">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:82 -->
+		<table tableName="t_s_varieties" domainObjectName="TSvarieties">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- No:83 -->
+		<table tableName="t_c_poslatlng" domainObjectName="TCposlatlng">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+	</context>
+</generatorConfiguration>

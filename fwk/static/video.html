@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+<style>
+  .video {
+    /* border: 1px solid red; */
+    background: black;
+    /* width: 320px; 
+    height: 120px; */
+  }
+</style>
+<div class="video">
+  <video id="vid" src="http://118.190.81.136:80/resource/M00/00/14/Ch9E_lq_J0OASZWPAEwg1bfl2i8748.mp4" 
+         controls="controls" height="120px" width ="100%" >
+        您的浏览器不支持该视频播放
+  </video>
+</div>
+<script>
+window.onload = function () {
+  var resParams = GetRequest()
+  console.log(resParams)
+  document.getElementById('vid').src = resParams['vid']
+}
+function GetRequest () {
+  var url = location.search
+  var theRequest = {}
+  if (url.indexOf('?') !== -1) {
+    var str = url.substr(1)
+    var strs = str.split('&')
+    for (var i = 0; i < strs.length; i++) {
+      theRequest[strs[i].split('=')[0]] = unescape(strs[i].split('=')[1])
+    }
+  }
+  return theRequest
+}
+</script>
+</body>
+</html>

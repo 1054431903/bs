@@ -1,0 +1,61 @@
+=====================<开始写入产品认证的URL>========================
+ISO9001.jpeg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_aAWAQU1_AACSvePA9gM64.jpeg
+中国有机产品认证.jpeg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_aAWAFljzAABwsZUgoDw66.jpeg
+农产品地理标志.jpeg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_aAaAMgRHAABGck-dvOE62.jpeg
+无公害农产品.jpeg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_aAaAAINIAABT2nuap1s68.jpeg
+生产许可.jpeg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_aAaAL_I7AAAyaXNdn9079.jpeg
+绿色食品.jpeg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_aAeAdoRBAACcuivYzaA46.jpeg
+
+
+
+=====================<开始写入产品155的图片的URL>========================
+产品图片_155_巴西蘑菇：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_cXCAD_7tAAP9r7CfnkU723.png
+
+产品图片_155_产品描述一：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_cY2AEfJ1ACu445qvACA280.jpg
+
+产品图片_155_产销过程_分销.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_fZGAHBpLAABCLvVtxpU832.jpg
+产品图片_155_产销过程_采收.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_fZGAE4v6AABH63ue_J0547.jpg
+产品图片_155_产销过程_清洗.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_fZKAbbSNAAA8ak-EPoE221.jpg
+产品图片_155_产销过程_包装.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_fZKABw-aAAAkDK4sWfw805.jpg
+产品图片_155_产销过程_出售.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_fZKAUZL0AABY4skh9Ac089.jpg
+产品图片_155_产销过程_育苗.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_fZOAH19SAABcYZK6J_4134.jpg
+产品图片_155_产销过程_选种.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_fZOADXz7AABLC9iVds8060.jpg
+产品图片_155_产销过程_测土.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_fZSAdhZlAABwgoalf9M818.jpg
+
+
+=====================<开始写入产品156的图片的URL>========================
+产品图片_156_辣椒干：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gE6AbllKAAR2a7kj9tE364.png
+产品图片_156_产品描述_1.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gE-AOjduAAI9iE9uBA0311.jpg
+产品图片_156_产品描述_2.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gE2AbIL8AAGrzB4kno4742.jpg
+产品图片_156_产品描述_3.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gE2Aaq8LAAQTEHi35q8335.jpg
+产品图片_156_产品描述_4.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gFGAIBk5AARIspMg7Ak031.jpg
+产品图片_156_产品描述_5.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gFCAXDeVAASUwC2Y2NA070.jpg
+产品图片_156_产品描述_6.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gFKAObFtAALxFJfJEFY008.jpg
+产品图片_156_产品描述_7.jpg：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gFKAYVSPAAJWoRm2EIo759.jpg
+
+<p><img src="http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gE-AOjduAAI9iE9uBA0311.jpg" title="wKgAA1m_gE-AOjduAAI9iE9uBA0311.jpg" alt="wKgAA1m_gE-AOjduAAI9iE9uBA0311.jpg"/></p>
+<p><img src="http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gE2AbIL8AAGrzB4kno4742.jpg" title="wKgAA1m_gE2AbIL8AAGrzB4kno4742.jpg" alt="wKgAA1m_gE2AbIL8AAGrzB4kno4742.jpg"/></p>
+<p><img src="http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gE2Aaq8LAAQTEHi35q8335.jpg" title="wKgAA1m_gE2Aaq8LAAQTEHi35q8335.jpg" alt="wKgAA1m_gE2Aaq8LAAQTEHi35q8335.jpg"/></p>
+<p><img src="http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gFGAIBk5AARIspMg7Ak031.jpg" title="wKgAA1m_gFGAIBk5AARIspMg7Ak031.jpg" alt="wKgAA1m_gFGAIBk5AARIspMg7Ak031.jpg"/></p>
+<p><img src="http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gFCAXDeVAASUwC2Y2NA070.jpg" title="wKgAA1m_gFCAXDeVAASUwC2Y2NA070.jpg" alt="wKgAA1m_gFCAXDeVAASUwC2Y2NA070.jpg"/></p>
+<p><img src="http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gFKAObFtAALxFJfJEFY008.jpg" title="wKgAA1m_gFKAObFtAALxFJfJEFY008.jpg" alt="wKgAA1m_gFKAObFtAALxFJfJEFY008.jpg"/></p>
+<p><img src="http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_gFKAYVSPAAJWoRm2EIo759.jpg" title="wKgAA1m_gFKAYVSPAAJWoRm2EIo759.jpg" alt="wKgAA1m_gFKAYVSPAAJWoRm2EIo759.jpg"/></p>
+
+=====================<开始写入产品追溯二维码的图片的URL>========================
+产品155的追溯二维码：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_h3qAZluFAAABqjMC-B4716.png
+产品156的追溯二维码：http://139.198.13.100:7010/resource/M00/00/00/wKgAA1m_h_WAOHBeAAABreUGF7Y407.png
+
+
+
+
+
+
+=====================<开始写入产品156的图片的URL>========================
+产品图片_156_产品描述_2.jpg：http://139.198.13.100:7010/resource/M00/00/5D/wKgAA1pq9DKAUKo9AAGrzB4kno4840.jpg
+产品图片_156_产品描述_3.jpg：http://139.198.13.100:7010/resource/M00/00/5D/wKgAA1pq9DSAQQdBAAQTEHi35q8737.jpg
+产品图片_156_辣椒干：http://139.198.13.100:7010/resource/M00/00/5D/wKgAA1pq9DWAfxQnAAR2a7kj9tE579.png
+产品图片_156_产品描述_1.jpg：http://139.198.13.100:7010/resource/M00/00/5D/wKgAA1pq9DaAceoJAAI9iE9uBA0607.jpg
+产品图片_156_产品描述_5.jpg：http://139.198.13.100:7010/resource/M00/00/5D/wKgAA1pq9DeAGAlSAASUwC2Y2NA115.jpg
+产品图片_156_产品描述_4.jpg：http://139.198.13.100:7010/resource/M00/00/5D/wKgAA1pq9DiARXQMAARIspMg7Ak458.jpg
+产品图片_156_产品描述_6.jpg：http://139.198.13.100:7010/resource/M00/00/5D/wKgAA1pq9DmAZv6rAALxFJfJEFY103.jpg
+产品图片_156_产品描述_7.jpg：http://139.198.13.100:7010/resource/M00/00/5E/wKgAA1pq9DuAH1HeAAJWoRm2EIo064.jpg

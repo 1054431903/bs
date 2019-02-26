@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>【农事管理】-农事任务管理</title>
+<script type="text/javascript" src="../js/lib/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/task.js"></script>
+
+</head>
+<body>
+	<table align="center">
+		<tr>
+			<th>【农事管理】-农事任务管理</th>
+		</tr>
+		<tr>
+			<td height="50px" width="300px" align="right"><button
+					type="button" onclick="javascript:history.go(-1);">返回</button></td>
+		</tr>
+		<tr>
+			<td height="50px"><button type="button" id="btn_add"
+					onclick="add();">新增农事任务</button></td>
+		</tr>
+		<tr>
+			<td height="50px"><button type="button" id="btn_querybyid"
+					onclick="querybyid();">查看农事任务</button></td>
+		</tr>
+		<tr>
+			<td height="50px"><button type="button" id="btn_update"
+					onclick="update();">修改农事任务</button></td>
+		</tr>
+		<tr>
+			<td height="50px"><button type="button" id="btn_querylist"
+					onclick="querylist();">查询农事任务</button></td>
+		</tr>
+		<tr>
+			<td height="50px"><button type="button" id="btn_deletebyid"
+					onclick="deletebyid();">删除农事任务</button></td>
+		</tr>
+		<tr>
+			<td height="50px"><button type="button" id="btn_batchdeletebyid"
+					onclick="batchdeletebyid();">批量删除农事任务</button></td>
+		</tr>
+		<tr>
+			<td height="50px"><button type="button" id="btn_queryparcellist"
+					onclick="queryparcellist();">获取地块</button></td>
+		</tr>
+		<tr>
+			<td height="50px"><button type="button" id="btn_querylistpartics"
+					onclick="querylistpartics();">我参与的</button></td>
+		</tr>
+		<tr>
+			<td height="50px"><button type="button" id="btn_querylistrelease"
+					onclick="querylistrelease();">我发布的</button></td>
+		</tr>
+		<tr>
+			<td height="50px"><button type="button" id="btn_querylistcopy"
+					onclick="querylistcopy();">抄送我的</button></td>
+		</tr>
+		<tr>
+			<td height="50px"></td>
+		</tr>
+	</table>
+</body>
+</html>

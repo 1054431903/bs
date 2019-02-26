@@ -1,0 +1,54 @@
+{
+  "$id": "common",
+  "title": "iov-common-schema",
+  "definitions": {
+    "status": {
+      "type": "integer",
+      "title": "状态",
+      "enum": [
+        0,
+        1
+      ],
+      "enumNames": [
+        "无效",
+        "有效"
+      ],
+      "default": 1
+    },
+    "address": {
+      "type": "object",
+      "title": "地址",
+      "format": "address",
+      "properties": {
+        "province": {
+          "type": "string",
+          "$id": "#base.area",
+          "title": "省"
+        },
+        "city": {
+          "type": "string",
+          "$id": "#base.area",
+          "title": "市"
+        },
+        "district": {
+          "type": "string",
+          "$id": "#base.area",
+          "title": "区"
+        },
+        "street": {
+          "type": "string",
+          "title": "街道"
+        }
+      },
+      "dependencies": {
+        "city": [
+          "province"
+        ],
+        "district": [
+          "province",
+          "city"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.farm.dao.RecordresourceEXTMapper">
+
+	<!--======================= 添加农事记录的附件资源文件 =========================-->
+	<insert id="add" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.fwk.service.farm.entity.RecordresourceEXT">
+
+		INSERT INTO 
+			t_f_record_resource (
+				resourceid,
+				recordid
+			)
+			VALUES
+				(
+					#{resourceid}, 
+					#{recordid}
+				)
+
+	</insert>
+	
+	<!--======================= 批量新增农事记录的附件资源文件 =========================-->
+	<insert id="batchAdd" useGeneratedKeys="true"
+		keyProperty="id" parameterType="java.util.List">
+
+		<if test="(null != list) and (list.size() > 0)">
+			INSERT INTO 
+				t_f_record_resource (
+						resourceid,
+						recordid
+					)
+					VALUES
+				<foreach collection="list" item="recordresourceEXT" separator=",">
+					(
+							#{recordresourceEXT.resourceid}, 
+							#{recordresourceEXT.recordid}
+						)
+				</foreach>
+		</if>
+
+	</insert>
+
+	<!--=================== 更新农事记录的附件资源文件 =========================-->
+	<update id="update" parameterType="com.fwk.service.farm.entity.RecordresourceEXT">
+
+		UPDATE t_f_record_resource
+			SET 
+				edittime = SYSDATE(),
+				resourceid = #{resourceid}, 
+				recordid = #{recordid} 
+			WHERE 
+				id = #{id}
+				
+	</update>
+	
+	<!--=============== 删除农事记录的附件资源文件 =========================-->
+	<update id="deletebyid" parameterType="com.fwk.service.farm.entity.RecordresourceEXT">
+
+		UPDATE t_f_record_resource SET edittime = SYSDATE(), delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}' WHERE id = #{id}
+
+	</update>
+	
+	<!--=============== 根据主键批量删除农事记录的附件资源文件 =========================-->
+	<update id="batchdeletebyids" parameterType="java.util.List">
+	
+		<if test="(null != idList) and (idList.size() > 0)">
+		UPDATE t_f_record_resource 
+					SET 
+						edittime = SYSDATE(),
+						delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}' 
+					WHERE 
+						id IN
+						
+						<foreach collection="idList" open="(" separator="," close=")" item="id">
+							#{id}
+						</foreach>
+		</if>
+
+	</update>
+	
+	<!-- 查询条件：查询出所有符合条件的农事记录的附件资源文件 -->
+	<sql id="where_queryList">
+		
+		WHERE 1 = 1
+		
+		<!-- 业务主键ID -->
+		<choose>
+			<when test="(null != id)">
+				AND id = #{id}
+			</when>
+			<when test="(null != idlist) and (idlist.size > 0)">
+				AND id IN 
+				<foreach collection="idlist" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</when>
+		</choose>
+		
+		<!-- 查询该日期以后更新的数据 -->
+		<if test="(null != lastservicetime)">
+			AND edittime &gt;= #{lastservicetime}
+		</if>
+		
+		<!-- 删除标记 -->
+		<choose>
+			<when test="(null == delstate)">
+				AND delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+			</when>
+			<otherwise>
+				AND delstate = #{delstate}
+			</otherwise>
+		</choose>
+		
+		<!-- 创建时间 -->
+		<choose>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null != createdateend and '' != createdateend)">
+				AND (creattime BETWEEN #{createdatestart} AND #{createdateend})
+			</when>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null == createdateend or '' == createdateend)">
+				AND creattime &gt;= #{createdatestart}
+			</when>
+			<when test=" (null == createdatestart or '' == createdatestart) and null != createdateend and '' != createdateend">
+				AND creattime &lt;= #{createdateend}
+			</when>
+		</choose>
+		
+		<!-- 农事记录的ID -->
+		<if test="(null != recordid)">
+			AND recordid = #{recordid}
+		</if>
+		
+		<!-- 资源上传历史的ID -->
+		<if test="(null != resourceid)">
+			AND resourceid = #{resourceid}
+		</if>
+		
+		<!-- 农事记录的业务主键列表 -->
+		<if test="(null != recordidlist) and (recordidlist.size() > 0)">
+			AND recordid IN 
+			<foreach collection="recordidlist" item="recordid" open="(" separator="," close=")">
+				#{recordid}
+			</foreach>
+		</if>
+		
+	</sql>
+	
+	<!--=================== 检索农事记录的附件资源文件 ========================-->
+	<select id="queryList" parameterType="com.fwk.service.farm.entity.RecordresourceEXT" resultType="com.fwk.service.farm.entity.RecordresourceEXT">
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					t_f_record_resource.*, 
+					t_c_resource_history.orderno, 
+					t_c_resource.resourcepath,
+					t_c_resource.resourcename,
+					t_c_resource.timelength
+				FROM
+					t_f_record_resource
+				LEFT OUTER JOIN t_c_resource_history ON t_c_resource_history.id = t_f_record_resource.resourceid
+				LEFT OUTER JOIN t_c_resource ON t_c_resource.id = t_c_resource_history.currentResource
+			) table_all
+			
+			<!-- 查询条件 -->
+			<include refid="where_queryList"/>
+			
+			<!-- 排序 -->
+			<choose>
+				<!-- 使用自定义的排序方式排序 -->
+				<when test="(null != orderBySQL) and ('' != orderBySQL)">
+					ORDER BY ${orderBySQL}
+				</when>
+				<!-- 使用默认的排序方式：添加时间降序排序（id是自增长，所以与添加时间的先后顺序一致） -->
+				<otherwise>
+					ORDER BY recordid ASC, orderno ASC
+				</otherwise>
+			</choose>
+			
+			<!-- 分页查询 -->
+			<if test="(null != page)">
+				LIMIT #{page.startRow}, #{page.pageSize}
+			</if>
+	</select>
+	
+	<!--=================== 检索农事记录的附件资源文件的总记录数量 ========================-->
+	<select id="queryListTotalCount" parameterType="com.fwk.service.farm.entity.RecordresourceEXT" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1) AS totalCount
+		FROM
+			(
+				SELECT
+					t_f_record_resource.*, 
+					t_c_resource_history.orderno, 
+					t_c_resource.resourcepath,
+					t_c_resource.resourcename,
+					t_c_resource.timelength
+				FROM
+					t_f_record_resource
+				LEFT OUTER JOIN t_c_resource_history ON t_c_resource_history.id = t_f_record_resource.resourceid
+				LEFT OUTER JOIN t_c_resource ON t_c_resource.id = t_c_resource_history.currentResource
+			) table_all
+			
+			<!-- 查询条件 -->
+			<include refid="where_queryList"/>
+	</select>
+	
+</mapper>

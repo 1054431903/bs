@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.system.dao.InformationDao">
+
+	<insert id="saveInformation" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.fwk.service.system.entity.InformationEXT">
+		insert into t_s_information
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="title != null">
+				title,
+			</if>
+			<if test="categoryid != null">
+				categoryid,
+			</if>
+			<if test="pubuserid != null">
+				pubuserid,
+			</if>
+			<if test="ispub != null">
+				ispub,
+			</if>
+			<if test="pubtime != null">
+				pubtime,
+			</if>
+			<if test="orgid != null">
+        		orgid,
+      		</if>
+		    <if test="edittime != null">
+		       edittime,
+		    </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryid != null">
+				#{categoryid,jdbcType=INTEGER},
+			</if>
+			<if test="pubuserid != null">
+				#{pubuserid,jdbcType=VARCHAR},
+			</if>
+			<if test="ispub != null">
+				#{ispub,jdbcType=INTEGER},
+			</if>
+			<if test="pubtime != null">
+				#{pubtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="orgid != null">
+	        	#{orgid,jdbcType=VARCHAR},
+	      	</if>
+	      	<if test="edittime != null">
+	        	#{edittime,jdbcType=TIMESTAMP},
+	      	</if>
+		</trim>
+	</insert>
+
+	<update id="updateInformation" parameterType="com.fwk.service.system.entity.InformationEXT">
+		update t_s_information
+		<set>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryid != null">
+				categoryid = #{categoryid,jdbcType=INTEGER},
+			</if>
+			<if test="pubuserid != null">
+				pubuserid = #{pubuserid,jdbcType=VARCHAR},
+			</if>
+			<if test="ispub != null">
+				ispub = #{ispub,jdbcType=INTEGER},
+			</if>
+			<if test="pubtime != null">
+				pubtime = #{pubtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="puborgid != null">
+				puborgid = #{puborgid,jdbcType=INTEGER},
+			</if>
+			<if test="orgid != null">
+        		orgid = #{orgid,jdbcType=VARCHAR},
+      		</if>
+      		<if test="edittime != null">
+        		edittime = #{edittime,jdbcType=TIMESTAMP},
+      		</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<update id="publishInformation" parameterType="com.fwk.service.system.entity.InformationEXT">
+		<if test="idlist != null and idlist.size() > 0">
+			update t_s_information
+			set ispub = #{ispub},
+			pubtime = #{pubtime},
+			pubuserid = #{pubuserid},
+			puborgid = #{puborgid}
+			where id in
+			<foreach collection="idlist" open="(" separator="," close=")"
+				item="id">
+				#{id}
+			</foreach>
+		</if>
+	</update>
+
+	<update id="deleteInformation" parameterType="com.fwk.service.system.entity.InformationEXT">
+		<if test="(null != idlist) and (idlist.size() > 0)">
+			update t_s_information set delstate=
+			'${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}'
+			where id in
+			<foreach collection="idlist" open="(" separator="," close=")"
+				item="id">
+				#{id}
+			</foreach>
+		</if>
+	</update>
+
+	<select id="queryInformation" parameterType="com.fwk.service.system.entity.InformationEXT"
+		resultType="com.fwk.service.system.entity.InformationEXT">
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					a.*, c. NAME puborgname,
+					b.resourceid,
+					(
+						SELECT
+							res.resourcepath
+						FROM
+							t_c_resource_history his,
+							t_c_resource res
+						WHERE
+							his.currentResource = res.id
+						AND his.delstate = 1
+						AND res.delstate = 1
+						AND his.id = b.resourceid
+					) resourcepath,
+					(
+						SELECT
+							NAME
+						FROM
+							t_u_users d
+						WHERE
+							a.pubuserid = d.supportid
+						AND d.delstate = 1
+					) pubusername,
+					(
+						SELECT
+							photo
+						FROM
+							t_u_users e
+						WHERE
+							e.delstate = 1
+						AND e.supportid = a.pubuserid
+					) photoid,
+					(
+						SELECT
+							g.resourcepath
+						FROM
+							t_u_users f
+						LEFT JOIN (
+							SELECT
+								his.id,
+								res.resourcepath
+							FROM
+								t_c_resource_history his,
+								t_c_resource res
+							WHERE
+								his.currentResource = res.id
+							AND his.delstate = 1
+							AND res.delstate = 1
+						) g ON f.photo = g.id
+						WHERE
+							f.delstate = 1
+						AND f.supportid = a.pubuserid
+					) photopath
+				FROM
+					t_s_information a
+				LEFT JOIN t_s_information_resource b ON a.id = b.informationid
+				AND b.delstate = 1
+				LEFT JOIN t_u_org c ON a.puborgid = c.id
+				AND c.delstate = 1
+			) table_all
+		<include refid="where_sql" />
+		<include refid="order_sql" />
+		<include refid="limit_sql" />
+	</select>
+
+	<select id="queryInformationCount" parameterType="com.fwk.service.system.entity.InformationEXT"
+		resultType="java.lang.Integer">
+		SELECT
+			count(1) totalCount
+		FROM
+			(
+				SELECT
+					a.*, c. NAME puborgname,
+					b.resourceid,
+					(
+						SELECT
+							res.resourcepath
+						FROM
+							t_c_resource_history his,
+							t_c_resource res
+						WHERE
+							his.currentResource = res.id
+						AND his.delstate = 1
+						AND res.delstate = 1
+						AND his.id = b.resourceid
+					) resourcepath,
+					(
+						SELECT
+							NAME
+						FROM
+							t_u_users d
+						WHERE
+							a.pubuserid = d.supportid
+						AND d.delstate = 1
+					) pubusername,
+					(
+						SELECT
+							photo
+						FROM
+							t_u_users e
+						WHERE
+							e.delstate = 1
+						AND e.supportid = a.pubuserid
+					) photoid,
+					(
+						SELECT
+							g.resourcepath
+						FROM
+							t_u_users f
+						LEFT JOIN (
+							SELECT
+								his.id,
+								res.resourcepath
+							FROM
+								t_c_resource_history his,
+								t_c_resource res
+							WHERE
+								his.currentResource = res.id
+							AND his.delstate = 1
+							AND res.delstate = 1
+						) g ON f.photo = g.id
+						WHERE
+							f.delstate = 1
+						AND f.supportid = a.pubuserid
+					) photopath
+				FROM
+					t_s_information a
+				LEFT JOIN t_s_information_resource b ON a.id = b.informationid
+				AND b.delstate = 1
+				LEFT JOIN t_u_org c ON a.puborgid = c.id
+				AND c.delstate = 1
+			) table_all
+		<include refid="where_sql" />
+	</select> 
+
+	<insert id="copyInformation" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.fwk.service.system.entity.InformationEXT">
+		INSERT INTO t_s_information (
+			creattime,
+			delstate,
+			title,
+			categoryid,
+			pubuserid,
+			ispub,
+			pubtime,
+			orgid,
+			edittime
+		) SELECT
+			creattime,
+			delstate,
+			title,
+			categoryid,
+			pubuserid,
+			ispub,
+			pubtime,
+			orgid,
+			edittime
+		FROM
+			t_s_information
+		WHERE
+			id = #{id}
+	</insert>
+
+	<sql id="where_sql">
+		where 1=1
+		<if test="title != null and title != ''">
+			and title like CONCAT('%',#{title},'%')
+		</if>
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="categoryid != null and categoryid != ''">
+			and categoryid = #{categoryid}
+		</if>
+		<if test="ispub != null">
+			and ispub = #{ispub}
+		</if>
+		<if test="orgid != null">
+			and orgid = #{orgid}
+		</if>
+		<if test="keywords != null and keywords != ''">
+			AND ((title LIKE CONCAT('%',#{keywords},'%')) 
+					OR (pubusername LIKE CONCAT('%',#{keywords},'%')) 
+				)
+		</if>
+		<choose>
+			<when test="delstate != null">
+				and delstate = #{delstate}
+			</when>
+			<otherwise>
+				and delstate = 1
+			</otherwise>
+		</choose>
+	</sql>
+
+	<sql id="order_sql">
+		<choose>
+			<when test="ordercol != null and ordercol != ''">
+				order by #{ordercol}
+				<choose>
+					<when test="desc != null and desc != ''">
+						#{desc}
+					</when>
+					<otherwise>
+						desc
+					</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				order by creattime desc
+			</otherwise>
+		</choose>
+	</sql>
+
+	<sql id="limit_sql">
+		<choose>
+			<when test="page !=null">
+				limit ${(page.currentPage-1) * page.pageSize},${page.pageSize}
+			</when>
+			<otherwise>
+				limit 0,99999
+			</otherwise>
+		</choose>
+	</sql>
+
+</mapper>

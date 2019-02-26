@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.common.dao.DictEXTMapper">
+	
+	<!-- 查询条件：查询出数据字典的列表 -->
+	<sql id="where_queryList">
+		<!-- 数据字典的ID -->
+		<if test="(null != id)">
+			AND id = #{id}
+		</if>
+		
+		<!-- 字典类型 -->
+		<if test="(null != dicttype) and ('' != dicttype)">
+			AND dicttype = #{dicttype}
+		</if>
+		
+		<!-- 字典的值 -->
+		<if test="(null != dictvalue) and ('' != dictvalue)">
+			AND dictvalue = #{dictvalue}
+		</if>
+		
+		<!-- 字典的名称 -->
+		<if test="(null != dictname) and ('' != dictname)">
+			AND dictname LIKE CONCAT('%',#{dictname},'%')
+		</if>
+		
+		<!-- 删除标记 -->
+		<if test="(null != delstate)">
+			AND delstate = #{delstate}
+		</if>
+		
+		<!-- 创建时间 -->
+		<choose>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null != createdateend and '' != createdateend)">
+				AND (creattime BETWEEN #{createdatestart} AND #{createdateend})
+			</when>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null == createdateend or '' == createdateend)">
+				AND creattime &gt;= #{createdatestart}
+			</when>
+			<when test=" (null == createdatestart or '' == createdatestart) and null != createdateend and '' != createdateend">
+				AND creattime &lt;= #{createdateend}
+			</when>
+		</choose>
+	</sql>
+	
+	<!--=================== 查询出数据字典的列表 ========================-->
+	<select id="queryList" parameterType="com.fwk.service.common.entity.DictEXT" resultType="com.fwk.service.common.entity.DictEXT">
+		SELECT * FROM t_c_dict WHERE 1=1
+		
+		<!-- 查询条件 -->
+		<include refid="where_queryList"/>
+		
+		<!-- 排序 -->
+		<choose>
+			<when test="(null != orderBySQL) and ('' != orderBySQL)">
+				ORDER BY ${orderBySQL}
+			</when>
+			<otherwise>
+				ORDER BY dicttype ASC, sort ASC
+			</otherwise>
+		</choose>
+		
+		<!-- 分页查询 -->
+		<if test="(null != page)">
+			LIMIT #{page.startRow}, #{page.pageSize}
+		</if>
+	</select>
+	
+	<!--=================== 查询出数据字典的列表的总记录数量 ========================-->
+	<select id="queryListTotalCount" parameterType="com.fwk.service.common.entity.DictEXT" resultType="java.lang.Integer">
+		SELECT COUNT(1) AS totalCount FROM t_c_dict WHERE 1=1
+		
+		<!-- 查询条件 -->
+		<include refid="where_queryList"/>
+	</select>
+	
+</mapper>

@@ -1,0 +1,94 @@
+{
+  "title": "神谷内容推送",
+  "type": "object",
+  "properties": {
+    "type": {
+      "title": "消息类型",
+      "type": "string",
+      "maxLength": 20
+    },
+    "stage": {
+      "title": "消息阶段",
+      "type": "string"
+    },
+    "readed": {
+      "title": "消息是否已读",
+      "type": "integer",
+      "enum": [
+        0,
+        1
+      ],
+      "enumNames": [
+        "否",
+        "是"
+      ],
+      "default": 0
+    },
+    "failure": {
+      "title": "失败标记",
+      "type": "integer",
+      "enum": [
+        0,
+        1
+      ],
+      "enumNames": [
+        "否",
+        "是"
+      ],
+      "default": 0
+    },
+    "param": {
+      "title": "消息参数",
+      "type": "object",
+      "properties": {
+        "task": {
+          "title": "任务Id",
+          "type": "string",
+          "$id": "#task"
+        },
+        "planContent": {
+          "title": "计划内容Id",
+          "type": "string",
+          "$id": "#plan.content"
+        },
+        "title": {
+          "title": "消息标题",
+          "type": "string"
+        },
+        "subTitle": {
+          "title": "副标题",
+          "type": "string"
+        },
+        "content": {
+          "title": "内容",
+          "type": "string"
+        },
+        "url": {
+          "title": "url地址",
+          "type": "string"
+        }
+      }
+    },
+    "tenant": {
+      "title": "消息接收组织",
+      "type": "string",
+      "$id": "#sys.tenant"
+    },
+    "staff": {
+      "title": "创建人",
+      "type": "string",
+      "$id": "#tenant.staff"
+    },
+    "createdOn": {
+      "type": "number",
+      "title": "创建时间",
+      "format": "datetime"
+    },
+    "updatedOn": {
+      "type": "number",
+      "title": "操作时间",
+      "format": "datetime"
+    }
+  },
+  "required": ["type", "tenant", "staff", "updatedOn"]
+}

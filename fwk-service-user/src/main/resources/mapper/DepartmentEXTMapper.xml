@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.user.dao.DepartmentDao">
+
+	<select id="queryDepartment" parameterType="map" resultType="com.fwk.service.user.entity.DepartmentEXT">
+		select * from t_u_department d
+		where 1=1
+		<include refid="where_sql" />
+	</select>
+	
+	<select id="getDepartmentTree" parameterType="map" resultType="com.fwk.service.user.entity.OrgDepartUserTreeDefine">
+		select d.id,d.name,'2' as sign, 
+			   case when parentid = 0 then true else false end as expanded,
+			   d.name as title
+		 from t_u_department d
+		where 1=1 and delstate = 1
+		<if test="orgid != null">
+			and d.orgid = #{orgid} 
+		</if>
+		<choose>
+			<when test="parentid != null">
+				and d.parentid = #{parentid}
+			</when>
+			<otherwise>
+				and d.parentid = 0
+			</otherwise>
+		</choose>
+		
+	</select>
+	
+	<select id="queryDepartmentDetail" parameterType="map" resultType="com.fwk.service.user.entity.DepartmentEXT">
+		select * from t_u_department d
+		where id = #{id}
+	</select>
+	
+	<sql id="where_sql">
+		<if test="orgid != null and orgid != ''">
+			and orgid = #{orgid}
+		</if>
+		<if test="(parentid != null) and (parentid != '')">
+			and parentid = #{parentid}
+		</if>
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="chargeuserid != null and chargeuserid != ''">
+			and chargeuserid = #{chargeuserid}
+		</if>
+		<choose>
+			<when test="delstate != null and delstate != ''">
+				and delstate = #{delstate}
+			</when>
+			<otherwise>
+				and delstate = 1
+			</otherwise>
+		</choose>
+		<if test="supportid != null and supportid != ''">
+			and supportid = #{supportid}
+		</if>
+	</sql>
+	<!-- 
+	<insert id="saveDepartment" parameterType="map">
+		insert into t_u_department (orgid, parentid, name,departno, chargeuserid,supportid)
+	    values (#{orgid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+	      #{departno,jdbcType=VARCHAR}, #{chargeuserid,jdbcType=INTEGER}, #{supportid,jdbcType=VARCHAR})
+	</insert>
+	 -->
+	<insert id="saveDepartment" parameterType="map">
+		INSERT INTO t_u_department
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="orgid != null and orgid !=''">
+				orgid,
+			</if>
+			<if test="parentid != null and parentid !=''">
+				parentid,
+			</if>
+			<if test="name != null and name !=''">
+				name,
+			</if>
+			<if test="departno != null and departno !=''">
+				departno,
+			</if>
+			<if test="chargeuserid != null and chargeuserid !=''">
+				chargeuserid,
+			</if>
+			<if test="supportid != null and supportid !=''">
+				supportid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">		
+			<if test="orgid != null and orgid !=''">
+				#{orgid,jdbcType=INTEGER},
+			</if>
+			<if test="parentid != null and parentid !=''">
+				#{parentid,jdbcType=INTEGER},
+			</if>
+			<if test="name != null and name !=''">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="departno != null and departno !=''">
+				#{departno,jdbcType=VARCHAR},
+			</if>
+			<if test="chargeuserid != null and chargeuserid !=''">
+				#{chargeuserid,jdbcType=INTEGER},
+			</if>
+			<if test="supportid != null and supportid !=''">
+				#{supportid,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateDepartment" parameterType="map">
+		update t_u_department
+	    <set>
+	      <if test="delstate != null and delstate!=''">
+	        delstate = #{delstate,jdbcType=INTEGER},
+	      </if>
+	      <if test="orgid != null and orgid !=''">
+	        orgid = #{orgid,jdbcType=INTEGER},
+	      </if>
+	      <if test="parentid != null and parentid !=''">
+	        parentid = #{parentid,jdbcType=INTEGER},
+	      </if>
+	      <if test="name != null and name !=''">
+	        name = #{name,jdbcType=VARCHAR},
+	      </if>
+	     <if test="departno != null and departno !=''">
+	        departno = #{departno,jdbcType=VARCHAR},
+	      </if>
+	      <if test="chargeuserid != null and chargeuserid !=''">
+	        chargeuserid = #{chargeuserid,jdbcType=INTEGER},
+	      </if>
+	    </set>
+	    where id = #{id}
+	</update>
+	
+</mapper>

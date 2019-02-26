@@ -1,0 +1,43 @@
+{
+  "title": "个人诊断模板",
+  "type": "object",
+  "properties": {
+    "name": {
+      "title": "病症名称",
+      "type": "string",
+      "maxLength": 20
+    },
+    "type": {
+      "title": "作物品类",
+      "type": "string",
+      "$id": "#base.category"
+    },
+    "diagnose": {
+      "title": "诊断结果",
+      "type": "string"
+    },
+    "formula": {
+      "title": "配方及使用说明",
+      "type": "string"
+    },
+    "recommends": {
+      "title": "药肥推荐",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "format": "url"
+    },
+    "staff": {
+      "title": "归属于",
+      "type": "string",
+      "$id": "#tenant.staff"
+    },
+    "updatedOn": {
+      "type": "number",
+      "title": "操作时间",
+      "format": "datetime"
+    }
+  },
+  "required": ["name", "type", "diagnose", "staff", "updatedOn"]
+}

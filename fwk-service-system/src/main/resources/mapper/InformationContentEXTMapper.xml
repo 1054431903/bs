@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.system.dao.InformationContentDao">
+	<insert id="saveInformationContent" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.fwk.service.system.entity.InformationContentEXT">
+		insert into t_s_information_content
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="informationid != null">
+				informationid,
+			</if>
+			<if test="name != null and name != ''">
+				name,
+			</if>
+			<if test="sort != null">
+				sort,
+			</if>
+			<if test="content != null and content != ''">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="informationid != null">
+				#{informationid,jdbcType=INTEGER},
+			</if>
+			<if test="name != null and name != ''">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				#{sort,jdbcType=INTEGER},
+			</if>
+			<if test="content != null and content != ''">
+				#{content,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="deleteInformationContent" parameterType="com.fwk.service.system.entity.InformationContentEXT">
+		<if test="(null != idlist) and (idlist.size() > 0)">
+			update t_s_information_content set delstate=
+			'${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}'
+			where id in
+			<foreach collection="idlist" open="(" separator="," close=")"
+				item="id">
+				#{id}
+			</foreach>
+		</if>
+	</update>
+
+	<update id="updateInformationContent" parameterType="com.fwk.service.system.entity.InformationContentEXT">
+		update t_s_information_content
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="informationid != null">
+				informationid = #{informationid,jdbcType=INTEGER},
+			</if>
+			<if test="sort != null">
+				sort = #{sort,jdbcType=INTEGER},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryInformationContent" parameterType="com.fwk.service.system.entity.InformationContentEXT"
+		resultType="com.fwk.service.system.entity.InformationContentEXT">
+		select * from t_s_information_content
+		<include refid="where_sql" />
+		<include refid="order_sql" />
+		<include refid="limit_sql" />
+	</select>
+
+	<select id="queryInformationContentCount" parameterType="com.fwk.service.system.entity.InformationContentEXT"
+		resultType="java.lang.Integer">
+		select count(*) from t_s_information_content
+		where
+		informationid = #{informationid}
+	</select>
+
+	<sql id="where_sql">
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="informationid != null">
+			and informationid = #{informationid}
+		</if>
+		<if test="sort != null">
+			and sort = #{sort}
+		</if>
+		<if test="name != null and name != ''">
+			and name like CONCAT('%',#{name},'%')
+		</if>
+		<choose>
+			<when test="delstate != null">
+				and delstate = #{delstate}
+			</when>
+			<otherwise>
+				and delstate = 1
+			</otherwise>
+		</choose>
+	</sql>
+
+	<sql id="order_sql">
+		<choose>
+			<when test="ordercol != null and ordercol != ''">
+				order by #{ordercol}
+				<choose>
+					<when test="desc != null and desc != ''">
+						#{desc}
+					</when>
+					<otherwise>
+						asc
+					</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				order by sort asc
+			</otherwise>
+		</choose>
+	</sql>
+
+	<sql id="limit_sql">
+		<choose>
+			<when test="page !=null">
+				limit ${(page.currentPage-1) * page.pageSize},${page.pageSize}
+			</when>
+			<otherwise>
+				limit 0,99999
+			</otherwise>
+		</choose>
+	</sql>
+
+</mapper>

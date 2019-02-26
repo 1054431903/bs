@@ -1,0 +1,31 @@
+{
+  "title": "品类",
+  "description": "品类",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "名称"
+    },
+    "status": {
+      "$ref": "common/definitions/status"
+    },
+    "tags": {
+      "type": "array",
+      "title": "标签",
+      "items": {
+        "type": "string",
+        "$id": "#base.category_tag"
+      }
+    },
+    "createdOn": {
+      "type": "number",
+      "title": "添加时间",
+      "format": "datetime"
+    }
+  },
+  "required": [
+    "name",
+    "status"
+  ]
+}

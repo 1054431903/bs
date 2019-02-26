@@ -1,0 +1,90 @@
+{
+  "title": "平台",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "secret": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "title": "平台名称"
+    },
+    "type": {
+      "type": "integer",
+      "title": "类型",
+      "enum": [
+        1,
+        2
+      ],
+      "enumNames": [
+        "内部平台",
+        "开放平台"
+      ]
+    },
+    "status": {
+      "$ref": "common/definitions/status"
+    },
+    "tenants": {
+      "type": "array",
+      "title": "组织",
+      "items": {
+        "type": "string",
+        "$id": "#sys.tenant"
+      }
+    },
+    "redirect_uri": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "grant_type": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "enum": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "description": "1: Authorization Code 2: Password, 3: Client credentials, 4: Implicit"
+      }
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tenant": {
+            "type": "string",
+            "$id": "#sys.tenant"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "$id": "#tenant.role"
+            }
+          }
+        }
+      },
+      "description": "client_credentials 授权时对应的角色"
+    },
+    "remark": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "secret",
+    "status",
+    "redirect_uri",
+    "grant_type",
+    "roles"
+  ]
+}

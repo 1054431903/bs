@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fwk-env-service
+  namespace: default
+data:
+  #SUPPORT_IP=47.104.162.6
+  SUPPORT_IP: "10.88.20.127"
+  #支撑平台调用端口
+  SUPPORT_PORT: "9000"
+  #支撑平台调用URI
+  SUPPORT_PATH: "/api/mongo/iov/"
+  #微服务主机IP
+  ACCESS_SERVICE_HOST: "fwk-ui"
+  #上传图片端口
+  ACCESS_SERVICE_PORT: "8767"
+  #公网资源服务器主机IP
+  ACCESS_SERVICE_RESOURCE_HOST: "118.190.81.136"
+  #公网资源访问端口-FastDFS
+  ACCESS_SERVICE_RESOURCE_PORT: "80"
+  #连接地址配置
+  SPRING_DATASOURCE_URL: "jdbc:mysql://10.88.20.127:3306/farmwork?useSSL=false&allowMultiQueries=true&useUnicode=true&characterEncoding=utf8&maxRows=5000"
+  #认证账号
+  SPRING_DATASOURCE_USERNAME: "root"
+  #认证密码
+  SPRING_DATASOURCE_PASSWORD: "Flzx_3kc"

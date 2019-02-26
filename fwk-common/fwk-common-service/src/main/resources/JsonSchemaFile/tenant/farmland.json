@@ -1,0 +1,117 @@
+{
+  "title": "地块",
+  "description": "地块",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "title": "编号"
+    },
+    "tenant": {
+      "type": "string",
+      "$id": "#sys.tenant",
+      "title": "组织"
+    },
+    "name": {
+      "type": "string",
+      "title": "名称"
+    },
+    "acreage": {
+      "type": "number",
+      "title": "地块面积（亩）",
+      "format": "long"
+    },
+    "address": {
+      "type": "object",
+      "title": "地址",
+      "format": "address",
+      "properties": {
+        "province": {
+          "type": "string",
+          "$id": "#base.area",
+          "title": "省"
+        },
+        "city": {
+          "type": "string",
+          "$id": "#base.area",
+          "title": "市"
+        },
+        "district": {
+          "type": "string",
+          "$id": "#base.area",
+          "title": "区"
+        },
+        "town": {
+          "type": "string",
+          "$id": "#base.area",
+          "title": "乡镇"
+        },
+        "village": {
+          "type": "string",
+          "$id": "#base.area",
+          "title": "村"
+        },
+        "street": {
+          "type": "string",
+          "title": "详细地址"
+        }
+      },
+      "required": ["province", "city", "district"]
+    },
+    "gis": {
+      "type": "array",
+      "title": "GIS地图",
+      "items": {
+        "type": "object",
+        "properties": {
+          "lng": {
+            "type": "number",
+            "title": "经度",
+            "format": "long"
+          },
+          "lat": {
+            "type": "number",
+            "title": "纬度",
+            "format": "long"
+          }
+        }
+      }
+    },
+    "lng": {
+      "type": "number",
+      "title": "经度",
+      "format": "long"
+    },
+    "lat": {
+      "type": "number",
+      "title": "纬度",
+      "format": "long"
+    },
+    "category": {
+      "type": "array",
+      "title": "品类",
+      "items": {
+        "type": "string",
+        "$id": "$base.category"
+      }
+    },
+    "alti": {
+      "type": "number",
+      "title": "海拔",
+      "format": "long"
+    },
+    "status": {
+      "$ref": "common/definitions/status"
+    },
+    "createdOn": {
+      "type": "number",
+      "title": "添加时间",
+      "format": "datetime"
+    }
+  },
+  "required": [
+    "name",
+    "acreage",
+    "status"
+  ]
+}

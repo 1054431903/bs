@@ -1,0 +1,32 @@
+{
+  "title": "专家领域标签",
+  "type": "object",
+  "properties": {
+    "parent": {
+      "type": "string",
+      "$id": "#base.category_tag",
+      "title": "父级"
+    },
+    "level": {
+      "type": "integer",
+      "title": "类型",
+      "enum": [
+        1,
+        2
+      ],
+      "enumNames": [
+        "目录",
+        "TAG"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "title": "名称",
+      "maxLength": 20
+    }
+  },
+  "required": [
+    "name",
+    "status"
+  ]
+}

@@ -1,0 +1,47 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo:3.4
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27017:27017
+  redis:
+    image: redis:4.0.1-alpine
+    volumes:
+      - ./data/redis:/data
+    ports:
+      - 6379:6379
+    command: redis-server --appendonly yes
+  mongo-rest:
+    image: rc.ami-tek.com.cn:9082/vehiclecloud/mongo-rest:1.0.0
+    ports:
+      - 9000:9000
+    environment:
+      - mongodb.uri=mongodb://47.104.162.6:9017
+    links:
+     - mongodb
+    depends_on:
+     - mongodb
+  redis-rest:
+    image: rc.ami-tek.com.cn:9082/vehiclecloud/redis-rest:1.0.0
+    ports:
+      - 9100:9100
+    environment:
+      - redis.uri=redis://localhost:6379
+    links:
+     - redis
+    depends_on:
+     - redis
+  file-server:
+    image: rc.ami-tek.com.cn:9082/vehiclecloud/file-server:1.0.0
+    ports:
+      - 9400:9400
+  fwk-web:
+    build: .
+    ports:
+     - "8080:8080"
+    volumes:
+     - ./src:/app/src
+     - ./public:/app/public
+    command: ["npm", "run", "serve"]

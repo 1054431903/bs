@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fwk.common.dao.TCdictMapper">
+  <resultMap id="BaseResultMap" type="com.fwk.common.entity.TCdict">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="dicttype" jdbcType="VARCHAR" property="dicttype" />
+    <result column="dictvalue" jdbcType="VARCHAR" property="dictvalue" />
+    <result column="dictname" jdbcType="VARCHAR" property="dictname" />
+    <result column="sort" jdbcType="VARCHAR" property="sort" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
+    <result column="creattime" jdbcType="TIMESTAMP" property="creattime" />
+    <result column="delstate" jdbcType="INTEGER" property="delstate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, dicttype, dictvalue, dictname, sort, memo, creattime, delstate
+  </sql>
+  <select id="selectByExample" parameterType="com.fwk.common.entity.TCdictExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_c_dict
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_c_dict
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_c_dict
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fwk.common.entity.TCdictExample">
+    delete from t_c_dict
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fwk.common.entity.TCdict">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_c_dict (dicttype, dictvalue, dictname, 
+      sort, memo, creattime, 
+      delstate)
+    values (#{dicttype,jdbcType=VARCHAR}, #{dictvalue,jdbcType=VARCHAR}, #{dictname,jdbcType=VARCHAR}, 
+      #{sort,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}, #{creattime,jdbcType=TIMESTAMP}, 
+      #{delstate,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fwk.common.entity.TCdict">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_c_dict
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dicttype != null">
+        dicttype,
+      </if>
+      <if test="dictvalue != null">
+        dictvalue,
+      </if>
+      <if test="dictname != null">
+        dictname,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="memo != null">
+        memo,
+      </if>
+      <if test="creattime != null">
+        creattime,
+      </if>
+      <if test="delstate != null">
+        delstate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dicttype != null">
+        #{dicttype,jdbcType=VARCHAR},
+      </if>
+      <if test="dictvalue != null">
+        #{dictvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="dictname != null">
+        #{dictname,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null">
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="creattime != null">
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        #{delstate,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fwk.common.entity.TCdictExample" resultType="java.lang.Integer">
+    select count(*) from t_c_dict
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_c_dict
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.dicttype != null">
+        dicttype = #{record.dicttype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dictvalue != null">
+        dictvalue = #{record.dictvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dictname != null">
+        dictname = #{record.dictname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sort != null">
+        sort = #{record.sort,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memo != null">
+        memo = #{record.memo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creattime != null">
+        creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delstate != null">
+        delstate = #{record.delstate,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_c_dict
+    set id = #{record.id,jdbcType=INTEGER},
+      dicttype = #{record.dicttype,jdbcType=VARCHAR},
+      dictvalue = #{record.dictvalue,jdbcType=VARCHAR},
+      dictname = #{record.dictname,jdbcType=VARCHAR},
+      sort = #{record.sort,jdbcType=VARCHAR},
+      memo = #{record.memo,jdbcType=VARCHAR},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fwk.common.entity.TCdict">
+    update t_c_dict
+    <set>
+      <if test="dicttype != null">
+        dicttype = #{dicttype,jdbcType=VARCHAR},
+      </if>
+      <if test="dictvalue != null">
+        dictvalue = #{dictvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="dictname != null">
+        dictname = #{dictname,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null">
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="creattime != null">
+        creattime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        delstate = #{delstate,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fwk.common.entity.TCdict">
+    update t_c_dict
+    set dicttype = #{dicttype,jdbcType=VARCHAR},
+      dictvalue = #{dictvalue,jdbcType=VARCHAR},
+      dictname = #{dictname,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=VARCHAR},
+      memo = #{memo,jdbcType=VARCHAR},
+      creattime = #{creattime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

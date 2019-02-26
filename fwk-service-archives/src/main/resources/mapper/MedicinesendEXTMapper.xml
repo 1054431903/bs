@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.archives.dao.MedicinesendEXTMapper">
+
+	<!--======================= 添加农资发放记录 =========================-->
+	<insert id="add" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.fwk.service.archives.entity.MedicinesendEXT">
+
+		INSERT INTO t_a_medicine_send (
+				parcelid,
+				nameid,
+				type,
+				SPECIFIC,
+				specificunit,
+				num,
+				numunit,
+				drowuserid,
+				EXPLAIN,
+				drowaddressdetail,
+				drowaddresscode,
+				msid,
+				drowtime
+			)
+			VALUES
+				(
+					#{parcelid}, 
+					#{nameid}, 
+					#{type}, 
+					#{specific}, 
+					#{specificunit}, 
+					#{num}, 
+					#{numunit}, 
+					#{drowuserid}, 
+					#{explain}, 
+					#{drowaddressdetail}, 
+					#{drowaddresscode}, 
+					#{msid}, 
+					#{drowtime}
+				)
+
+	</insert>
+
+	<!--=================== 更新农资发放记录 =========================-->
+	<update id="update" parameterType="com.fwk.service.archives.entity.MedicinesendEXT">
+
+		UPDATE t_a_medicine_send
+			SET 
+				edittime = SYSDATE(),
+				parcelid = #{parcelid}, 
+				nameid = #{nameid}, 
+				type = #{type}, 
+				specific = #{specific}, 
+				specificunit = #{specificunit}, 
+				num = #{num}, 
+				numunit = #{numunit}, 
+				drowuserid = #{drowuserid}, 
+				explain = #{explain}, 
+				drowaddressdetail = #{drowaddressdetail}, 
+				drowaddresscode = #{drowaddresscode}, 
+				msid = #{msid}, 
+				drowtime = #{drowtime}
+			WHERE id = #{id}
+
+	</update>
+	
+	<!--=============== 删除农资发放记录 =========================-->
+	<update id="deletebyid" parameterType="com.fwk.service.archives.entity.MedicinesendEXT">
+
+		UPDATE t_a_medicine_send SET edittime = SYSDATE(), delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}' WHERE id = #{id}
+
+	</update>
+	
+	<!--=============== 根据主键批量删除农资发放记录 =========================-->
+	<update id="batchdeletebyids" parameterType="java.util.List">
+	
+		<if test="(null != idList) and (idList.size() > 0)">
+		UPDATE t_a_medicine_send 
+					SET 
+						edittime = SYSDATE(),
+						delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}' 
+					WHERE 
+						id IN
+						
+						<foreach collection="idList" open="(" separator="," close=")" item="id">
+							#{id}
+						</foreach>
+		</if>
+
+	</update>
+	
+	<!-- 查询条件：查询出所有符合条件的农资发放记录 -->
+	<sql id="where_queryList">
+		
+		WHERE 1 = 1
+		
+		<!-- 业务主键ID -->
+		<choose>
+			<when test="(null != id)">
+				AND id = #{id}
+			</when>
+			<when test="(null != idlist) and (idlist.size > 0)">
+				AND id IN 
+				<foreach collection="idlist" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</when>
+		</choose>
+		
+		<!-- 查询该日期以后更新的数据 -->
+		<if test="(null != lastservicetime)">
+			AND edittime &gt;= #{lastservicetime}
+		</if>
+		
+		<!-- 删除标记 -->
+		<if test="(null != delstate)">
+			AND delstate = #{delstate}
+		</if>
+		
+		<!-- 创建时间 -->
+		<choose>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null != createdateend and '' != createdateend)">
+				AND (creattime BETWEEN #{createdatestart} AND #{createdateend})
+			</when>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null == createdateend or '' == createdateend)">
+				AND creattime &gt;= #{createdatestart}
+			</when>
+			<when test=" (null == createdatestart or '' == createdatestart) and null != createdateend and '' != createdateend">
+				AND creattime &lt;= #{createdateend}
+			</when>
+		</choose>
+		
+		<!-- 根据关键字查询（记录编号、农资名称、领取人） -->
+		<if test="(null != keyword) and ('' != keyword)">
+			AND ( (msid LIKE CONCAT('%',#{keyword},'%')) 
+					OR (name LIKE CONCAT('%',#{keyword},'%')) 
+					OR (drowusername LIKE CONCAT('%',#{keyword},'%')) 
+				)
+		</if>
+		
+		<!-- 记录编号 -->
+		<if test="(null != msid) and ('' != msid)">
+			AND msid LIKE CONCAT('%',#{msid},'%')
+		</if>
+		
+		<!-- 农资名称编号 -->
+		<if test="(null != nameid)">
+			AND nameid = #{nameid}
+		</if>
+		
+		<!-- 农资名称 -->
+		<if test="(null != name) and ('' != name)">
+			AND name LIKE CONCAT('%',#{name},'%')
+		</if>
+		
+		<!-- 农资类别 -->
+		<if test="(null != type) and ('' != type)">
+			AND type = #{type}
+		</if>
+		
+		<!-- 农资类别名称 -->
+		<if test="(null != typename) and ('' != typename)">
+			AND typename LIKE CONCAT('%',#{typename},'%')
+		</if>
+		
+		<!-- 领取人的姓名 -->
+		<if test="(null != drowusername) and ('' != drowusername)">
+			AND drowusername LIKE CONCAT('%',#{drowusername},'%')
+		</if>
+
+	</sql>
+	
+	<!--=================== 检索农资发放记录 ========================-->
+	<select id="queryList" parameterType="com.fwk.service.archives.entity.MedicinesendEXT" resultType="com.fwk.service.archives.entity.MedicinesendEXT">
+			SELECT
+				*
+			FROM
+				(
+					SELECT
+						*
+					FROM
+						(
+							SELECT
+								t_a_medicine_send.*, 
+								t_u_users.`name` AS drowusername,
+								(
+									SELECT
+										t_a_agricname.`name`
+									FROM
+										t_a_agricname
+									WHERE
+										t_a_agricname.id = t_a_medicine_send.nameid
+								) AS `name`,
+								0_t_s_dict_type.`name` AS typename,
+								1_t_s_dict_type.`name` AS specificunitname,
+								2_t_s_dict_type.`name` AS numunitname
+							FROM
+								t_a_medicine_send
+							LEFT OUTER JOIN t_s_dict_type 0_t_s_dict_type ON 0_t_s_dict_type.id = t_a_medicine_send.type
+							LEFT OUTER JOIN t_s_dict_type 1_t_s_dict_type ON 1_t_s_dict_type.id = t_a_medicine_send.specificunit
+							LEFT OUTER JOIN t_s_dict_type 2_t_s_dict_type ON 2_t_s_dict_type.id = t_a_medicine_send.numunit
+							LEFT OUTER JOIN t_u_users ON t_u_users.id = t_a_medicine_send.drowuserid
+						) 0_t_a_medicine_send
+				) table_all
+			
+			<!-- 查询条件 -->
+			<include refid="where_queryList"/>
+			
+			<!-- 排序 -->
+			<choose>
+				<!-- 使用自定义的排序方式排序 -->
+				<when test="(null != orderBySQL) and ('' != orderBySQL)">
+					ORDER BY ${orderBySQL}
+				</when>
+				<!-- 使用默认的排序方式：添加时间降序排序（id是自增长，所以与添加时间的先后顺序一致） -->
+				<otherwise>
+					ORDER BY id DESC
+				</otherwise>
+			</choose>
+			
+			<!-- 分页查询 -->
+			<if test="(null != page)">
+				LIMIT #{page.startRow}, #{page.pageSize}
+			</if>
+	</select>
+	
+	<!--=================== 检索农资发放记录的总记录数量 ========================-->
+	<select id="queryListTotalCount" parameterType="com.fwk.service.archives.entity.MedicinesendEXT" resultType="java.lang.Integer">
+		SELECT
+				COUNT(1) AS totalCount
+			FROM
+				(
+					SELECT
+						*
+					FROM
+						(
+							SELECT
+								t_a_medicine_send.*, 
+								t_u_users.`name` AS drowusername,
+								(
+									SELECT
+										t_a_agricname.`name`
+									FROM
+										t_a_agricname
+									WHERE
+										t_a_agricname.id = t_a_medicine_send.nameid
+								) AS `name`,
+								0_t_s_dict_type.`name` AS typename,
+								1_t_s_dict_type.`name` AS specificunitname,
+								2_t_s_dict_type.`name` AS numunitname
+							FROM
+								t_a_medicine_send
+							LEFT OUTER JOIN t_s_dict_type 0_t_s_dict_type ON 0_t_s_dict_type.id = t_a_medicine_send.type
+							LEFT OUTER JOIN t_s_dict_type 1_t_s_dict_type ON 1_t_s_dict_type.id = t_a_medicine_send.specificunit
+							LEFT OUTER JOIN t_s_dict_type 2_t_s_dict_type ON 2_t_s_dict_type.id = t_a_medicine_send.numunit
+							LEFT OUTER JOIN t_u_users ON t_u_users.id = t_a_medicine_send.drowuserid
+						) 0_t_a_medicine_send
+				) table_all
+			
+			<!-- 查询条件 -->
+			<include refid="where_queryList"/>
+	</select>
+	
+</mapper>

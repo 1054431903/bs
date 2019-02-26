@@ -1,0 +1,36 @@
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f000" }, "level" : 2, "title" : "概况", "icon" : "dashboard", "uri" : "/", "exact" : true, "method" : 1, "idx" : 1 }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f100" }, "level" : 1, "title" : "专家管理", "idx" : 2 }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f110" }, "level" : 2, "parent" : { "$oid" : "5aef3f2e4428eddf9735f100" }, "title" : "专家信息", "icon" : "info", "uri" : "/tenant/expert", "method" : 1, "idx" : 201 }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f112" }, "level" : 3, "title" : "编辑专家信息", "idx" : 20101, "parent" : { "$oid" : "5aef3f2e4428eddf9735f110" }, "uri" : "/tenant/expert", "method" : "3" }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f150" }, "level" : 1, "title" : "模板库", "idx" : 3 }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f151" }, "level" : 2, "parent" : { "$oid" : "5aef3f2e4428eddf9735f150" }, "title" : "诊断配方公共模板", "icon" : "info", "uri" : "/template/common_diagnose", "method" : 1, "idx" : 301 }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f152" }, "level" : 3, "title" : "添加诊断配方公共模板", "idx" : 30101, "parent" : { "$oid" : "5aef3f2e4428eddf9735f151" }, "uri" : "/template/common_diagnose", "method" : "2" }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f153" }, "level" : 3, "title" : "编辑诊断配方公共模板", "idx" : 30102, "parent" : { "$oid" : "5aef3f2e4428eddf9735f151" }, "uri" : "/template/common_diagnose", "method" : "3" }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f154" }, "level" : 3, "title" : "删除诊断配方公共模板", "idx" : 30103, "parent" : { "$oid" : "5aef3f2e4428eddf9735f151" }, "uri" : "/template/common_diagnose", "method" : "4" }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f160" }, "level" : 2, "parent" : { "$oid" : "5aef3f2e4428eddf9735f150" }, "title" : "诊断配方个人模板", "icon" : "info", "uri" : "/template/personal_diagnose", "method" : 1, "idx" : 302 }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f161" }, "level" : 3, "title" : "添加诊断配方个人模板", "idx" : 30201, "parent" : { "$oid" : "5aef3f2e4428eddf9735f160" }, "uri" : "/template/personal_diagnose", "method" : "2" }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f162" }, "level" : 3, "title" : "编辑诊断配方个人模板", "idx" : 30202, "parent" : { "$oid" : "5aef3f2e4428eddf9735f160" }, "uri" : "/template/personal_diagnose", "method" : "3" }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f163" }, "level" : 3, "title" : "删除诊断配方个人模板", "idx" : 30203, "parent" : { "$oid" : "5aef3f2e4428eddf9735f160" }, "uri" : "/template/personal_diagnose", "method" : "4" }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f155" }, "level" : 1, "title" : "标签管理", "idx" : 4 }
+{ "_id" : { "$oid" : "5adc5a34a9f37c07346bc79c" }, "level" : 2, "parent" : { "$oid" : "5aef3f2e4428eddf9735f155" }, "title" : "品类信息", "icon" : "style", "uri" : "/base/expert_domain", "method" : 1, "idx" : 401 }
+{ "_id" : { "$oid" : "5add86b271947cbdcd85b752" }, "level" : 3, "title" : "新增品类", "idx" : 40101, "parent" : { "$oid" : "5adc5a34a9f37c07346bc79c" }, "icon" : "add", "uri" : "/base/expert_domain", "method" : "2" }
+{ "_id" : { "$oid" : "5add86c571947cbdcd85b759" }, "level" : 3, "title" : "编辑品类", "idx" : 40102, "parent" : { "$oid" : "5adc5a34a9f37c07346bc79c" }, "icon" : "edit", "uri" : "/base/expert_domain", "method" : "3" }
+{ "_id" : { "$oid" : "5add86fa71947cbdcd85b770" }, "level" : 3, "title" : "删除品类", "idx" : 40103, "parent" : { "$oid" : "5adc5a34a9f37c07346bc79c" }, "icon" : "delete", "uri" : "/base/expert_domain", "method" : "4" }
+{ "_id" : { "$oid" : "5aef3f2e4428eddf9735f156" }, "level" : 2, "parent" : { "$oid" : "5aef3f2e4428eddf9735f155" }, "title" : "标签信息", "icon" : "info", "uri" : "/base/expert_tag", "method" : 1, "idx" : 401 }
+{ "_id" : { "$oid" : "5add856171947cbdcd85b6a3" }, "level" : 3, "title" : "新增标签", "idx" : 40101, "parent" : { "$oid" : "5aef3f2e4428eddf9735f156" }, "icon" : "add", "uri" : "/base/expert_tag", "method" : "2" }
+{ "_id" : { "$oid" : "5add857571947cbdcd85b6ad" }, "level" : 3, "title" : "修改标签", "idx" : 40102, "parent" : { "$oid" : "5aef3f2e4428eddf9735f156" }, "icon" : "edit", "uri" : "/base/expert_tag", "method" : "3" }
+{ "_id" : { "$oid" : "5add85b071947cbdcd85b6c5" }, "level" : 3, "title" : "删除标签", "idx" : 40103, "parent" : { "$oid" : "5aef3f2e4428eddf9735f156" }, "icon" : "delete", "uri" : "/base/expert_tag", "method" : "4" }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f000" }, "level" : 1, "title" : "角色权限", "idx" : 99 }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f010" }, "level" : 2, "parent" : { "$oid" : "6aef3f2e4428eddf9735f000" }, "title" : "人员管理", "icon" : "contacts", "uri" : "/tenant/staff", "method" : 1, "idx" : 9901 }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f011" }, "level" : 3, "title" : "新增用户", "idx" : 990101, "parent" : { "$oid" : "6aef3f2e4428eddf9735f010" }, "uri" : "/tenant/staff", "method" : "2" }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f012" }, "level" : 3, "title" : "修改用户", "idx" : 990102, "parent" : { "$oid" : "6aef3f2e4428eddf9735f010" }, "uri" : "/tenant/staff", "method" : "3" }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f013" }, "level" : 3, "title" : "删除用户", "idx" : 990103, "parent" : { "$oid" : "6aef3f2e4428eddf9735f010" }, "uri" : "/tenant/staff", "method" : "4" }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f014" }, "level" : 3, "title" : "重置密码", "idx" : 990104, "parent" : { "$oid" : "6aef3f2e4428eddf9735f010" }, "uri" : "/tenant/staff/reset_pwd", "method" : "3" }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f020" }, "level" : 2, "parent" : { "$oid" : "6aef3f2e4428eddf9735f000" }, "title" : "角色管理", "icon" : "assignment_ind", "uri" : "/tenant/role", "method" : 1, "idx" : 9902 }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f021" }, "level" : 3, "title" : "新增角色", "idx" : 990201, "parent" : { "$oid" : "6aef3f2e4428eddf9735f020" }, "uri" : "/tenant/role", "method" : "2" }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f022" }, "level" : 3, "title" : "编辑角色", "idx" : 990202, "parent" : { "$oid" : "6aef3f2e4428eddf9735f020" }, "uri" : "/tenant/role", "method" : "3" }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f023" }, "level" : 3, "title" : "删除角色", "idx" : 990203, "parent" : { "$oid" : "6aef3f2e4428eddf9735f020" }, "uri" : "/tenant/role", "method" : "4" }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f030" }, "level" : 2, "parent" : { "$oid" : "6aef3f2e4428eddf9735f000" }, "title" : "权限管理", "icon" : "folder_shared", "uri" : "/tenant/staff_roles", "method" : 1, "idx" : 9903 }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f031" }, "level" : 3, "title" : "新增用户权限", "idx" : 990301, "parent" : { "$oid" : "6aef3f2e4428eddf9735f030" }, "uri" : "/tenant/staff_roles", "method" : "2" }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f032" }, "level" : 3, "title" : "编辑用户权限", "idx" : 990302, "parent" : { "$oid" : "6aef3f2e4428eddf9735f030" }, "uri" : "/tenant/staff_roles", "method" : "3" }
+{ "_id" : { "$oid" : "6aef3f2e4428eddf9735f033" }, "level" : 3, "title" : "删除用户权限", "idx" : 990303, "parent" : { "$oid" : "6aef3f2e4428eddf9735f030" }, "uri" : "/tenant/staff_roles", "method" : "4" }

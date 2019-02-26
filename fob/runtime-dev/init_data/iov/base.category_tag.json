@@ -1,0 +1,372 @@
+{ 
+    "_id" : ObjectId("5aa7282d46e0fb00013b6ecc"), 
+    "level" : NumberInt(1), 
+    "name" : "1111", 
+    "createdOn" : NumberLong(1520904237986), 
+    "updatedOn" : NumberLong(1520904237986), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5aa7283546e0fb00013b6ecd"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5aa7282d46e0fb00013b6ecc"), 
+    "name" : "2222", 
+    "createdOn" : NumberLong(1520904245353), 
+    "updatedOn" : NumberLong(1520904245353), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5aa72e6546e0fb00013b6ece"), 
+    "level" : NumberInt(1), 
+    "name" : "水果", 
+    "createdOn" : NumberLong(1520905829814), 
+    "updatedOn" : NumberLong(1520905829814)
+}
+{ 
+    "_id" : ObjectId("5aa72eed46e0fb00013b6ed0"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5aa72e6546e0fb00013b6ece"), 
+    "name" : "1112222", 
+    "createdOn" : NumberLong(1520905965572), 
+    "updatedOn" : NumberLong(1525251981905)
+}
+{ 
+    "_id" : ObjectId("5aa72f0246e0fb00013b6ed1"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5aa72e6546e0fb00013b6ece"), 
+    "name" : "222", 
+    "createdOn" : NumberLong(1520905986328), 
+    "updatedOn" : NumberLong(1520905986328)
+}
+{ 
+    "_id" : ObjectId("5aa8818246e0fb00013b6f0a"), 
+    "level" : NumberInt(1), 
+    "name" : "蔬菜", 
+    "createdOn" : NumberLong(1520992642028), 
+    "updatedOn" : NumberLong(1520992642028)
+}
+{ 
+    "_id" : ObjectId("5aa8834a46e0fb00013b6f0b"), 
+    "level" : NumberInt(1), 
+    "name" : "11111", 
+    "createdOn" : NumberLong(1520993098757), 
+    "updatedOn" : NumberLong(1520993098757)
+}
+{ 
+    "_id" : ObjectId("5aa8883146e0fb00013b6f0c"), 
+    "level" : NumberInt(1), 
+    "name" : "1232323232", 
+    "createdOn" : NumberLong(1520994353597), 
+    "updatedOn" : NumberLong(1520994353597)
+}
+{ 
+    "_id" : ObjectId("5aa8992646e0fb00013b6f1b"), 
+    "level" : NumberInt(1), 
+    "name" : "的官方鬼地方谁", 
+    "createdOn" : NumberLong(1520998694551), 
+    "updatedOn" : NumberLong(1520998694551), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5aa8992a46e0fb00013b6f1c"), 
+    "level" : NumberInt(1), 
+    "name" : "的风格", 
+    "createdOn" : NumberLong(1520998698950), 
+    "updatedOn" : NumberLong(1520998698950)
+}
+{ 
+    "_id" : ObjectId("5aa8992f46e0fb00013b6f1d"), 
+    "level" : NumberInt(1), 
+    "name" : "的国防生是", 
+    "createdOn" : NumberLong(1520998703404), 
+    "updatedOn" : NumberLong(1520998703404)
+}
+{ 
+    "_id" : ObjectId("5aa8993346e0fb00013b6f1e"), 
+    "level" : NumberInt(1), 
+    "name" : "的官方广东省个", 
+    "createdOn" : NumberLong(1520998707236), 
+    "updatedOn" : NumberLong(1520998707236)
+}
+{ 
+    "_id" : ObjectId("5aa8993746e0fb00013b6f1f"), 
+    "level" : NumberInt(1), 
+    "name" : "的风格rete", 
+    "createdOn" : NumberLong(1520998711309), 
+    "updatedOn" : NumberLong(1520998711309)
+}
+{ 
+    "_id" : ObjectId("5aa8993a46e0fb00013b6f20"), 
+    "level" : NumberInt(1), 
+    "name" : "大锅饭很热外套呀5", 
+    "createdOn" : NumberLong(1520998714877), 
+    "updatedOn" : NumberLong(1520998714877)
+}
+{ 
+    "_id" : ObjectId("5aa8993f46e0fb00013b6f21"), 
+    "level" : NumberInt(1), 
+    "name" : "人体艺术凤凰男加工费", 
+    "createdOn" : NumberLong(1520998719231), 
+    "updatedOn" : NumberLong(1520998719231)
+}
+{ 
+    "_id" : ObjectId("5aa8994246e0fb00013b6f22"), 
+    "level" : NumberInt(1), 
+    "name" : "yrt6y45", 
+    "createdOn" : NumberLong(1520998722639), 
+    "updatedOn" : NumberLong(1520998722639)
+}
+{ 
+    "_id" : ObjectId("5aa8994646e0fb00013b6f23"), 
+    "level" : NumberInt(1), 
+    "name" : "风格的很大方", 
+    "createdOn" : NumberLong(1520998726534), 
+    "updatedOn" : NumberLong(1520998726534)
+}
+{ 
+    "_id" : ObjectId("5aa8994a46e0fb00013b6f24"), 
+    "level" : NumberInt(1), 
+    "name" : "黄蜂腰让一", 
+    "createdOn" : NumberLong(1520998730445), 
+    "updatedOn" : NumberLong(1520998730445)
+}
+{ 
+    "_id" : ObjectId("5aa8994e46e0fb00013b6f25"), 
+    "level" : NumberInt(1), 
+    "name" : "官方回复的高很反感", 
+    "createdOn" : NumberLong(1520998734754), 
+    "updatedOn" : NumberLong(1520998734754), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5aa8995246e0fb00013b6f26"), 
+    "level" : NumberInt(1), 
+    "name" : "很反感很热一", 
+    "createdOn" : NumberLong(1520998738556), 
+    "updatedOn" : NumberLong(1520998738556)
+}
+{ 
+    "_id" : ObjectId("5aa8995646e0fb00013b6f27"), 
+    "level" : NumberInt(1), 
+    "name" : "风格皇贵妃", 
+    "createdOn" : NumberLong(1520998742287), 
+    "updatedOn" : NumberLong(1520998742287)
+}
+{ 
+    "_id" : ObjectId("5aa8995a46e0fb00013b6f28"), 
+    "level" : NumberInt(1), 
+    "name" : "恢复规划局热一", 
+    "createdOn" : NumberLong(1520998746020), 
+    "updatedOn" : NumberLong(1520998746020)
+}
+{ 
+    "_id" : ObjectId("5aa8995d46e0fb00013b6f29"), 
+    "level" : NumberInt(1), 
+    "name" : "汇丰银行人", 
+    "createdOn" : NumberLong(1520998749645), 
+    "updatedOn" : NumberLong(1520998749645)
+}
+{ 
+    "_id" : ObjectId("5aa8996146e0fb00013b6f2a"), 
+    "level" : NumberInt(1), 
+    "name" : "规范化金额元", 
+    "createdOn" : NumberLong(1520998753440), 
+    "updatedOn" : NumberLong(1520998753440)
+}
+{ 
+    "_id" : ObjectId("5aa8996546e0fb00013b6f2b"), 
+    "level" : NumberInt(1), 
+    "name" : "很反感很热", 
+    "createdOn" : NumberLong(1520998757956), 
+    "updatedOn" : NumberLong(1520998757956), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5aa8996946e0fb00013b6f2c"), 
+    "level" : NumberInt(1), 
+    "name" : "反规划 6 ", 
+    "createdOn" : NumberLong(1520998761685), 
+    "updatedOn" : NumberLong(1520998761685), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5aa8996d46e0fb00013b6f2d"), 
+    "level" : NumberInt(1), 
+    "name" : "风格的后台", 
+    "createdOn" : NumberLong(1520998765602), 
+    "updatedOn" : NumberLong(1520998765602), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5aa8997346e0fb00013b6f2e"), 
+    "level" : NumberInt(1), 
+    "name" : "购房合同人认同", 
+    "createdOn" : NumberLong(1520998771275), 
+    "updatedOn" : NumberLong(1520998771275), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5aa8997646e0fb00013b6f2f"), 
+    "level" : NumberInt(1), 
+    "name" : "芳烃油让", 
+    "createdOn" : NumberLong(1520998774948), 
+    "updatedOn" : NumberLong(1520998774948), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5aa8997a46e0fb00013b6f30"), 
+    "level" : NumberInt(1), 
+    "name" : "飞皇贵妃", 
+    "createdOn" : NumberLong(1520998778680), 
+    "updatedOn" : NumberLong(1520998778680), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5aa8b97046e0fb00013b6f41"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5aa8834a46e0fb00013b6f0b"), 
+    "name" : "234343", 
+    "createdOn" : NumberLong(1521006960112), 
+    "updatedOn" : NumberLong(1521006960112)
+}
+{ 
+    "_id" : ObjectId("5aa8c1eb46e0fb00013b6f4d"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5aa72e6546e0fb00013b6ece"), 
+    "name" : "的是", 
+    "createdOn" : NumberLong(1521009131193), 
+    "updatedOn" : NumberLong(1521009131193), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5aa8c8ec46e0fb00013b6f4f"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5aa8883146e0fb00013b6f0c"), 
+    "name" : "yuuu", 
+    "createdOn" : NumberLong(1521010924822), 
+    "updatedOn" : NumberLong(1521010924822)
+}
+{ 
+    "_id" : ObjectId("5aa9dd7546e0fb00013b6f54"), 
+    "level" : NumberInt(1), 
+    "name" : "54645645", 
+    "createdOn" : NumberLong(1521081717758), 
+    "updatedOn" : NumberLong(1521081717758), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5aa9dd8546e0fb00013b6f55"), 
+    "level" : NumberInt(1), 
+    "name" : "222222222的撒范德萨11111", 
+    "createdOn" : NumberLong(1521081733561), 
+    "updatedOn" : NumberLong(1521081733561), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5aaf2a6346e0fb00013b6f92"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5aa9dd8546e0fb00013b6f55"), 
+    "name" : "hiuu", 
+    "createdOn" : NumberLong(1521429091410), 
+    "updatedOn" : NumberLong(1521429091410), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5ab20dcd46e0fb00013b6fe9"), 
+    "level" : NumberInt(1), 
+    "name" : "wt", 
+    "createdOn" : NumberLong(1521618381975), 
+    "updatedOn" : NumberLong(1521618381975), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5ab20ddf46e0fb00013b6fea"), 
+    "level" : NumberInt(1), 
+    "name" : "wt", 
+    "createdOn" : NumberLong(1521618399526), 
+    "updatedOn" : NumberLong(1521618399526), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5ab20de546e0fb00013b6feb"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5ab20ddf46e0fb00013b6fea"), 
+    "name" : "wt1", 
+    "createdOn" : NumberLong(1521618405134), 
+    "updatedOn" : NumberLong(1521618405134), 
+    "_removed" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5ab4523346e0fb00013b7010"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5aa8996146e0fb00013b6f2a"), 
+    "name" : "test", 
+    "createdOn" : NumberLong(1521766963798), 
+    "updatedOn" : NumberLong(1521766963798)
+}
+{ 
+    "_id" : ObjectId("5adad9ae46e0fb000193fed6"), 
+    "level" : NumberInt(1), 
+    "name" : "1211", 
+    "createdOn" : NumberLong(1524292014467), 
+    "updatedOn" : NumberLong(1524292014467)
+}
+{ 
+    "_id" : ObjectId("5adad9f546e0fb000193fed7"), 
+    "level" : NumberInt(1), 
+    "name" : "是发达", 
+    "createdOn" : NumberLong(1524292085818), 
+    "updatedOn" : NumberLong(1524292085818)
+}
+{ 
+    "_id" : ObjectId("5adada2e46e0fb000193fed8"), 
+    "level" : NumberInt(1), 
+    "name" : "鹅鹅鹅鹅鹅鹅", 
+    "createdOn" : NumberLong(1524292142647), 
+    "updatedOn" : NumberLong(1524292142647)
+}
+{ 
+    "_id" : ObjectId("5adada3646e0fb000193fed9"), 
+    "level" : NumberInt(1), 
+    "name" : "阿凡达发", 
+    "createdOn" : NumberLong(1524292150143), 
+    "updatedOn" : NumberLong(1524292150143)
+}
+{ 
+    "_id" : ObjectId("5adae1a446e0fb000193feda"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5aa8818246e0fb00013b6f0a"), 
+    "name" : "菠菜", 
+    "createdOn" : NumberLong(1524294052337), 
+    "updatedOn" : NumberLong(1524294052337)
+}
+{ 
+    "_id" : ObjectId("5adae1af46e0fb000193fedb"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5aa8818246e0fb00013b6f0a"), 
+    "name" : "白菜", 
+    "createdOn" : NumberLong(1524294063155), 
+    "updatedOn" : NumberLong(1524294063155)
+}
+{ 
+    "_id" : ObjectId("5ae2ddfd46e0fb000193ff46"), 
+    "level" : NumberInt(1), 
+    "name" : "ssssssss", 
+    "createdOn" : NumberLong(1524817405164), 
+    "updatedOn" : NumberLong(1524817405164)
+}
+{ 
+    "_id" : ObjectId("5ae2e3d646e0fb000193ff47"), 
+    "level" : NumberInt(1), 
+    "name" : "1111", 
+    "createdOn" : NumberLong(1524818902398), 
+    "updatedOn" : NumberLong(1524818902398)
+}
+{ 
+    "_id" : ObjectId("5aec072c46e0fb000193ffa7"), 
+    "level" : NumberInt(2), 
+    "parent" : ObjectId("5aa72e6546e0fb00013b6ece"), 
+    "name" : "333", 
+    "createdOn" : NumberLong(1525417772437), 
+    "updatedOn" : NumberLong(1525417772437)
+}

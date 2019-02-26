@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.archives.dao.PeasantEXTMapper">
+
+	<!--======================= 添加合作农户档案 =========================-->
+	<insert id="add" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.fwk.service.archives.entity.PeasantEXT">
+
+		INSERT INTO t_a_peasant (
+					`name`,
+					photoid,
+					sex,
+					ispoverty,
+					identity,
+					birthday,
+					culture,
+					linkphone,
+					addresscode,
+					addressdetail,
+					cooperstate,
+					`explain`,
+					orgid,
+					pid
+				) 
+			VALUES 
+				(
+					#{name},
+					#{photoid},
+					#{sex},
+					#{ispoverty},
+					#{identity},
+					#{birthday},
+					#{culture},
+					#{linkphone},
+					#{addresscode},
+					#{addressdetail},
+					#{cooperstate},
+					#{explain},
+					#{orgid},
+					#{pid}
+				)
+
+	</insert>
+	
+	<!--======================= 批量添加合作农户档案 =========================-->
+	<insert id="batchAdd" useGeneratedKeys="true"
+		keyProperty="id" parameterType="java.util.List">
+
+		<if test="(null != list) and (list.size() > 0)">
+			INSERT INTO t_a_peasant (
+					`name`,
+					photoid,
+					sex,
+					ispoverty,
+					identity,
+					birthday,
+					culture,
+					linkphone,
+					addresscode,
+					addressdetail,
+					cooperstate,
+					`explain`,
+					orgid,
+					pid
+				)
+					VALUES
+				<foreach collection="list" item="peasantEXT" separator=",">
+					(
+							#{peasantEXT.name},
+							#{peasantEXT.photoid},
+							#{peasantEXT.sex},
+							#{peasantEXT.ispoverty},
+							#{peasantEXT.identity},
+							#{peasantEXT.birthday},
+							#{peasantEXT.culture},
+							#{peasantEXT.linkphone},
+							#{peasantEXT.addresscode},
+							#{peasantEXT.addressdetail},
+							#{peasantEXT.cooperstate},
+							#{peasantEXT.explain},
+							#{peasantEXT.orgid},
+							#{peasantEXT.pid}
+						)
+				</foreach>
+		</if>
+
+	</insert>
+
+	<!--=================== 更新合作农户档案 =========================-->
+	<update id="update" parameterType="com.fwk.service.archives.entity.PeasantEXT">
+
+		UPDATE t_a_peasant
+					SET 
+						edittime = SYSDATE(),
+						`name` = #{name}, 
+						photoid = #{photoid}, 
+						sex = #{sex}, 
+						ispoverty = #{ispoverty}, 
+						identity = #{identity}, 
+						birthday = #{birthday}, 
+						culture = #{culture}, 
+						linkphone = #{linkphone}, 
+						addresscode = #{addresscode}, 
+						addressdetail = #{addressdetail}, 
+						cooperstate = #{cooperstate}, 
+						`explain` = #{explain}, 
+						orgid = #{orgid}, 
+						pid = #{pid}
+					WHERE 
+						id = #{id}
+					
+	</update>
+	
+	<!--=============== 删除合作农户档案 =========================-->
+	<update id="deletebyid" parameterType="com.fwk.service.archives.entity.PeasantEXT">
+
+		UPDATE t_a_peasant SET edittime = SYSDATE(), delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}' WHERE id = #{id}
+
+	</update>
+	
+	<!--=============== 根据主键批量删除合作农户档案 =========================-->
+	<update id="batchdeletebyids" parameterType="java.util.List">
+	
+		<if test="(null != idList) and (idList.size() > 0)">
+		UPDATE t_a_peasant 
+					SET 
+						edittime = SYSDATE(),
+						delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}' 
+					WHERE 
+						id IN
+						
+						<foreach collection="idList" open="(" separator="," close=")" item="id">
+							#{id}
+						</foreach>
+		</if>
+
+	</update>
+	
+	<!-- 查询条件：查询出所有符合条件的合作农户档案 -->
+	<sql id="where_queryList">
+		
+		WHERE 1 = 1
+		
+		<!-- 业务主键ID -->
+		<choose>
+			<when test="(null != id)">
+				AND id = #{id}
+			</when>
+			<when test="(null != idlist) and (idlist.size > 0)">
+				AND id IN 
+				<foreach collection="idlist" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</when>
+		</choose>
+		
+		<!-- 查询该日期以后更新的数据 -->
+		<if test="(null != lastservicetime)">
+			AND edittime &gt;= #{lastservicetime}
+		</if>
+		
+		<!-- 删除标记 -->
+		<if test="(null != delstate)">
+			AND delstate = #{delstate}
+		</if>
+		
+		<!-- 创建时间 -->
+		<choose>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null != createdateend and '' != createdateend)">
+				AND (creattime BETWEEN #{createdatestart} AND #{createdateend})
+			</when>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null == createdateend or '' == createdateend)">
+				AND creattime &gt;= #{createdatestart}
+			</when>
+			<when test=" (null == createdatestart or '' == createdatestart) and null != createdateend and '' != createdateend">
+				AND creattime &lt;= #{createdateend}
+			</when>
+		</choose>
+		
+		<!-- 行政区划地址 -->
+		<if test="(null != addresscode) and ('' != addresscode)">
+			AND addresscode LIKE CONCAT(#{addresscode}, '%')
+		</if>
+		
+		<!-- 根据关键字查询（农户编号、姓名、电话、责任部门、当前合作状态） -->
+		<if test="(null != keyword) and ('' != keyword)">
+			AND ( (pid LIKE CONCAT('%',#{keyword},'%')) 
+					OR (name LIKE CONCAT('%',#{keyword},'%')) 
+					OR (linkphone LIKE CONCAT('%',#{keyword},'%')) 
+					OR (orgidname LIKE CONCAT('%',#{keyword},'%')) 
+					OR (cooperstatename LIKE CONCAT('%',#{keyword},'%')) 
+				)
+		</if>
+		
+		<!-- 合作农户姓名 -->
+		<if test="(null != name) and ('' != name)">
+			AND name LIKE CONCAT('%',#{name},'%')
+		</if>
+		
+		<!-- 农户的联系电话 -->
+		<if test="(null != linkphone) and ('' != linkphone)">
+			AND linkphone = #{linkphone}
+		</if>
+		
+		<!-- 性别 -->
+		<if test="(null != sex) and ('' != sex)">
+			AND sex = #{sex}
+		</if>
+		
+		<!-- 身份证号 -->
+		<if test="(null != identity)">
+			AND identity LIKE CONCAT('%',#{identity},'%')
+		</if>
+		
+		<!-- 文化程度 -->
+		<if test="(null != culture) and ('' != culture)">
+			AND culture = #{culture}
+		</if>
+		
+		<!-- 责任部门 -->
+		<if test="(null != orgid) and ('' != orgid)">
+			AND orgid = #{orgid}
+		</if>
+		
+		<!-- 当前合作状态 -->
+		<if test="(null != cooperstate) and ('' != cooperstate)">
+			AND cooperstate = #{cooperstate}
+		</if>
+		
+		<!-- 逻辑编号 -->
+		<if test="(null != pid) and ('' != pid)">
+			AND pid LIKE CONCAT('%',#{pid},'%')
+		</if>
+		
+	</sql>
+	
+	<!--=================== 检索合作农户档案 ========================-->
+	<select id="queryList" parameterType="com.fwk.service.archives.entity.PeasantEXT" resultType="com.fwk.service.archives.entity.PeasantEXT">
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					0_t_a_peasant.*, 1_t_c_resource_history.resourcepath AS photoidurl
+				FROM
+					(
+						SELECT
+							t_a_peasant.*, 
+							t_u_org.`name` AS orgidname,
+							(
+								SELECT
+									t_c_dict.dictname
+								FROM
+									t_c_dict
+								WHERE
+									t_c_dict.dicttype = '${@com.fwk.common.util.constants.EDictType@user_sex.dicttype}'
+								AND t_c_dict.dictvalue = t_a_peasant.sex
+							) AS sexname,
+							(
+								SELECT
+									t_c_dict.dictname
+								FROM
+									t_c_dict
+								WHERE
+									t_c_dict.dicttype = '${@com.fwk.common.util.constants.EDictType@peasant_poverty.dicttype}'
+								AND t_c_dict.dictvalue = t_a_peasant.ispoverty
+							) AS ispovertyname,
+							(
+								SELECT
+									t_c_dict.dictname
+								FROM
+									t_c_dict
+								WHERE
+									t_c_dict.dicttype = '${@com.fwk.common.util.constants.EDictType@peasant_culture.dicttype}'
+								AND t_c_dict.dictvalue = t_a_peasant.culture
+							) AS culturename,
+							(
+								SELECT
+									t_c_dict.dictname
+								FROM
+									t_c_dict
+								WHERE
+									t_c_dict.dicttype = '${@com.fwk.common.util.constants.EDictType@peasant_cooperstate.dicttype}'
+								AND t_c_dict.dictvalue = t_a_peasant.cooperstate
+							) AS cooperstatename
+						FROM
+							t_a_peasant
+						LEFT OUTER JOIN t_u_org ON t_u_org.supportid = t_a_peasant.orgid
+					) 0_t_a_peasant
+				LEFT OUTER JOIN (
+					SELECT
+						*
+					FROM
+						(
+							SELECT
+								t_c_resource_history.id AS historyid,
+								t_c_resource.*
+							FROM
+								t_c_resource_history
+							LEFT OUTER JOIN t_c_resource ON t_c_resource_history.currentResource = t_c_resource.id
+						) 0_t_c_resource_history
+				) 1_t_c_resource_history ON 0_t_a_peasant.photoid = 1_t_c_resource_history.historyid
+			) table_all
+			
+			<!-- 查询条件 -->
+			<include refid="where_queryList"/>
+			
+			<!-- 排序 -->
+			<choose>
+				<!-- 使用自定义的排序方式排序 -->
+				<when test="(null != orderBySQL) and ('' != orderBySQL)">
+					ORDER BY ${orderBySQL}
+				</when>
+				<!-- 使用默认的排序方式：添加时间降序排序（id是自增长，所以与添加时间的先后顺序一致） -->
+				<otherwise>
+					ORDER BY id DESC
+				</otherwise>
+			</choose>
+			
+			<!-- 分页查询 -->
+			<if test="(null != page)">
+				LIMIT #{page.startRow}, #{page.pageSize}
+			</if>
+	</select>
+	
+	<!--=================== 检索合作农户档案的总记录数量 ========================-->
+	<select id="queryListTotalCount" parameterType="com.fwk.service.archives.entity.PeasantEXT" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1) AS totalCount
+		FROM
+			(
+				SELECT
+					0_t_a_peasant.*, 1_t_c_resource_history.resourcepath AS photoidurl
+				FROM
+					(
+						SELECT
+							t_a_peasant.*, 
+							t_u_org.`name` AS orgidname,
+							(
+								SELECT
+									t_c_dict.dictname
+								FROM
+									t_c_dict
+								WHERE
+									t_c_dict.dicttype = '${@com.fwk.common.util.constants.EDictType@user_sex.dicttype}'
+								AND t_c_dict.dictvalue = t_a_peasant.sex
+							) AS sexname,
+							(
+								SELECT
+									t_c_dict.dictname
+								FROM
+									t_c_dict
+								WHERE
+									t_c_dict.dicttype = '${@com.fwk.common.util.constants.EDictType@peasant_poverty.dicttype}'
+								AND t_c_dict.dictvalue = t_a_peasant.ispoverty
+							) AS ispovertyname,
+							(
+								SELECT
+									t_c_dict.dictname
+								FROM
+									t_c_dict
+								WHERE
+									t_c_dict.dicttype = '${@com.fwk.common.util.constants.EDictType@peasant_culture.dicttype}'
+								AND t_c_dict.dictvalue = t_a_peasant.culture
+							) AS culturename,
+							(
+								SELECT
+									t_c_dict.dictname
+								FROM
+									t_c_dict
+								WHERE
+									t_c_dict.dicttype = '${@com.fwk.common.util.constants.EDictType@peasant_cooperstate.dicttype}'
+								AND t_c_dict.dictvalue = t_a_peasant.cooperstate
+							) AS cooperstatename
+						FROM
+							t_a_peasant
+						LEFT OUTER JOIN t_u_org ON t_u_org.supportid = t_a_peasant.orgid
+					) 0_t_a_peasant
+				LEFT OUTER JOIN (
+					SELECT
+						*
+					FROM
+						(
+							SELECT
+								t_c_resource_history.id AS historyid,
+								t_c_resource.*
+							FROM
+								t_c_resource_history
+							LEFT OUTER JOIN t_c_resource ON t_c_resource_history.currentResource = t_c_resource.id
+						) 0_t_c_resource_history
+				) 1_t_c_resource_history ON 0_t_a_peasant.photoid = 1_t_c_resource_history.historyid
+			) table_all
+			
+			<!-- 查询条件 -->
+			<include refid="where_queryList"/>
+	</select>
+	
+</mapper>

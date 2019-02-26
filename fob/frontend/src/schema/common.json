@@ -1,0 +1,19 @@
+{
+  "$id": "common",
+  "title": "fob-common-schema",
+  "definitions": {
+    "status": {
+      "type": "integer",
+      "title": "状态",
+      "enum": [
+        0,
+        1
+      ],
+      "enumNames": [
+        "禁用",
+        "启用"
+      ],
+      "default": 1
+    }
+  }
+}

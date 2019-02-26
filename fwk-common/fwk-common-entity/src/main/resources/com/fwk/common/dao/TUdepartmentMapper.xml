@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fwk.common.dao.TUdepartmentMapper">
+  <resultMap id="BaseResultMap" type="com.fwk.common.entity.TUdepartment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="creattime" jdbcType="TIMESTAMP" property="creattime" />
+    <result column="delstate" jdbcType="INTEGER" property="delstate" />
+    <result column="orgid" jdbcType="INTEGER" property="orgid" />
+    <result column="parentid" jdbcType="INTEGER" property="parentid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="departno" jdbcType="VARCHAR" property="departno" />
+    <result column="chargeuserid" jdbcType="INTEGER" property="chargeuserid" />
+    <result column="edittime" jdbcType="TIMESTAMP" property="edittime" />
+    <result column="supportid" jdbcType="VARCHAR" property="supportid" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, creattime, delstate, orgid, parentid, name, departno, chargeuserid, edittime, 
+    supportid
+  </sql>
+  <select id="selectByExample" parameterType="com.fwk.common.entity.TUdepartmentExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_u_department
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_u_department
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_u_department
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fwk.common.entity.TUdepartmentExample">
+    delete from t_u_department
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fwk.common.entity.TUdepartment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_u_department (creattime, delstate, orgid, 
+      parentid, name, departno, 
+      chargeuserid, edittime, supportid
+      )
+    values (#{creattime,jdbcType=TIMESTAMP}, #{delstate,jdbcType=INTEGER}, #{orgid,jdbcType=INTEGER}, 
+      #{parentid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{departno,jdbcType=VARCHAR}, 
+      #{chargeuserid,jdbcType=INTEGER}, #{edittime,jdbcType=TIMESTAMP}, #{supportid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fwk.common.entity.TUdepartment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_u_department
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        creattime,
+      </if>
+      <if test="delstate != null">
+        delstate,
+      </if>
+      <if test="orgid != null">
+        orgid,
+      </if>
+      <if test="parentid != null">
+        parentid,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="departno != null">
+        departno,
+      </if>
+      <if test="chargeuserid != null">
+        chargeuserid,
+      </if>
+      <if test="edittime != null">
+        edittime,
+      </if>
+      <if test="supportid != null">
+        supportid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="orgid != null">
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="parentid != null">
+        #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="departno != null">
+        #{departno,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeuserid != null">
+        #{chargeuserid,jdbcType=INTEGER},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supportid != null">
+        #{supportid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fwk.common.entity.TUdepartmentExample" resultType="java.lang.Integer">
+    select count(*) from t_u_department
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_u_department
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.creattime != null">
+        creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delstate != null">
+        delstate = #{record.delstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.orgid != null">
+        orgid = #{record.orgid,jdbcType=INTEGER},
+      </if>
+      <if test="record.parentid != null">
+        parentid = #{record.parentid,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departno != null">
+        departno = #{record.departno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chargeuserid != null">
+        chargeuserid = #{record.chargeuserid,jdbcType=INTEGER},
+      </if>
+      <if test="record.edittime != null">
+        edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.supportid != null">
+        supportid = #{record.supportid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_u_department
+    set id = #{record.id,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      orgid = #{record.orgid,jdbcType=INTEGER},
+      parentid = #{record.parentid,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      departno = #{record.departno,jdbcType=VARCHAR},
+      chargeuserid = #{record.chargeuserid,jdbcType=INTEGER},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      supportid = #{record.supportid,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fwk.common.entity.TUdepartment">
+    update t_u_department
+    <set>
+      <if test="creattime != null">
+        creattime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        delstate = #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="orgid != null">
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="parentid != null">
+        parentid = #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="departno != null">
+        departno = #{departno,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeuserid != null">
+        chargeuserid = #{chargeuserid,jdbcType=INTEGER},
+      </if>
+      <if test="edittime != null">
+        edittime = #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supportid != null">
+        supportid = #{supportid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fwk.common.entity.TUdepartment">
+    update t_u_department
+    set creattime = #{creattime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      orgid = #{orgid,jdbcType=INTEGER},
+      parentid = #{parentid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      departno = #{departno,jdbcType=VARCHAR},
+      chargeuserid = #{chargeuserid,jdbcType=INTEGER},
+      edittime = #{edittime,jdbcType=TIMESTAMP},
+      supportid = #{supportid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

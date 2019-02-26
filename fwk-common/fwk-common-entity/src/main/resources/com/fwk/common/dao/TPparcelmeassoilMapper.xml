@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fwk.common.dao.TPparcelmeassoilMapper">
+  <resultMap id="BaseResultMap" type="com.fwk.common.entity.TPparcelmeassoil">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="creattime" jdbcType="TIMESTAMP" property="creattime" />
+    <result column="delstate" jdbcType="INTEGER" property="delstate" />
+    <result column="parcelid" jdbcType="INTEGER" property="parcelid" />
+    <result column="soiltexture" jdbcType="VARCHAR" property="soiltexture" />
+    <result column="sampltime" jdbcType="TIMESTAMP" property="sampltime" />
+    <result column="meastime" jdbcType="TIMESTAMP" property="meastime" />
+    <result column="orgname" jdbcType="VARCHAR" property="orgname" />
+    <result column="samplnum" jdbcType="VARCHAR" property="samplnum" />
+    <result column="soilgenre" jdbcType="VARCHAR" property="soilgenre" />
+    <result column="nitrogen" jdbcType="DECIMAL" property="nitrogen" />
+    <result column="phosphorus" jdbcType="DECIMAL" property="phosphorus" />
+    <result column="potassium" jdbcType="DECIMAL" property="potassium" />
+    <result column="PHvalue" jdbcType="DECIMAL" property="phvalue" />
+    <result column="matter" jdbcType="DECIMAL" property="matter" />
+    <result column="validzn" jdbcType="DECIMAL" property="validzn" />
+    <result column="validcu" jdbcType="DECIMAL" property="validcu" />
+    <result column="validfe" jdbcType="DECIMAL" property="validfe" />
+    <result column="validmn" jdbcType="DECIMAL" property="validmn" />
+    <result column="validmo" jdbcType="DECIMAL" property="validmo" />
+    <result column="valids" jdbcType="DECIMAL" property="valids" />
+    <result column="solubilityca" jdbcType="DECIMAL" property="solubilityca" />
+    <result column="solubilitymg" jdbcType="DECIMAL" property="solubilitymg" />
+    <result column="salt" jdbcType="DECIMAL" property="salt" />
+    <result column="mid" jdbcType="INTEGER" property="mid" />
+    <result column="edittime" jdbcType="TIMESTAMP" property="edittime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, creattime, delstate, parcelid, soiltexture, sampltime, meastime, orgname, samplnum, 
+    soilgenre, nitrogen, phosphorus, potassium, PHvalue, matter, validzn, validcu, validfe, 
+    validmn, validmo, valids, solubilityca, solubilitymg, salt, mid, edittime
+  </sql>
+  <select id="selectByExample" parameterType="com.fwk.common.entity.TPparcelmeassoilExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_p_parcel_meassoil
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_p_parcel_meassoil
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_p_parcel_meassoil
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fwk.common.entity.TPparcelmeassoilExample">
+    delete from t_p_parcel_meassoil
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fwk.common.entity.TPparcelmeassoil">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_p_parcel_meassoil (creattime, delstate, parcelid, 
+      soiltexture, sampltime, meastime, 
+      orgname, samplnum, soilgenre, 
+      nitrogen, phosphorus, potassium, 
+      PHvalue, matter, validzn, 
+      validcu, validfe, validmn, 
+      validmo, valids, solubilityca, 
+      solubilitymg, salt, mid, 
+      edittime)
+    values (#{creattime,jdbcType=TIMESTAMP}, #{delstate,jdbcType=INTEGER}, #{parcelid,jdbcType=INTEGER}, 
+      #{soiltexture,jdbcType=VARCHAR}, #{sampltime,jdbcType=TIMESTAMP}, #{meastime,jdbcType=TIMESTAMP}, 
+      #{orgname,jdbcType=VARCHAR}, #{samplnum,jdbcType=VARCHAR}, #{soilgenre,jdbcType=VARCHAR}, 
+      #{nitrogen,jdbcType=DECIMAL}, #{phosphorus,jdbcType=DECIMAL}, #{potassium,jdbcType=DECIMAL}, 
+      #{phvalue,jdbcType=DECIMAL}, #{matter,jdbcType=DECIMAL}, #{validzn,jdbcType=DECIMAL}, 
+      #{validcu,jdbcType=DECIMAL}, #{validfe,jdbcType=DECIMAL}, #{validmn,jdbcType=DECIMAL}, 
+      #{validmo,jdbcType=DECIMAL}, #{valids,jdbcType=DECIMAL}, #{solubilityca,jdbcType=DECIMAL}, 
+      #{solubilitymg,jdbcType=DECIMAL}, #{salt,jdbcType=DECIMAL}, #{mid,jdbcType=INTEGER}, 
+      #{edittime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fwk.common.entity.TPparcelmeassoil">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_p_parcel_meassoil
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        creattime,
+      </if>
+      <if test="delstate != null">
+        delstate,
+      </if>
+      <if test="parcelid != null">
+        parcelid,
+      </if>
+      <if test="soiltexture != null">
+        soiltexture,
+      </if>
+      <if test="sampltime != null">
+        sampltime,
+      </if>
+      <if test="meastime != null">
+        meastime,
+      </if>
+      <if test="orgname != null">
+        orgname,
+      </if>
+      <if test="samplnum != null">
+        samplnum,
+      </if>
+      <if test="soilgenre != null">
+        soilgenre,
+      </if>
+      <if test="nitrogen != null">
+        nitrogen,
+      </if>
+      <if test="phosphorus != null">
+        phosphorus,
+      </if>
+      <if test="potassium != null">
+        potassium,
+      </if>
+      <if test="phvalue != null">
+        PHvalue,
+      </if>
+      <if test="matter != null">
+        matter,
+      </if>
+      <if test="validzn != null">
+        validzn,
+      </if>
+      <if test="validcu != null">
+        validcu,
+      </if>
+      <if test="validfe != null">
+        validfe,
+      </if>
+      <if test="validmn != null">
+        validmn,
+      </if>
+      <if test="validmo != null">
+        validmo,
+      </if>
+      <if test="valids != null">
+        valids,
+      </if>
+      <if test="solubilityca != null">
+        solubilityca,
+      </if>
+      <if test="solubilitymg != null">
+        solubilitymg,
+      </if>
+      <if test="salt != null">
+        salt,
+      </if>
+      <if test="mid != null">
+        mid,
+      </if>
+      <if test="edittime != null">
+        edittime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="parcelid != null">
+        #{parcelid,jdbcType=INTEGER},
+      </if>
+      <if test="soiltexture != null">
+        #{soiltexture,jdbcType=VARCHAR},
+      </if>
+      <if test="sampltime != null">
+        #{sampltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="meastime != null">
+        #{meastime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgname != null">
+        #{orgname,jdbcType=VARCHAR},
+      </if>
+      <if test="samplnum != null">
+        #{samplnum,jdbcType=VARCHAR},
+      </if>
+      <if test="soilgenre != null">
+        #{soilgenre,jdbcType=VARCHAR},
+      </if>
+      <if test="nitrogen != null">
+        #{nitrogen,jdbcType=DECIMAL},
+      </if>
+      <if test="phosphorus != null">
+        #{phosphorus,jdbcType=DECIMAL},
+      </if>
+      <if test="potassium != null">
+        #{potassium,jdbcType=DECIMAL},
+      </if>
+      <if test="phvalue != null">
+        #{phvalue,jdbcType=DECIMAL},
+      </if>
+      <if test="matter != null">
+        #{matter,jdbcType=DECIMAL},
+      </if>
+      <if test="validzn != null">
+        #{validzn,jdbcType=DECIMAL},
+      </if>
+      <if test="validcu != null">
+        #{validcu,jdbcType=DECIMAL},
+      </if>
+      <if test="validfe != null">
+        #{validfe,jdbcType=DECIMAL},
+      </if>
+      <if test="validmn != null">
+        #{validmn,jdbcType=DECIMAL},
+      </if>
+      <if test="validmo != null">
+        #{validmo,jdbcType=DECIMAL},
+      </if>
+      <if test="valids != null">
+        #{valids,jdbcType=DECIMAL},
+      </if>
+      <if test="solubilityca != null">
+        #{solubilityca,jdbcType=DECIMAL},
+      </if>
+      <if test="solubilitymg != null">
+        #{solubilitymg,jdbcType=DECIMAL},
+      </if>
+      <if test="salt != null">
+        #{salt,jdbcType=DECIMAL},
+      </if>
+      <if test="mid != null">
+        #{mid,jdbcType=INTEGER},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fwk.common.entity.TPparcelmeassoilExample" resultType="java.lang.Integer">
+    select count(*) from t_p_parcel_meassoil
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_p_parcel_meassoil
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.creattime != null">
+        creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delstate != null">
+        delstate = #{record.delstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.parcelid != null">
+        parcelid = #{record.parcelid,jdbcType=INTEGER},
+      </if>
+      <if test="record.soiltexture != null">
+        soiltexture = #{record.soiltexture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sampltime != null">
+        sampltime = #{record.sampltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.meastime != null">
+        meastime = #{record.meastime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orgname != null">
+        orgname = #{record.orgname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.samplnum != null">
+        samplnum = #{record.samplnum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.soilgenre != null">
+        soilgenre = #{record.soilgenre,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nitrogen != null">
+        nitrogen = #{record.nitrogen,jdbcType=DECIMAL},
+      </if>
+      <if test="record.phosphorus != null">
+        phosphorus = #{record.phosphorus,jdbcType=DECIMAL},
+      </if>
+      <if test="record.potassium != null">
+        potassium = #{record.potassium,jdbcType=DECIMAL},
+      </if>
+      <if test="record.phvalue != null">
+        PHvalue = #{record.phvalue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.matter != null">
+        matter = #{record.matter,jdbcType=DECIMAL},
+      </if>
+      <if test="record.validzn != null">
+        validzn = #{record.validzn,jdbcType=DECIMAL},
+      </if>
+      <if test="record.validcu != null">
+        validcu = #{record.validcu,jdbcType=DECIMAL},
+      </if>
+      <if test="record.validfe != null">
+        validfe = #{record.validfe,jdbcType=DECIMAL},
+      </if>
+      <if test="record.validmn != null">
+        validmn = #{record.validmn,jdbcType=DECIMAL},
+      </if>
+      <if test="record.validmo != null">
+        validmo = #{record.validmo,jdbcType=DECIMAL},
+      </if>
+      <if test="record.valids != null">
+        valids = #{record.valids,jdbcType=DECIMAL},
+      </if>
+      <if test="record.solubilityca != null">
+        solubilityca = #{record.solubilityca,jdbcType=DECIMAL},
+      </if>
+      <if test="record.solubilitymg != null">
+        solubilitymg = #{record.solubilitymg,jdbcType=DECIMAL},
+      </if>
+      <if test="record.salt != null">
+        salt = #{record.salt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.mid != null">
+        mid = #{record.mid,jdbcType=INTEGER},
+      </if>
+      <if test="record.edittime != null">
+        edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_p_parcel_meassoil
+    set id = #{record.id,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      parcelid = #{record.parcelid,jdbcType=INTEGER},
+      soiltexture = #{record.soiltexture,jdbcType=VARCHAR},
+      sampltime = #{record.sampltime,jdbcType=TIMESTAMP},
+      meastime = #{record.meastime,jdbcType=TIMESTAMP},
+      orgname = #{record.orgname,jdbcType=VARCHAR},
+      samplnum = #{record.samplnum,jdbcType=VARCHAR},
+      soilgenre = #{record.soilgenre,jdbcType=VARCHAR},
+      nitrogen = #{record.nitrogen,jdbcType=DECIMAL},
+      phosphorus = #{record.phosphorus,jdbcType=DECIMAL},
+      potassium = #{record.potassium,jdbcType=DECIMAL},
+      PHvalue = #{record.phvalue,jdbcType=DECIMAL},
+      matter = #{record.matter,jdbcType=DECIMAL},
+      validzn = #{record.validzn,jdbcType=DECIMAL},
+      validcu = #{record.validcu,jdbcType=DECIMAL},
+      validfe = #{record.validfe,jdbcType=DECIMAL},
+      validmn = #{record.validmn,jdbcType=DECIMAL},
+      validmo = #{record.validmo,jdbcType=DECIMAL},
+      valids = #{record.valids,jdbcType=DECIMAL},
+      solubilityca = #{record.solubilityca,jdbcType=DECIMAL},
+      solubilitymg = #{record.solubilitymg,jdbcType=DECIMAL},
+      salt = #{record.salt,jdbcType=DECIMAL},
+      mid = #{record.mid,jdbcType=INTEGER},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fwk.common.entity.TPparcelmeassoil">
+    update t_p_parcel_meassoil
+    <set>
+      <if test="creattime != null">
+        creattime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        delstate = #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="parcelid != null">
+        parcelid = #{parcelid,jdbcType=INTEGER},
+      </if>
+      <if test="soiltexture != null">
+        soiltexture = #{soiltexture,jdbcType=VARCHAR},
+      </if>
+      <if test="sampltime != null">
+        sampltime = #{sampltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="meastime != null">
+        meastime = #{meastime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgname != null">
+        orgname = #{orgname,jdbcType=VARCHAR},
+      </if>
+      <if test="samplnum != null">
+        samplnum = #{samplnum,jdbcType=VARCHAR},
+      </if>
+      <if test="soilgenre != null">
+        soilgenre = #{soilgenre,jdbcType=VARCHAR},
+      </if>
+      <if test="nitrogen != null">
+        nitrogen = #{nitrogen,jdbcType=DECIMAL},
+      </if>
+      <if test="phosphorus != null">
+        phosphorus = #{phosphorus,jdbcType=DECIMAL},
+      </if>
+      <if test="potassium != null">
+        potassium = #{potassium,jdbcType=DECIMAL},
+      </if>
+      <if test="phvalue != null">
+        PHvalue = #{phvalue,jdbcType=DECIMAL},
+      </if>
+      <if test="matter != null">
+        matter = #{matter,jdbcType=DECIMAL},
+      </if>
+      <if test="validzn != null">
+        validzn = #{validzn,jdbcType=DECIMAL},
+      </if>
+      <if test="validcu != null">
+        validcu = #{validcu,jdbcType=DECIMAL},
+      </if>
+      <if test="validfe != null">
+        validfe = #{validfe,jdbcType=DECIMAL},
+      </if>
+      <if test="validmn != null">
+        validmn = #{validmn,jdbcType=DECIMAL},
+      </if>
+      <if test="validmo != null">
+        validmo = #{validmo,jdbcType=DECIMAL},
+      </if>
+      <if test="valids != null">
+        valids = #{valids,jdbcType=DECIMAL},
+      </if>
+      <if test="solubilityca != null">
+        solubilityca = #{solubilityca,jdbcType=DECIMAL},
+      </if>
+      <if test="solubilitymg != null">
+        solubilitymg = #{solubilitymg,jdbcType=DECIMAL},
+      </if>
+      <if test="salt != null">
+        salt = #{salt,jdbcType=DECIMAL},
+      </if>
+      <if test="mid != null">
+        mid = #{mid,jdbcType=INTEGER},
+      </if>
+      <if test="edittime != null">
+        edittime = #{edittime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fwk.common.entity.TPparcelmeassoil">
+    update t_p_parcel_meassoil
+    set creattime = #{creattime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      parcelid = #{parcelid,jdbcType=INTEGER},
+      soiltexture = #{soiltexture,jdbcType=VARCHAR},
+      sampltime = #{sampltime,jdbcType=TIMESTAMP},
+      meastime = #{meastime,jdbcType=TIMESTAMP},
+      orgname = #{orgname,jdbcType=VARCHAR},
+      samplnum = #{samplnum,jdbcType=VARCHAR},
+      soilgenre = #{soilgenre,jdbcType=VARCHAR},
+      nitrogen = #{nitrogen,jdbcType=DECIMAL},
+      phosphorus = #{phosphorus,jdbcType=DECIMAL},
+      potassium = #{potassium,jdbcType=DECIMAL},
+      PHvalue = #{phvalue,jdbcType=DECIMAL},
+      matter = #{matter,jdbcType=DECIMAL},
+      validzn = #{validzn,jdbcType=DECIMAL},
+      validcu = #{validcu,jdbcType=DECIMAL},
+      validfe = #{validfe,jdbcType=DECIMAL},
+      validmn = #{validmn,jdbcType=DECIMAL},
+      validmo = #{validmo,jdbcType=DECIMAL},
+      valids = #{valids,jdbcType=DECIMAL},
+      solubilityca = #{solubilityca,jdbcType=DECIMAL},
+      solubilitymg = #{solubilitymg,jdbcType=DECIMAL},
+      salt = #{salt,jdbcType=DECIMAL},
+      mid = #{mid,jdbcType=INTEGER},
+      edittime = #{edittime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

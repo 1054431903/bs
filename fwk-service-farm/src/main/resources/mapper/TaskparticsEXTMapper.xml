@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.farm.dao.TaskparticsEXTMapper">
+
+	<!--======================= 添加农事任务的参与人 =========================-->
+	<insert id="add" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.fwk.service.farm.entity.TaskparticsEXT">
+
+		INSERT INTO 
+			t_f_task_partics (
+					taskid,
+					userid,
+					taskparticsstatus,
+					recordeid,
+					taskstatus
+				)
+				VALUES
+					(
+						#{taskid}, 
+						#{userid},
+						#{taskparticsstatus},
+						#{recordeid},
+						#{taskstatus}
+					)
+
+	</insert>
+	
+	<!--======================= 批量添加农事任务的参与人 =========================-->
+	<insert id="batchAdd" useGeneratedKeys="true"
+		keyProperty="id" parameterType="java.util.List">
+
+		<if test="(null != list) and (list.size() > 0)">
+			INSERT INTO 
+				t_f_task_partics (
+						taskid,
+						userid,
+						taskparticsstatus,
+						recordeid,
+						taskstatus
+					)
+					VALUES
+				<foreach collection="list" item="taskparticsEXT" separator=",">
+					(
+							#{taskparticsEXT.taskid}, 
+							#{taskparticsEXT.userid},
+							#{taskparticsEXT.taskparticsstatus},
+							#{taskparticsEXT.recordeid},
+							#{taskparticsEXT.taskstatus}
+						)
+				</foreach>
+		</if>
+
+	</insert>
+
+	<!--=================== 更新农事任务的参与人 =========================-->
+	<update id="update" parameterType="com.fwk.service.farm.entity.TaskparticsEXT">
+
+		UPDATE t_f_task_partics
+					SET 
+						edittime = SYSDATE(),
+						taskid = #{taskid}, 
+						userid = #{userid},
+						taskparticsstatus = #{taskparticsstatus},
+						recordeid = #{recordeid},
+						taskstatus = #{taskstatus},
+						issavedtorecord = #{issavedtorecord},
+						hasreaded = #{hasreaded}
+					WHERE 
+						id = #{id}
+					
+	</update>
+	
+	<!--=============== 删除农事任务的参与人 =========================-->
+	<update id="deletebyid" parameterType="com.fwk.service.farm.entity.TaskparticsEXT">
+
+		UPDATE t_f_task_partics SET edittime = SYSDATE(), delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}' WHERE id = #{id}
+
+	</update>
+	
+	<!--=============== 根据主键批量删除农事任务的参与人 =========================-->
+	<update id="batchdeletebyids" parameterType="java.util.List">
+	
+		<if test="(null != idList) and (idList.size() > 0)">
+		UPDATE t_f_task_partics 
+					SET 
+						edittime = SYSDATE(),
+						delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}' 
+					WHERE 
+						id IN
+						
+						<foreach collection="idList" open="(" separator="," close=")" item="id">
+							#{id}
+						</foreach>
+		</if>
+
+	</update>
+	
+	<!-- 查询条件：查询出所有符合条件的农事任务的参与人 -->
+	<sql id="where_queryList">
+		
+		WHERE 1 = 1
+		
+		<!-- 业务主键ID -->
+		<choose>
+			<when test="(null != id)">
+				AND id = #{id}
+			</when>
+			<when test="(null != idlist) and (idlist.size > 0)">
+				AND id IN 
+				<foreach collection="idlist" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</when>
+		</choose>
+		
+		<!-- 查询该日期以后更新的数据 -->
+		<if test="(null != lastservicetime)">
+			AND edittime &gt;= #{lastservicetime}
+		</if>
+		
+		<!-- 删除标记 -->
+		<choose>
+			<when test="(null == delstate)">
+				AND delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+			</when>
+			<otherwise>
+				AND delstate = #{delstate}
+			</otherwise>
+		</choose>
+		
+		<!-- 创建时间 -->
+		<choose>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null != createdateend and '' != createdateend)">
+				AND (creattime BETWEEN #{createdatestart} AND #{createdateend})
+			</when>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null == createdateend or '' == createdateend)">
+				AND creattime &gt;= #{createdatestart}
+			</when>
+			<when test=" (null == createdatestart or '' == createdatestart) and null != createdateend and '' != createdateend">
+				AND creattime &lt;= #{createdateend}
+			</when>
+		</choose>
+		
+		<!-- 农事任务的ID -->
+		<choose>
+			<when test="(null != taskid)">
+				AND taskid = #{taskid}
+			</when>
+			<when test="(null != taskidlist) and (taskidlist.size > 0)">
+				AND taskid IN 
+				<foreach collection="taskidlist" item="taskid" open="(" separator="," close=")">
+					#{taskid}
+				</foreach>
+			</when>
+		</choose>
+		
+		<!-- 用户的ID -->
+		<if test="(null != userid)">
+			AND userid = #{userid}
+		</if>
+		
+		<!-- 任务参与状态 -->
+		<if test="(null != taskparticsstatus) and ('' != taskparticsstatus)">
+			AND taskparticsstatus = #{taskparticsstatus}
+		</if>
+		
+		<!-- 农事记录的ID -->
+		<if test="(null != recordeid)">
+			AND recordeid = #{recordeid}
+		</if>
+		
+		<!-- 农事任务的状态 -->
+		<if test="(null != taskstatus) and ('' != taskstatus)">
+			AND taskstatus = #{taskstatus}
+		</if>
+		
+	</sql>
+	
+	<!--=================== 检索农事任务的参与人 ========================-->
+	<select id="queryList" parameterType="com.fwk.service.farm.entity.TaskparticsEXT" resultType="com.fwk.service.farm.entity.TaskparticsEXT">
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					t_f_task_partics.*, t_u_users.`name` AS username,
+					t_u_users.supportid AS usersupportid,
+					t_c_dict_taskparticsstatus.dictname AS taskparticsstatusname,
+					t_c_dict_taskstatus.dictname AS taskstatusname,
+					t_c_resource.resourcepath AS photourl
+				FROM
+					t_f_task_partics
+				LEFT OUTER JOIN t_u_users ON t_f_task_partics.userid = t_u_users.id
+				LEFT OUTER JOIN t_c_dict t_c_dict_taskparticsstatus ON (
+				 		t_c_dict_taskparticsstatus.dicttype = '${@com.fwk.common.util.constants.EDictType@task_partics_status.dicttype}'
+					AND t_c_dict_taskparticsstatus.dictvalue = t_f_task_partics.taskparticsstatus
+				 )
+				LEFT OUTER JOIN t_c_dict t_c_dict_taskstatus ON (
+				 		t_c_dict_taskstatus.dicttype = '${@com.fwk.common.util.constants.EDictType@task_status.dicttype}'
+					AND t_c_dict_taskstatus.dictvalue = t_f_task_partics.taskstatus
+				 )
+				LEFT OUTER JOIN t_c_resource_history ON t_c_resource_history.id = t_u_users.photo
+				LEFT OUTER JOIN t_c_resource ON t_c_resource.id = t_c_resource_history.currentResource
+			) table_all
+			
+			<!-- 查询条件 -->
+			<include refid="where_queryList"/>
+			
+			<!-- 排序 -->
+			<choose>
+				<!-- 使用自定义的排序方式排序 -->
+				<when test="(null != orderBySQL) and ('' != orderBySQL)">
+					ORDER BY ${orderBySQL}
+				</when>
+				<!-- 使用默认的排序方式：添加时间降序排序（id是自增长，所以与添加时间的先后顺序一致） -->
+				<otherwise>
+					ORDER BY id ASC
+				</otherwise>
+			</choose>
+			
+			<!-- 分页查询 -->
+			<if test="(null != page)">
+				LIMIT #{page.startRow}, #{page.pageSize}
+			</if>
+	</select>
+	
+	<!--=================== 检索农事任务的参与人的总记录数量 ========================-->
+	<select id="queryListTotalCount" parameterType="com.fwk.service.farm.entity.TaskparticsEXT" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1) AS totalCount
+		FROM
+			(
+				SELECT
+					t_f_task_partics.*, t_u_users.`name` AS username,
+					t_u_users.supportid AS usersupportid,
+					t_c_dict_taskparticsstatus.dictname AS taskparticsstatusname,
+					t_c_dict_taskstatus.dictname AS taskstatusname,
+					t_c_resource.resourcepath AS photourl
+				FROM
+					t_f_task_partics
+				LEFT OUTER JOIN t_u_users ON t_f_task_partics.userid = t_u_users.id
+				LEFT OUTER JOIN t_c_dict t_c_dict_taskparticsstatus ON (
+				 		t_c_dict_taskparticsstatus.dicttype = '${@com.fwk.common.util.constants.EDictType@task_partics_status.dicttype}'
+					AND t_c_dict_taskparticsstatus.dictvalue = t_f_task_partics.taskparticsstatus
+				 )
+				LEFT OUTER JOIN t_c_dict t_c_dict_taskstatus ON (
+				 		t_c_dict_taskstatus.dicttype = '${@com.fwk.common.util.constants.EDictType@task_status.dicttype}'
+					AND t_c_dict_taskstatus.dictvalue = t_f_task_partics.taskstatus
+				 )
+				LEFT OUTER JOIN t_c_resource_history ON t_c_resource_history.id = t_u_users.photo
+				LEFT OUTER JOIN t_c_resource ON t_c_resource.id = t_c_resource_history.currentResource
+			) table_all
+			
+			<!-- 查询条件 -->
+			<include refid="where_queryList"/>
+	</select>
+	
+	<!--================= 清空回收站 =================-->
+	<update id="deleteAllFromTrash" parameterType="com.fwk.service.farm.entity.TaskparticsEXT">
+		UPDATE t_f_task_partics
+		SET t_f_task_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FROM_TRASH}'
+		WHERE
+			t_f_task_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}'
+		
+		<!-- 我参与的 -->
+		<if test="(null != userid)">
+			AND t_f_task_partics.userid = #{userid}
+		</if>
+		
+		<!-- 根据ID清空 -->
+		<if test="(null != id)">
+			AND t_f_task_partics.id = #{id}
+		</if>
+		
+		<!-- 根据ID清空 -->
+		<if test="(null != idlist) and (idlist.size() > 0)">
+			AND t_f_task_partics.id IN
+			
+			<foreach collection="idlist" open="(" separator="," close=")" item="id">
+				#{id}
+			</foreach>
+		</if>
+		
+		<!-- 根据农事任务的ID清空 -->
+		<if test="(null != taskid)">
+			AND t_f_task_partics.taskid = #{taskid}
+		</if>
+		
+		<!-- 根据农事任务的ID清空 -->
+		<if test="(null != taskidlist) and (taskidlist.size() > 0)">
+			AND t_f_task_partics.taskid IN
+			
+			<foreach collection="taskidlist" open="(" separator="," close=")" item="taskid">
+				#{taskid}
+			</foreach>
+		</if>
+		
+	</update>
+	
+	<!--=============== 保存到农事记录 =========================-->
+	<update id="saveToRecord" parameterType="com.fwk.service.farm.entity.TaskparticsEXT">
+
+		UPDATE t_f_task_partics SET 
+			edittime = SYSDATE(), 
+			issavedtorecord = '${@com.fwk.common.util.constants.CommonConstantsUtil@YES_OR_NO_YES}'
+		WHERE 
+			delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+		AND taskid = #{taskid}
+		AND userid = #{userid}
+
+	</update>
+	
+</mapper>

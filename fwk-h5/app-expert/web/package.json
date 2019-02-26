@@ -1,0 +1,71 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --open",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@agrithings/cmap": "^1.0.0",
+    "@agrithings/common": "^1.0.0",
+    "@babel/polyfill": "^7.0.0-beta.56",
+    "@babel/runtime": "^7.0.0-beta.56",
+    "@vehiclecloud/commons": "^1.1.0",
+    "@vehiclecloud/grpc-websocket-client": "^1.1.0",
+    "@vehiclecloud/json-schema": "^1.1.0",
+    "@vehiclecloud/json-schema-vuetify": "^1.1.0",
+    "@vehiclecloud/mongo-rest-client": "^1.1.0",
+    "@vehiclecloud/oauth2-client": "^1.1.0",
+    "@vehiclecloud/redis-rest-client": "^1.1.0",
+    "axios": "^0.18.0",
+    "better-scroll": "^1.12.4",
+    "echarts": "^4.1.0",
+    "material-design-icons": "^3.0.1",
+    "moment": "^2.22.1",
+    "reset-css": "^4.0.1",
+    "v-charts": "^1.16.23",
+    "videojs-contrib-hls": "^5.14.1",
+    "vue": "^2.5.16",
+    "vue-awesome-picker": "^1.1.0",
+    "vue-infinite-loading": "^2.3.1",
+    "vue-picture-preview": "^1.2.0",
+    "vue-router": "^3.0.1",
+    "vue-scroller": "^2.2.4",
+    "vue-toasted": "^1.1.24",
+    "vue-video-player": "^5.0.2",
+    "vuetify": "^1.0.17",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.56",
+    "@babel/preset-env": "^7.0.0-beta.56",
+    "@vue/cli-plugin-babel": "^3.0.0-beta.10",
+    "@vue/cli-plugin-eslint": "^3.0.0-beta.10",
+    "@vue/cli-service": "^3.0.0-beta.10",
+    "@vue/eslint-config-standard": "^3.0.0-beta.10",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "vue-template-compiler": "^2.5.13"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/standard"
+    ]
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}

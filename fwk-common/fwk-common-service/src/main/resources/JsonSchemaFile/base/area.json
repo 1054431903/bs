@@ -1,0 +1,43 @@
+{
+  "title": "区域",
+  "type": "object",
+  "properties": {
+    "parent": {
+      "type": "string",
+      "$id": "#base.area",
+      "title": "父级"
+    },
+    "level": {
+      "type": "integer",
+      "enum": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "enumNames": [
+        "国家",
+        "省",
+        "市",
+        "县",
+        "乡镇",
+        "村"
+      ],
+      "title": "级别"
+    },
+    "name": {
+      "type": "string",
+      "title": "行政区域名称"
+    },
+    "code": {
+      "type": "string",
+      "title": "国别，省别，市别代码"
+    }
+  },
+  "required": [
+    "name",
+    "code"
+  ]
+}

@@ -1,0 +1,4 @@
+application-language.properties          语言国际化文件
+application-log-action-name.properties   前后台请求方法名称
+application-log-type-execute.properties  日志为业务类的方法名（值仅为备注）
+application-archive-attent-action-name.properties  需要添加产品关注度的方法名称

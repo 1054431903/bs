@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.farm.dao.PlanEXTMapper">
+
+	<!--======================= 添加农事计划 =========================-->
+	<insert id="add" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.fwk.service.farm.entity.PlanEXT">
+
+		INSERT INTO 
+				t_f_plan (
+							title,
+							`describe`,
+							begintime,
+							endtime,
+							remark,
+							createuserid
+						)
+						VALUES
+							(
+								#{title}, 
+								#{describe}, 
+								#{begintime}, 
+								#{endtime}, 
+								#{remark}, 
+								#{createuserid}
+							)
+
+	</insert>
+
+	<!--=================== 更新农事计划 =========================-->
+	<update id="update" parameterType="com.fwk.service.farm.entity.PlanEXT">
+
+		UPDATE t_f_plan
+					SET 
+						edittime = SYSDATE(),
+						title = #{title}, 
+						`describe` = #{describe}, 
+						begintime = #{begintime}, 
+						endtime = #{endtime}, 
+						remark = #{remark}, 
+						createuserid = #{createuserid}
+					WHERE 
+						id = #{id}
+					
+	</update>
+	
+	<!--=============== 删除农事计划 =========================-->
+	<update id="deletebyid" parameterType="com.fwk.service.farm.entity.PlanEXT">
+
+		UPDATE t_f_plan SET edittime = SYSDATE(), delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}' WHERE id = #{id}
+
+	</update>
+	
+	<!--=============== 根据主键批量删除农事计划 =========================-->
+	<update id="batchdeletebyids" parameterType="java.util.List">
+	
+		<if test="(null != idList) and (idList.size() > 0)">
+		UPDATE t_f_plan 
+					SET 
+						edittime = SYSDATE(),
+						delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}' 
+					WHERE 
+						id IN
+						
+						<foreach collection="idList" open="(" separator="," close=")" item="id">
+							#{id}
+						</foreach>
+		</if>
+
+	</update>
+	
+	<!-- 查询条件：查询出所有符合条件的农事计划 -->
+	<sql id="where_queryList">
+		
+		WHERE 1 = 1
+		
+		<!-- 业务主键ID -->
+		<choose>
+			<when test="(null != id)">
+				AND id = #{id}
+			</when>
+			<when test="(null != idlist) and (idlist.size > 0)">
+				AND id IN 
+				<foreach collection="idlist" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</when>
+		</choose>
+		
+		<!-- 查询该日期以后更新的数据 -->
+		<if test="(null != lastservicetime)">
+			AND edittime &gt;= #{lastservicetime}
+		</if>
+		
+		<!-- 删除标记 -->
+		<if test="(null != delstate)">
+			AND delstate = #{delstate}
+		</if>
+		
+		<!-- 创建时间 -->
+		<choose>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null != createdateend and '' != createdateend)">
+				AND (creattime BETWEEN #{createdatestart} AND #{createdateend})
+			</when>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null == createdateend or '' == createdateend)">
+				AND creattime &gt;= #{createdatestart}
+			</when>
+			<when test=" (null == createdatestart or '' == createdatestart) and null != createdateend and '' != createdateend">
+				AND creattime &lt;= #{createdateend}
+			</when>
+		</choose>
+		
+		<!-- 根据关键字查询（计划内容） -->
+		<if test="(null != keyword) and ('' != keyword)">
+			AND ( (`describe` LIKE CONCAT('%',#{keyword},'%')) 
+				)
+		</if>
+		
+		<!-- 开始时间和结束时间 -->
+		<choose>
+			<when test=" (null != begintime) and (null != endtime)">
+				AND ( begintime &lt;= #{begintimestr} OR ( begintime &gt;= #{begintimestr} AND begintime &lt;= #{endtimestr} ) )  
+			</when>
+			<when test=" (null != begintime) and (null == endtime)">
+				<choose>
+					<!-- 查询指定的日期范围内的 -->
+					<when test="( (null != begintimestr) and ('' != begintimestr) ) and ( (null != endtimestr) and ('' != endtimestr) )">
+						AND begintime &lt;= #{endtimestr} AND #{begintimestr} &lt;= endtime
+					</when>
+					<otherwise>
+						AND begintime &gt;= #{begintime}
+					</otherwise>
+				</choose>
+			</when>
+			<when test=" (null == begintime) and (null != endtime)">
+				AND endtime &lt;= #{endtime}
+			</when>
+		</choose>
+		
+		<!-- 根据任务的不同角色查询农事计划 -->
+		<choose>
+			<!-- 插叙我创建的和我参与的农事计划 -->
+			<when test="(null != createuserid) and (null != planparticsuserid)">
+				<choose>
+					<when test="userIds != null and userIds.size >= 1">
+						AND (createuserid = #{createuserid} OR planparticsuserids LIKE CONCAT('%', #{planparticsuserid}, '%') 
+							OR userpermisionscreateuserid IN (
+								<foreach collection="userIds" item="user" separator=",">
+									#{user}
+								</foreach>
+							)
+						)
+					</when>
+					<otherwise>
+						AND (createuserid = #{createuserid} OR planparticsuserids LIKE CONCAT('%', #{planparticsuserid}, '%') )
+					</otherwise>
+				</choose>
+			</when>
+			<!-- 我发布的农事计划 -->
+			<when test="(null != createuserid)">
+				AND createuserid = #{createuserid}
+			</when>
+			<!-- 我参与的农事计划 -->
+			<when test="(null != planparticsuserid)">
+				AND planparticsuserids LIKE CONCAT('%', #{planparticsuserid}, '%')
+			</when>
+		</choose>
+		
+		
+		<!-- 农事计划内容 -->
+		<if test="(null != describe) and ('' != describe)">
+			AND `describe` = #{describe}
+		</if>
+		
+		<!-- 地块的ID -->
+		<!-- <if test="(null != parcelid)">
+			AND parcelid = #{parcelid}
+		</if> -->
+		
+		<!-- 地块的名称 -->
+		<if test="(null != parcelidname) and ('' != parcelidname)">
+			AND parcelidnames LIKE CONCAT('%', #{parcelidname}, '%')
+		</if>
+		
+		<!-- 按权限查询 -->
+		<if test="(null != permisionssqlwhere) and ('' != permisionssqlwhere)">
+			${permisionssqlwhere}
+		</if>
+		
+		<!-- 开始时间小于等于指定的时间 -->
+		<if test="(null != lessthanbegintime)">
+			AND begintime &lt;= #{lessthanbegintime}
+		</if>
+		
+		<!-- 开始时间大于等于指定的时间 -->
+		<if test="(null != greatthanbegintime)">
+			AND begintime &gt;= #{greatthanbegintime}
+		</if>
+		
+		<!-- 结束时间小于等于指定的时间 -->
+		<if test="(null != lessthanendtime)">
+			AND endtime &lt;= #{lessthanendtime}
+		</if>
+		
+		<!-- 结束时间大于等于指定的时间 -->
+		<if test="(null != greatthanendtime)">
+			AND endtime &gt;= #{greatthanendtime}
+		</if>
+		
+		<!-- 开始时间介于指定的开始时间和截止时间 -->
+		<if test="(null != betweenstartbegintime) and (null  != betweenendbegintime)">
+			AND ( begintime BETWEEN #{betweenstartbegintime} AND #{betweenendbegintime} )
+		</if>
+		
+		<!-- 结束时间介于指定的开始时间和截止时间 -->
+		<if test="(null != betweenstartendtime) and (null  != betweenendendtime)">
+			AND ( endtime BETWEEN #{betweenstartendtime} AND #{betweenendendtime} )
+		</if>
+		
+		<!-- 参与人的ID -->
+		<if test="(null != planparticsuserids) and ('' != planparticsuserids)">
+			AND planparticsuserids LIKE CONCAT('%,', #{planparticsuserids}, ',%')
+		</if>
+		
+		<!-- 是否已读的标志 -->
+		<if test="(null != hasreaded)">
+			AND hasreaded = #{hasreaded}
+		</if>
+		
+		<!-- 数据所属的组织（数据权限） -->
+		<if test="(null != userpermisionscreateuserorgid)">
+			AND userpermisionscreateuserorgid LIKE CONCAT('%', #{userpermisionscreateuserorgid}, '%')
+		</if>
+		
+		
+	</sql>
+	
+	<!--=================== 检索农事计划 ========================-->
+	<select id="queryList" parameterType="com.fwk.service.farm.entity.PlanEXT" resultType="com.fwk.service.farm.entity.PlanEXT">
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					t_f_plan_all.*, 
+					t_f_plan_partics_user.planparticsusernames,
+					CONCAT(',', t_f_plan_partics_user.planparticsuserids, ',') AS planparticsuserids,
+					t_f_plan_parcel_name.parcelidnames,
+					t_f_plan_userpermisions_final.createuserid AS userpermisionscreateuserid,
+					t_f_plan_userpermisions_final.createuserorgid AS userpermisionscreateuserorgid,
+					t_f_plan_userpermisions_final.createuserdepartmentid AS userpermisionscreateuserdepartmentidlist
+				FROM
+					(
+						SELECT
+							t_f_plan.*, 
+							<choose>
+								<when test="(null != planparticsuserids) and ('' != planparticsuserids)">
+									(
+										SELECT
+											t_f_plan_partics.hasreaded
+										FROM
+											t_f_plan_partics
+										WHERE
+											t_f_plan_partics.userid = #{planparticsuserids}
+										AND t_f_plan_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+										AND t_f_plan_partics.planid = t_f_plan.id
+									) AS hasreaded,
+								</when>
+								<otherwise>
+									${@com.fwk.common.util.constants.CommonConstantsUtil@YES_OR_NO_YES} AS hasreaded,
+								</otherwise>
+							</choose>
+							t_u_users.`name` AS createuseridname,
+							date_format(t_f_plan.begintime,'%Y-%c-%d %h:%i:%s') AS begintimestr,
+							date_format(t_f_plan.endtime,'%Y-%c-%d %h:%i:%s') AS endtimestr
+					FROM
+						t_f_plan
+					LEFT OUTER JOIN t_u_users ON t_u_users.id = t_f_plan.createuserid
+					) t_f_plan_all
+				LEFT OUTER JOIN (
+					SELECT
+						t_f_plan_partics.planid,
+						GROUP_CONCAT(t_u_users.`name`) AS planparticsusernames,
+						GROUP_CONCAT(t_f_plan_partics.userid) AS planparticsuserids
+					FROM
+						t_f_plan_partics
+					LEFT OUTER JOIN t_u_users ON 
+						( 
+							t_f_plan_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+							AND t_u_users.id = t_f_plan_partics.userid
+						)
+					GROUP BY
+						t_f_plan_partics.planid
+					ORDER BY
+						t_f_plan_partics.planid,
+						t_f_plan_partics.id
+				) t_f_plan_partics_user ON t_f_plan_all.id = t_f_plan_partics_user.planid
+			LEFT OUTER JOIN (
+					SELECT
+						planid,
+						GROUP_CONCAT(parcelidname) AS parcelidnames
+					FROM
+						(
+							SELECT
+								t_f_plan_parcel.planid,
+								t_f_plan_parcel.parcelid,
+								t_p_parcel.`name` AS parcelidname
+							FROM
+								t_f_plan_parcel
+							LEFT OUTER JOIN t_p_parcel ON (
+								t_f_plan_parcel.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+								AND t_f_plan_parcel.parcelid = t_p_parcel.id
+							)
+						) t_f_plan_parcel_parcelidnames
+					GROUP BY
+						planid
+				) t_f_plan_parcel_name ON t_f_plan_parcel_name.planid = t_f_plan_all.id
+			LEFT OUTER JOIN (
+					SELECT
+						t_f_plan_userpermisions.planid,
+						t_f_plan_userpermisions.createuserid,
+						t_f_plan_userpermisions.createuserorgid,
+						CONCAT(',', GROUP_CONCAT(
+							t_f_plan_userpermisions.createuserdepartmentid
+						), ',') AS createuserdepartmentid
+					FROM
+						t_f_plan_userpermisions
+					WHERE
+						t_f_plan_userpermisions.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+					GROUP BY
+						t_f_plan_userpermisions.planid
+				) t_f_plan_userpermisions_final ON t_f_plan_userpermisions_final.planid = t_f_plan_all.id 
+			) table_all
+		
+			<!-- 查询条件 -->
+			<include refid="where_queryList"/>
+			
+			<!-- 排序 -->
+			<choose>
+				<!-- 使用自定义的排序方式排序 -->
+				<when test="(null != orderBySQL) and ('' != orderBySQL)">
+					ORDER BY ${orderBySQL}
+				</when>
+				<!-- 使用默认的排序方式：以农事计划的开始时间升序排序 -->
+				<otherwise>
+					ORDER BY begintime ASC
+				</otherwise>
+			</choose>
+			
+			<!-- 分页查询 -->
+			<if test="(null != page)">
+				LIMIT #{page.startRow}, #{page.pageSize}
+			</if>
+	</select>
+	
+	<!--=================== 检索农事计划的总记录数量 ========================-->
+	<select id="queryListTotalCount" parameterType="com.fwk.service.farm.entity.PlanEXT" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1) AS totalCount
+		FROM
+			(
+				SELECT
+					t_f_plan_all.*, 
+					t_f_plan_partics_user.planparticsusernames,
+					CONCAT(',', t_f_plan_partics_user.planparticsuserids, ',') AS planparticsuserids,
+					t_f_plan_parcel_name.parcelidnames,
+					t_f_plan_userpermisions_final.createuserid AS userpermisionscreateuserid,
+					t_f_plan_userpermisions_final.createuserorgid AS userpermisionscreateuserorgid,
+					t_f_plan_userpermisions_final.createuserdepartmentid AS userpermisionscreateuserdepartmentidlist
+				FROM
+					(
+						SELECT
+							t_f_plan.*, 
+							<choose>
+								<when test="(null != planparticsuserids) and ('' != planparticsuserids)">
+									(
+										SELECT
+											t_f_plan_partics.hasreaded
+										FROM
+											t_f_plan_partics
+										WHERE
+											t_f_plan_partics.userid = #{planparticsuserids}
+										AND t_f_plan_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+										AND t_f_plan_partics.planid = t_f_plan.id
+									) AS hasreaded,
+								</when>
+								<otherwise>
+									${@com.fwk.common.util.constants.CommonConstantsUtil@YES_OR_NO_YES} AS hasreaded,
+								</otherwise>
+							</choose>
+							t_u_users.`name` AS createuseridname,
+							date_format(t_f_plan.begintime,'%Y-%c-%d %h:%i:%s') AS begintimestr,
+							date_format(t_f_plan.endtime,'%Y-%c-%d %h:%i:%s') AS endtimestr
+					FROM
+						t_f_plan
+					LEFT OUTER JOIN t_u_users ON t_u_users.id = t_f_plan.createuserid
+					) t_f_plan_all
+				LEFT OUTER JOIN (
+					SELECT
+						t_f_plan_partics.planid,
+						GROUP_CONCAT(t_u_users.`name`) AS planparticsusernames,
+						GROUP_CONCAT(t_f_plan_partics.userid) AS planparticsuserids
+					FROM
+						t_f_plan_partics
+					LEFT OUTER JOIN t_u_users ON 
+						( 
+							t_f_plan_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+							AND t_u_users.id = t_f_plan_partics.userid
+						)
+					GROUP BY
+						t_f_plan_partics.planid
+					ORDER BY
+						t_f_plan_partics.planid,
+						t_f_plan_partics.id
+				) t_f_plan_partics_user ON t_f_plan_all.id = t_f_plan_partics_user.planid
+			LEFT OUTER JOIN (
+					SELECT
+						planid,
+						GROUP_CONCAT(parcelidname) AS parcelidnames
+					FROM
+						(
+							SELECT
+								t_f_plan_parcel.planid,
+								t_f_plan_parcel.parcelid,
+								t_p_parcel.`name` AS parcelidname
+							FROM
+								t_f_plan_parcel
+							LEFT OUTER JOIN t_p_parcel ON (
+								t_f_plan_parcel.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+								AND t_f_plan_parcel.parcelid = t_p_parcel.id
+							)
+						) t_f_plan_parcel_parcelidnames
+					GROUP BY
+						planid
+				) t_f_plan_parcel_name ON t_f_plan_parcel_name.planid = t_f_plan_all.id
+			LEFT OUTER JOIN (
+					SELECT
+						t_f_plan_userpermisions.planid,
+						t_f_plan_userpermisions.createuserid,
+						t_f_plan_userpermisions.createuserorgid,
+						CONCAT(',', GROUP_CONCAT(
+							t_f_plan_userpermisions.createuserdepartmentid
+						), ',') AS createuserdepartmentid
+					FROM
+						t_f_plan_userpermisions
+					WHERE
+						t_f_plan_userpermisions.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+					GROUP BY
+						t_f_plan_userpermisions.planid
+				) t_f_plan_userpermisions_final ON t_f_plan_userpermisions_final.planid = t_f_plan_all.id 
+			) table_all
+			
+			<!-- 查询条件 -->
+			<include refid="where_queryList"/>
+	</select>
+	
+</mapper>

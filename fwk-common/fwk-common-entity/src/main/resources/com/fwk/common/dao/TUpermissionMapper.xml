@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fwk.common.dao.TUpermissionMapper">
+  <resultMap id="BaseResultMap" type="com.fwk.common.entity.TUpermission">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="creattime" jdbcType="TIMESTAMP" property="creattime" />
+    <result column="delstate" jdbcType="INTEGER" property="delstate" />
+    <result column="permissionname" jdbcType="VARCHAR" property="permissionname" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="rootid" jdbcType="INTEGER" property="rootid" />
+    <result column="solecode" jdbcType="VARCHAR" property="solecode" />
+    <result column="typecode" jdbcType="VARCHAR" property="typecode" />
+    <result column="edittime" jdbcType="TIMESTAMP" property="edittime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, creattime, delstate, permissionname, description, rootid, solecode, typecode, 
+    edittime
+  </sql>
+  <select id="selectByExample" parameterType="com.fwk.common.entity.TUpermissionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_u_permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_u_permission
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_u_permission
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fwk.common.entity.TUpermissionExample">
+    delete from t_u_permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fwk.common.entity.TUpermission">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_u_permission (creattime, delstate, permissionname, 
+      description, rootid, solecode, 
+      typecode, edittime)
+    values (#{creattime,jdbcType=TIMESTAMP}, #{delstate,jdbcType=INTEGER}, #{permissionname,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{rootid,jdbcType=INTEGER}, #{solecode,jdbcType=VARCHAR}, 
+      #{typecode,jdbcType=VARCHAR}, #{edittime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fwk.common.entity.TUpermission">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_u_permission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        creattime,
+      </if>
+      <if test="delstate != null">
+        delstate,
+      </if>
+      <if test="permissionname != null">
+        permissionname,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="rootid != null">
+        rootid,
+      </if>
+      <if test="solecode != null">
+        solecode,
+      </if>
+      <if test="typecode != null">
+        typecode,
+      </if>
+      <if test="edittime != null">
+        edittime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="permissionname != null">
+        #{permissionname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="rootid != null">
+        #{rootid,jdbcType=INTEGER},
+      </if>
+      <if test="solecode != null">
+        #{solecode,jdbcType=VARCHAR},
+      </if>
+      <if test="typecode != null">
+        #{typecode,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fwk.common.entity.TUpermissionExample" resultType="java.lang.Integer">
+    select count(*) from t_u_permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_u_permission
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.creattime != null">
+        creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delstate != null">
+        delstate = #{record.delstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.permissionname != null">
+        permissionname = #{record.permissionname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rootid != null">
+        rootid = #{record.rootid,jdbcType=INTEGER},
+      </if>
+      <if test="record.solecode != null">
+        solecode = #{record.solecode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.typecode != null">
+        typecode = #{record.typecode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.edittime != null">
+        edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_u_permission
+    set id = #{record.id,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      permissionname = #{record.permissionname,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      rootid = #{record.rootid,jdbcType=INTEGER},
+      solecode = #{record.solecode,jdbcType=VARCHAR},
+      typecode = #{record.typecode,jdbcType=VARCHAR},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fwk.common.entity.TUpermission">
+    update t_u_permission
+    <set>
+      <if test="creattime != null">
+        creattime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        delstate = #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="permissionname != null">
+        permissionname = #{permissionname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="rootid != null">
+        rootid = #{rootid,jdbcType=INTEGER},
+      </if>
+      <if test="solecode != null">
+        solecode = #{solecode,jdbcType=VARCHAR},
+      </if>
+      <if test="typecode != null">
+        typecode = #{typecode,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        edittime = #{edittime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fwk.common.entity.TUpermission">
+    update t_u_permission
+    set creattime = #{creattime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      permissionname = #{permissionname,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      rootid = #{rootid,jdbcType=INTEGER},
+      solecode = #{solecode,jdbcType=VARCHAR},
+      typecode = #{typecode,jdbcType=VARCHAR},
+      edittime = #{edittime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

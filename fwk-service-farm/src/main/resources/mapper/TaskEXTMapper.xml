@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.farm.dao.TaskEXTMapper">
+
+	<!--======================= 添加农事任务 =========================-->
+	<insert id="add" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.fwk.service.farm.entity.TaskEXT">
+
+		INSERT INTO 
+				t_f_task (
+							type,
+							`describe`,
+							begintime,
+							endtime,
+							isaffirmexecute,
+							isaffirmpartics,
+							remark,
+							meetingplace,
+							createuserid,
+							taskstatus
+						)
+						VALUES
+							(
+								#{type}, 
+								#{describe}, 
+								#{begintime}, 
+								#{endtime}, 
+								#{isaffirmexecute}, 
+								#{isaffirmpartics}, 
+								#{remark}, 
+								#{meetingplace}, 
+								#{createuserid}, 
+								#{taskstatus}
+							)
+
+	</insert>
+
+	<!--=================== 更新农事任务 =========================-->
+	<update id="update" parameterType="com.fwk.service.farm.entity.TaskEXT">
+
+		UPDATE t_f_task
+					SET 
+						edittime = SYSDATE(),
+						type = #{type}, 
+						`describe` = #{describe}, 
+						begintime = #{begintime}, 
+						endtime = #{endtime}, 
+						isaffirmexecute = #{isaffirmexecute}, 
+						isaffirmpartics = #{isaffirmpartics}, 
+						remark = #{remark}, 
+						meetingplace = #{meetingplace}, 
+						createuserid = #{createuserid}, 
+						taskstatus = #{taskstatus}
+					WHERE 
+						id = #{id}
+					
+	</update>
+	
+	<!--=============== 删除农事任务 =========================-->
+	<update id="deletebyid" parameterType="com.fwk.service.farm.entity.TaskEXT">
+
+		UPDATE t_f_task SET edittime = SYSDATE(), delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}' WHERE id = #{id}
+
+	</update>
+	
+	<!--=============== 根据主键批量删除农事任务 =========================-->
+	<update id="batchdeletebyids" parameterType="java.util.List">
+	
+		<if test="(null != idList) and (idList.size() > 0)">
+		UPDATE t_f_task 
+					SET 
+						edittime = SYSDATE(),
+						delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}' 
+					WHERE 
+						id IN
+						
+						<foreach collection="idList" open="(" separator="," close=")" item="id">
+							#{id}
+						</foreach>
+		</if>
+
+	</update>
+	
+	<!-- 查询条件：查询出所有符合条件的农事任务 -->
+	<sql id="where_queryList">
+		
+		WHERE 1 = 1
+		
+		<!-- 业务主键ID -->
+		<choose>
+			<when test="(null != id)">
+				AND id = #{id}
+			</when>
+			<when test="(null != idlist) and (idlist.size > 0)">
+				AND id IN 
+				<foreach collection="idlist" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</when>
+		</choose>
+		
+		<!-- 查询该日期以后更新的数据 -->
+		<if test="(null != lastservicetime)">
+			AND edittime &gt;= #{lastservicetime}
+		</if>
+		
+		<!-- 删除标记 -->
+		<if test="(null != delstate)">
+			AND delstate = #{delstate}
+		</if>
+		
+		<!-- 创建时间 -->
+		<choose>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null != createdateend and '' != createdateend)">
+				AND (creattime BETWEEN #{createdatestart} AND #{createdateend})
+			</when>
+			<when test=" (null != createdatestart and '' != createdatestart) and (null == createdateend or '' == createdateend)">
+				AND creattime &gt;= #{createdatestart}
+			</when>
+			<when test=" (null == createdatestart or '' == createdatestart) and null != createdateend and '' != createdateend">
+				AND creattime &lt;= #{createdateend}
+			</when>
+		</choose>
+		
+		<!-- 根据关键字查询（任务内容、发布人） -->
+		<if test="(null != keyword) and ('' != keyword)">
+			AND ( (`describe` LIKE CONCAT('%',#{keyword},'%')) 
+					OR (createuseridname LIKE CONCAT('%',#{keyword},'%')) 
+				)
+		</if>
+		
+		<!-- 开始时间和结束时间 -->
+		<choose>
+			<when test=" (null != begintime) and (null != endtime)">
+				AND begintime &gt;= #{begintime} AND endtime &lt;= #{endtime}
+			</when>
+			<when test=" (null != begintime) and (null == endtime)">
+				<choose>
+					<!-- 查询指定的日期范围内的 -->
+					<when test="( (null != begintimestr) and ('' != begintimestr) ) and ( (null != endtimestr) and ('' != endtimestr) )">
+						AND begintime &lt;= #{endtimestr} AND #{begintimestr} &lt;= endtime
+					</when>
+					<otherwise>
+						AND begintime &gt;= #{begintime}
+					</otherwise>
+				</choose>
+			</when>
+			<when test=" (null == begintime) and (null != endtime)">
+				AND endtime &lt;= #{endtime}
+			</when>
+		</choose>
+		
+		<!-- 根据任务的不同角色查询农事任务 -->
+		<choose>
+			<!-- 我发布的农事任务 -->
+			<when test="(null != createuserid)">
+				AND createuserid = #{createuserid}
+			</when>
+			<!-- 我参与的农事任务 -->
+			<when test="(null != taskparticsuserid)">
+				AND id IN (
+						SELECT
+							t_f_task_partics.taskid
+						FROM
+							t_f_task_partics
+						WHERE
+							t_f_task_partics.userid = #{taskparticsuserid}
+						AND t_f_task_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+					)
+				
+				<!-- 我参与的任务状态 -->
+				<if test="(null != taskparticsusertaskstatus) and ('' != taskparticsusertaskstatus)">
+					AND taskparticsusertaskstatus = #{taskparticsusertaskstatus}
+				</if>
+				
+				<!-- 我参与的任务状态列表 -->
+				<if test="(null != taskparticsusertaskstatuslist) and (taskparticsusertaskstatuslist.size() > 0)">
+					and 1=1 AND ( 
+					<foreach collection="taskparticsusertaskstatuslist"  separator=" OR "  item="item">
+						taskparticsusertaskstatus = #{item}
+					</foreach>
+					<if test="nulldatestate != null">
+						or taskparticsusertaskstatus is null
+					</if>
+					)
+				</if>
+			</when>
+			<!-- 抄送我的农事任务 -->
+			<when test="(null != taskcopyuserid)">
+				AND id IN (
+						SELECT
+							t_f_task_copy.taskid
+						FROM
+							t_f_task_copy
+						WHERE
+							t_f_task_copy.userid = #{taskcopyuserid}
+						AND t_f_task_copy.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+					)
+			</when>
+		</choose>
+		
+		<!-- 查询我发布的、我参与的、抄送我的 -->
+		<if test="(null != createuserid) and (null != taskparticsuserid) and (null != taskcopyuserid)">
+			AND (
+					(createuserid = #{createuserid})
+				OR
+					(id IN (
+						SELECT
+							t_f_task_partics.taskid
+						FROM
+							t_f_task_partics
+						WHERE
+							t_f_task_partics.userid = #{taskparticsuserid}
+						AND t_f_task_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+					))
+				OR id IN (
+						SELECT
+							t_f_task_copy.taskid
+						FROM
+							t_f_task_copy
+						WHERE
+							t_f_task_copy.userid = #{taskcopyuserid}
+						AND t_f_task_copy.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+					)
+			)
+		</if>
+		
+		<!-- 农事任务内容 -->
+		<if test="(null != describe) and ('' != describe)">
+			AND `describe` LIKE (CONCAT('%', #{describe}, '%')
+		</if>
+		
+		<!-- 农事任务类别 -->
+		<if test="(null != type)">
+			AND type = #{type}
+		</if>
+		
+		<!-- 农事任务类别名称 -->
+		<if test="(null != typename) and ('' != typename)">
+			AND typename = #{typename}
+		</if>
+		
+		<!-- 地块的ID -->
+		<!-- <if test="(null != parcelid)">
+			AND parcelid = #{parcelid}
+		</if> -->
+		
+		<!-- 地块的名称 -->
+		<if test="(null != parcelidname) and ('' != parcelidname)">
+			AND parcelidnames LIKE CONCAT('%', #{parcelidname}, '%')
+		</if>
+		
+		<!-- 任务状态 -->
+		<if test="(null != taskstatus) and ('' != taskstatus)">
+			AND taskstatus = #{taskstatus}
+		</if>
+		
+		<!-- 任务状态列表 -->
+		<if test="(null != taskstatuslist) and (taskstatuslist.size() > 0)">
+			AND 
+			<foreach collection="taskstatuslist" open="(" separator=" OR " close=")" item="taskstatus">
+				taskstatus = #{taskstatus}
+			</foreach>
+		</if>
+		
+		<!-- 任务状态名称 -->
+		<if test="(null != taskstatusname) and ('' != taskstatusname)">
+			AND taskstatusname = #{taskstatusname}
+		</if>
+		
+		<!-- 按权限查询 -->
+		<if test="(null != permisionssqlwhere) and ('' != permisionssqlwhere)">
+			${permisionssqlwhere}
+		</if>
+		
+		<!-- 开始时间小于等于指定的时间 -->
+		<if test="(null != lessthanbegintime)">
+			AND begintime &lt;= #{lessthanbegintime}
+		</if>
+		
+		<!-- 开始时间大于等于指定的时间 -->
+		<if test="(null != greatthanbegintime)">
+			AND begintime &gt;= #{greatthanbegintime}
+		</if>
+		
+		<!-- 结束时间小于等于指定的时间 -->
+		<if test="(null != lessthanendtime)">
+			AND endtime &lt;= #{lessthanendtime}
+		</if>
+		
+		<!-- 结束时间大于等于指定的时间 -->
+		<if test="(null != greatthanendtime)">
+			AND endtime &gt;= #{greatthanendtime}
+		</if>
+		
+		<!-- 开始时间介于指定的开始时间和截止时间 -->
+		<if test="(null != betweenstartbegintime) and (null  != betweenendbegintime)">
+			AND ( begintime BETWEEN #{betweenstartbegintime} AND #{betweenendbegintime} )
+		</if>
+		
+		<!-- 结束时间介于指定的开始时间和截止时间 -->
+		<if test="(null != betweenstartendtime) and (null  != betweenendendtime)">
+			AND ( endtime BETWEEN #{betweenstartendtime} AND #{betweenendendtime} )
+		</if>
+		
+		<!-- 参与人的ID -->
+		<if test="(null != taskparticsuserids) and ('' != taskparticsuserids)">
+			AND taskparticsuserids LIKE CONCAT('%,', #{taskparticsuserids}, ',%')
+		</if>
+		
+		<!-- 抄送人的ID -->
+		<!-- <if test="(null != taskcopyuserids) and ('' != taskcopyuserids)">
+			AND taskcopyuserids LIKE CONCAT('%,', #{taskcopyuserids}, ',%')
+		</if> -->
+		
+		<!-- 是否已读的标志 -->
+		<if test="(null != hasreaded)">
+			AND hasreaded = #{hasreaded}
+		</if>
+		
+	</sql>
+	
+	<!--=================== 检索农事任务 ========================-->
+	<select id="queryList" parameterType="com.fwk.service.farm.entity.TaskEXT" resultType="com.fwk.service.farm.entity.TaskEXT">
+		SELECT
+			table_all.*,
+			<!-- 排序的序号 -->
+			<choose>
+					<!-- 如果是我参与的，那么需要按我参与的状态排序 -->
+					<when test="(null != taskparticsuserid)">
+						(
+							CASE IFNULL(taskparticsusertaskstatus, '')
+							WHEN '${@com.fwk.common.util.constants.EDict@task_status_started.getDict().getDictValue()}' THEN
+								100
+							WHEN '${@com.fwk.common.util.constants.EDict@task_status_overdue.getDict().getDictValue()}' THEN
+								100
+							WHEN '' THEN
+								100
+							WHEN '${@com.fwk.common.util.constants.EDict@task_status_finish.getDict().getDictValue()}' THEN
+								200
+							WHEN '${@com.fwk.common.util.constants.EDict@task_status_refuse.getDict().getDictValue()}' THEN
+								200
+							END
+						) AS defaultsortno
+					</when>
+					<!-- 否则按全局的状态排序 -->
+					<otherwise>
+					(
+						CASE IFNULL(taskstatus, '')
+						WHEN '${@com.fwk.common.util.constants.EDict@task_status_started.getDict().getDictValue()}' THEN
+							100
+						WHEN '${@com.fwk.common.util.constants.EDict@task_status_overdue.getDict().getDictValue()}' THEN
+							100
+						WHEN '' THEN
+							100
+						WHEN '${@com.fwk.common.util.constants.EDict@task_status_finish.getDict().getDictValue()}' THEN
+							200
+						WHEN '${@com.fwk.common.util.constants.EDict@task_status_refuse.getDict().getDictValue()}' THEN
+							200
+						END
+					) AS defaultsortno
+					</otherwise>
+			</choose>
+		FROM
+			(
+				SELECT
+					t_f_task_all.*, 
+					<!-- 排序的序号 -->
+					<if test="(null != taskparticsuserid)">
+						(SELECT t_f_task_partics.taskstatus AS taskparticsusertaskstatus FROM t_f_task_partics WHERE t_f_task_partics.userid = #{taskparticsuserid} AND t_f_task_partics.taskid = t_f_task_all.id AND t_f_task_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}') AS taskparticsusertaskstatus ,
+					</if>
+					t_f_task_partics_user.taskparticsusernames,
+					CONCAT(',', t_f_task_partics_user.taskparticsuserids, ',') AS taskparticsuserids,
+					t_f_task_partics_user.taskparticsstatus,
+					t_f_task_partics_user.taskparticstaskstatus,
+					t_f_task_partics_user.taskparticsrecordeid,
+					t_f_task_parcel_name.parcelidnames,
+					IFNULL(t_f_task_comment_dynamiccount.dynamiccount,0) AS dynamiccount,
+					t_f_task_userpermisions_final.createuserid AS userpermisionscreateuserid,
+					t_f_task_userpermisions_final.createuserorgid AS userpermisionscreateuserorgid,
+					t_f_task_userpermisions_final.createuserdepartmentid AS userpermisionscreateuserdepartmentidlist
+				FROM
+					(
+						SELECT
+							t_f_task.*, 
+							<choose>
+								<!-- 参与人 -->
+								<when test="(null != taskparticsuserids) and ('' != taskparticsuserids)">
+									(
+										SELECT
+											t_f_task_partics.hasreaded
+										FROM
+											t_f_task_partics
+										WHERE
+											t_f_task_partics.userid = #{taskparticsuserids}
+										AND t_f_task_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+										AND t_f_task_partics.taskid = t_f_task.id
+									) AS hasreaded,
+								</when>
+								<!-- 抄送人 -->
+								<when test="(null != taskcopyuserids) and ('' != taskcopyuserids)">
+									(
+										SELECT
+											t_f_task_copy.hasreaded
+										FROM
+											t_f_task_copy
+										WHERE
+											t_f_task_copy.userid = #{taskcopyuserids}
+										AND t_f_task_copy.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+										AND t_f_task_copy.taskid = t_f_task.id
+									) AS hasreaded,
+								</when>
+								<otherwise>
+									${@com.fwk.common.util.constants.CommonConstantsUtil@YES_OR_NO_YES} AS hasreaded,
+								</otherwise>
+							</choose>
+							t_c_dict_taskstatus.dictname AS taskstatusname,
+							t_c_dict_type.dictname AS typename,
+							t_u_users.`name` AS createuseridname,
+							t_u_users.supportid AS createusersupportid,
+							date_format(t_f_task.begintime,'%Y-%c-%d %h:%i:%s') AS begintimestr,
+							date_format(t_f_task.endtime,'%Y-%c-%d %h:%i:%s') AS endtimestr
+					FROM
+						t_f_task
+					LEFT OUTER JOIN t_c_dict t_c_dict_taskstatus ON (
+						t_c_dict_taskstatus.dicttype = '${@com.fwk.common.util.constants.EDictType@task_status.dicttype}'
+						AND t_f_task.taskstatus = t_c_dict_taskstatus.dictvalue
+					)
+					LEFT OUTER JOIN t_c_dict t_c_dict_type ON (
+						t_c_dict_type.dicttype = '${@com.fwk.common.util.constants.EDictType@task_type.dicttype}'
+						AND t_f_task.type = t_c_dict_type.dictvalue
+					)
+					LEFT OUTER JOIN t_u_users ON t_u_users.id = t_f_task.createuserid
+					) t_f_task_all
+				LEFT OUTER JOIN (
+					SELECT
+						t_f_task_partics.taskid,
+						GROUP_CONCAT(t_u_users.`name`) AS taskparticsusernames,
+						GROUP_CONCAT(t_f_task_partics.userid) AS taskparticsuserids,
+						GROUP_CONCAT(t_f_task_partics.taskparticsstatus) AS taskparticsstatus,
+						GROUP_CONCAT(t_f_task_partics.taskstatus) AS taskparticstaskstatus,
+						GROUP_CONCAT(t_f_task_partics.recordeid) AS taskparticsrecordeid
+					FROM
+						t_f_task_partics
+					LEFT OUTER JOIN t_u_users ON 
+						( 
+							t_f_task_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+							AND t_u_users.id = t_f_task_partics.userid
+						)
+					GROUP BY
+						t_f_task_partics.taskid
+					ORDER BY
+						t_f_task_partics.taskid,
+						t_f_task_partics.id
+				) t_f_task_partics_user ON t_f_task_all.id = t_f_task_partics_user.taskid
+			LEFT OUTER JOIN (
+					SELECT
+						taskid,
+						GROUP_CONCAT(parcelidname) AS parcelidnames
+					FROM
+						(
+							SELECT
+								t_f_task_parcel.taskid,
+								t_f_task_parcel.parcelid,
+								t_p_parcel.`name` AS parcelidname
+							FROM
+								t_f_task_parcel
+							LEFT OUTER JOIN t_p_parcel ON (
+								t_f_task_parcel.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+								AND t_f_task_parcel.parcelid = t_p_parcel.id
+							)
+						) t_f_task_parcel_parcelidnames
+					GROUP BY
+						taskid
+				) t_f_task_parcel_name ON t_f_task_parcel_name.taskid = t_f_task_all.id
+			LEFT OUTER JOIN (
+					SELECT
+						t_f_task_comment.taskid,
+						COUNT(1) AS dynamiccount
+					FROM
+						t_f_task_comment
+					WHERE
+						t_f_task_comment.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+					GROUP BY
+						t_f_task_comment.taskid
+				) t_f_task_comment_dynamiccount ON t_f_task_comment_dynamiccount.taskid = t_f_task_all.id
+			LEFT OUTER JOIN (
+					SELECT
+						t_f_task_userpermisions.taskid,
+						t_f_task_userpermisions.createuserid,
+						t_f_task_userpermisions.createuserorgid,
+						CONCAT(',', GROUP_CONCAT(
+							t_f_task_userpermisions.createuserdepartmentid
+						), ',') AS createuserdepartmentid
+					FROM
+						t_f_task_userpermisions
+					WHERE
+						t_f_task_userpermisions.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+					GROUP BY
+						t_f_task_userpermisions.taskid
+				) t_f_task_userpermisions_final ON t_f_task_userpermisions_final.taskid = t_f_task_all.id 
+			) table_all
+		
+			<!-- 查询条件 -->
+			<include refid="where_queryList"/>
+			
+			<!-- 排序 -->
+			<choose>
+				<!-- 使用自定义的排序方式排序 -->
+				<when test="(null != orderBySQL) and ('' != orderBySQL)">
+					ORDER BY ${orderBySQL}
+				</when>
+				<!-- 使用默认的排序方式（第一排序顺序：把未完成的排在前面，再把已完成和已拒绝的牌在后面。第二排序顺序：根据截至时间降序排序） -->
+				<otherwise>
+					ORDER BY defaultsortno ASC, endtime ASC
+				</otherwise>
+			</choose>
+			
+			<!-- 分页查询 -->
+			<if test="(null != page)">
+				LIMIT #{page.startRow}, #{page.pageSize}
+			</if>
+	</select>
+	
+	<!--=================== 检索农事任务的总记录数量 ========================-->
+	<select id="queryListTotalCount" parameterType="com.fwk.service.farm.entity.TaskEXT" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1) AS totalCount
+		FROM
+			(
+				SELECT
+					t_f_task_all.*, 
+					<if test="(null != taskparticsuserid)">
+						(SELECT t_f_task_partics.taskstatus AS taskparticsusertaskstatus FROM t_f_task_partics WHERE t_f_task_partics.userid = #{taskparticsuserid} AND t_f_task_partics.taskid = t_f_task_all.id AND t_f_task_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}') AS taskparticsusertaskstatus ,
+					</if>
+					t_f_task_partics_user.taskparticsusernames,
+					CONCAT(',', t_f_task_partics_user.taskparticsuserids, ',') AS taskparticsuserids,
+					t_f_task_partics_user.taskparticsstatus,
+					t_f_task_partics_user.taskparticstaskstatus,
+					t_f_task_partics_user.taskparticsrecordeid,
+					t_f_task_parcel_name.parcelidnames,
+					IFNULL(t_f_task_comment_dynamiccount.dynamiccount,0) AS dynamiccount,
+					t_f_task_userpermisions_final.createuserid AS userpermisionscreateuserid,
+					t_f_task_userpermisions_final.createuserorgid AS userpermisionscreateuserorgid,
+					t_f_task_userpermisions_final.createuserdepartmentid AS userpermisionscreateuserdepartmentidlist
+				FROM
+					(
+						SELECT
+							t_f_task.*, 
+							<choose>
+								<!-- 参与人 -->
+								<when test="(null != taskparticsuserids) and ('' != taskparticsuserids)">
+									(
+										SELECT
+											t_f_task_partics.hasreaded
+										FROM
+											t_f_task_partics
+										WHERE
+											t_f_task_partics.userid = #{taskparticsuserids}
+										AND t_f_task_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+										AND t_f_task_partics.taskid = t_f_task.id
+									) AS hasreaded,
+								</when>
+								<!-- 抄送人 -->
+								<when test="(null != taskcopyuserids) and ('' != taskcopyuserids)">
+									(
+										SELECT
+											t_f_task_copy.hasreaded
+										FROM
+											t_f_task_copy
+										WHERE
+											t_f_task_copy.userid = #{taskcopyuserids}
+										AND t_f_task_copy.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+										AND t_f_task_copy.taskid = t_f_task.id
+									) AS hasreaded,
+								</when>
+								<otherwise>
+									${@com.fwk.common.util.constants.CommonConstantsUtil@YES_OR_NO_YES} AS hasreaded,
+								</otherwise>
+							</choose>
+							t_c_dict_taskstatus.dictname AS taskstatusname,
+							t_c_dict_type.dictname AS typename,
+							t_u_users.`name` AS createuseridname,
+							t_u_users.supportid AS createusersupportid,
+							date_format(t_f_task.begintime,'%Y-%c-%d %h:%i:%s') AS begintimestr,
+							date_format(t_f_task.endtime,'%Y-%c-%d %h:%i:%s') AS endtimestr
+					FROM
+						t_f_task
+					LEFT OUTER JOIN t_c_dict t_c_dict_taskstatus ON (
+						t_c_dict_taskstatus.dicttype = '${@com.fwk.common.util.constants.EDictType@task_status.dicttype}'
+						AND t_f_task.taskstatus = t_c_dict_taskstatus.dictvalue
+					)
+					LEFT OUTER JOIN t_c_dict t_c_dict_type ON (
+						t_c_dict_type.dicttype = '${@com.fwk.common.util.constants.EDictType@task_type.dicttype}'
+						AND t_f_task.type = t_c_dict_type.dictvalue
+					)
+					LEFT OUTER JOIN t_u_users ON t_u_users.id = t_f_task.createuserid
+					) t_f_task_all
+				LEFT OUTER JOIN (
+					SELECT
+						t_f_task_partics.taskid,
+						GROUP_CONCAT(t_u_users.`name`) AS taskparticsusernames,
+						GROUP_CONCAT(t_f_task_partics.userid) AS taskparticsuserids,
+						GROUP_CONCAT(t_f_task_partics.taskparticsstatus) AS taskparticsstatus,
+						GROUP_CONCAT(t_f_task_partics.taskstatus) AS taskparticstaskstatus,
+						GROUP_CONCAT(t_f_task_partics.recordeid) AS taskparticsrecordeid
+					FROM
+						t_f_task_partics
+					LEFT OUTER JOIN t_u_users ON 
+						( 
+							t_f_task_partics.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+							AND t_u_users.id = t_f_task_partics.userid
+						)
+					GROUP BY
+						t_f_task_partics.taskid
+					ORDER BY
+						t_f_task_partics.taskid,
+						t_f_task_partics.id
+				) t_f_task_partics_user ON t_f_task_all.id = t_f_task_partics_user.taskid
+			LEFT OUTER JOIN (
+					SELECT
+						taskid,
+						GROUP_CONCAT(parcelidname) AS parcelidnames
+					FROM
+						(
+							SELECT
+								t_f_task_parcel.taskid,
+								t_f_task_parcel.parcelid,
+								t_p_parcel.`name` AS parcelidname
+							FROM
+								t_f_task_parcel
+							LEFT OUTER JOIN t_p_parcel ON (
+								t_f_task_parcel.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+								AND t_f_task_parcel.parcelid = t_p_parcel.id
+							)
+						) t_f_task_parcel_parcelidnames
+					GROUP BY
+						taskid
+				) t_f_task_parcel_name ON t_f_task_parcel_name.taskid = t_f_task_all.id
+			LEFT OUTER JOIN (
+					SELECT
+						t_f_task_comment.taskid,
+						COUNT(1) AS dynamiccount
+					FROM
+						t_f_task_comment
+					WHERE
+						t_f_task_comment.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+					GROUP BY
+						t_f_task_comment.taskid
+				) t_f_task_comment_dynamiccount ON t_f_task_comment_dynamiccount.taskid = t_f_task_all.id
+			LEFT OUTER JOIN (
+					SELECT
+						t_f_task_userpermisions.taskid,
+						t_f_task_userpermisions.createuserid,
+						t_f_task_userpermisions.createuserorgid,
+						CONCAT(',', GROUP_CONCAT(
+							t_f_task_userpermisions.createuserdepartmentid
+						), ',') AS createuserdepartmentid
+					FROM
+						t_f_task_userpermisions
+					WHERE
+						t_f_task_userpermisions.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+					GROUP BY
+						t_f_task_userpermisions.taskid
+				) t_f_task_userpermisions_final ON t_f_task_userpermisions_final.taskid = t_f_task_all.id 
+			) table_all
+			
+			<!-- 查询条件 -->
+			<include refid="where_queryList"/>
+	</select>
+	
+	<!--================= 清空回收站 =================-->
+	<update id="deleteAllFromTrash" parameterType="com.fwk.service.farm.entity.TaskEXT">
+		UPDATE t_f_task
+		SET t_f_task.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FROM_TRASH}'
+		WHERE
+			t_f_task.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_TRUE}'
+		
+		<!-- 我发布的 -->
+		<if test="(null != createuserid)">
+			AND t_f_task.createuserid = #{createuserid}
+		</if>
+		
+		<!-- 根据ID清空 -->
+		<if test="(null != id)">
+			AND t_f_task.id = #{id}
+		</if>
+		
+		<!-- 根据ID清空 -->
+		<if test="(null != idlist) and (idlist.size() > 0)">
+			AND t_f_task.id IN
+			
+			<foreach collection="idlist" open="(" separator="," close=")" item="id">
+				#{id}
+			</foreach>
+		</if>
+		
+	</update>
+	
+	<!--=============== 从回收站中恢复 =========================-->
+	<update id="revertFromTrash" parameterType="com.fwk.service.farm.entity.TaskEXT">
+	
+		<choose>
+			<!-- 恢复单个农事任务 -->
+			<when test="(null != id)">
+				UPDATE t_f_task SET edittime = SYSDATE(), delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}' WHERE id = #{id}
+			</when>
+			<!-- 批量恢复农事任务 -->
+			<when test="(null != idList) and (idList.size() > 0)">
+				UPDATE t_f_task 
+					SET 
+						edittime = SYSDATE(),
+						delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}' 
+					WHERE 
+						id IN
+						
+						<foreach collection="idList" open="(" separator="," close=")" item="id">
+							#{id}
+						</foreach>
+			</when>
+		</choose>
+
+	</update>
+	
+</mapper>

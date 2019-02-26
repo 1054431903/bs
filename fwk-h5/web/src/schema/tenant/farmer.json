@@ -1,0 +1,145 @@
+{
+  "title": "农户档案",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "姓名",
+      "maxLength": 20
+    },
+    "avatar": {
+      "type": "string",
+      "title": "头像",
+      "format": "img"
+    },
+    "mobile": {
+      "type": "string",
+      "title": "手机号",
+      "minLength": 11,
+      "maxLength": 11,
+      "pattern": "^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$"
+    },
+    "status": {
+      "$ref": "common/definitions/status"
+    },
+    "address": {
+      "type": "object",
+      "title": "地址",
+      "format": "address",
+      "properties": {
+        "province": {
+          "type": "string",
+          "$id": "#base.area",
+          "title": "省"
+        },
+        "city": {
+          "type": "string",
+          "$id": "#base.area",
+          "title": "市"
+        },
+        "district": {
+          "type": "string",
+          "$id": "#base.area",
+          "title": "区"
+        },
+        "town": {
+          "type": "string",
+          "$id": "#base.area",
+          "title": "乡镇"
+        },
+        "village": {
+          "type": "string",
+          "$id": "#base.area",
+          "title": "村"
+        },
+        "street": {
+          "type": "string",
+          "title": "详细地址"
+        }
+      }
+    },
+    "gender": {
+      "type": "integer",
+      "title": "性别",
+      "enum": [
+        1,
+        2
+      ],
+      "enumNames": [
+        "男",
+        "女"
+      ]
+    },
+    "poor": {
+      "type": "integer",
+      "title": "贫困户",
+      "enum": [
+        1,
+        2
+      ],
+      "enumNames": [
+        "是",
+        "否"
+      ]
+    },
+    "idCard": {
+      "type": "string",
+      "title": "身份证号",
+      "minLength": 18,
+      "maxLength": 18,
+      "pattern": "^(^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$)|(^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])((\\d{4})|\\d{3}[Xx])$)$"
+    },
+    "birthDay": {
+      "type": "string",
+      "title": "出生日期"
+    },
+    "age": {
+      "type": "integer",
+      "title": "年龄(岁)"
+    },
+    "degreeOfEdu": {
+      "type": "integer",
+      "title": "文化程度",
+      "enum": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "enumNames": [
+        "小学以下",
+        "小学",
+        "初中",
+        "高中",
+        "技校",
+        "中专",
+        "大专",
+        "本科",
+        "硕士"
+      ]
+    },
+    "coopStatus": {
+      "type": "integer",
+      "title": "当前合作状态",
+      "enum": [
+        1,
+        2
+      ],
+      "enumNames": [
+        "进行中",
+        "已开始",
+        "已结束"
+      ]
+    },
+    "remark": {
+      "type": "string",
+      "title": "其他说明",
+      "maxLength": 500
+    }
+  }
+}

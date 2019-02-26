@@ -1,0 +1,87 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    fwk-service-deploy: fwk-service-farm
+  name: fwk-service-farm
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      fwk-service-po: fwk-service-farm
+  template:
+    metadata:
+      labels:
+        fwk-service-po: fwk-service-farm
+    spec:
+      containers:
+      - image: dev.docker.agthings.cn:8000/fwk-service-farm
+        imagePullPolicy: Always
+        name: fwk-service-farm
+        ports:
+        - containerPort: 5763
+          name: service
+          protocol: TCP
+        env:
+        - name: SUPPORT_IP
+          valueFrom:
+            configMapKeyRef:
+              name: fwk-env-service
+              key: SUPPORT_IP
+        - name: SUPPORT_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: fwk-env-service
+              key: SUPPORT_PORT
+        - name: SUPPORT_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: fwk-env-service
+              key: SUPPORT_PATH
+        - name: ACCESS_SERVICE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: fwk-env-service
+              key: ACCESS_SERVICE_HOST
+        - name: ACCESS_SERVICE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: fwk-env-service
+              key: ACCESS_SERVICE_PORT
+        - name: ACCESS_SERVICE_RESOURCE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: fwk-env-service
+              key: ACCESS_SERVICE_RESOURCE_HOST
+        - name: ACCESS_SERVICE_RESOURCE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: fwk-env-service
+              key: ACCESS_SERVICE_RESOURCE_PORT
+        - name: SPRING_DATASOURCE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: fwk-env-service
+              key: SPRING_DATASOURCE_URL
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: fwk-env-service
+              key: SPRING_DATASOURCE_USERNAME
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: fwk-env-service
+              key: SPRING_DATASOURCE_PASSWORD
+        volumeMounts:
+        - name: fwk-log
+          mountPath: /var/log/fwk
+      volumes:
+      - name: fwk-log
+        hostPath: 
+          path: /var/log/fwk
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        fwk-service: "true"
+      restartPolicy: Always

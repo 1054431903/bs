@@ -1,0 +1,17 @@
+version: '3'
+services:
+  fwk-ui:
+    container_name: fwk-app
+    image: dev.docker.agthings.cn:8000/fwk-app
+    ports:
+    - 80:80
+    env_file:
+    - ./fwk-app.env
+    networks: 
+    - fwk-app
+    tmpfs:
+    - /run
+    - /tmp
+networks:
+  fwk-app:
+    driver: bridge

@@ -1,0 +1,34 @@
+html {
+  .theme {
+    background-color: rgb(77, 188, 209) !important;
+    color: rgb(255, 255, 255) !important;
+  }
+
+  .theme-1 {
+    background-color: rgb(255, 255, 255) !important;
+    color: rgb(0, 0, 0) !important;
+  }
+
+  .theme-color {
+    color: rgb(77, 188, 209);
+  }
+
+  .theme-color-1 {
+    color: #02ad58;
+  }
+
+  .toobar-text * {
+    // color: rgb(255, 255, 255);
+    line-height: 36px;
+  }
+
+  .toobar-text-1 * {
+    color: rgb(0, 0, 0);
+    line-height: 36px;
+  }
+}
+
+* {
+  font-family: source-han-sans-simplified-c, sans-serif;
+  font-style: normal;
+}

@@ -1,0 +1,1 @@
+package com.fwk.common.util;import java.util.UUID;/** * 获取UUID工具类 *  * @author JJ * */public class UUIDUtils {	/**	 * 获取UUID字符串	 * 	 * @return	 */	public static String getUUID() {		return UUID.randomUUID().toString().replaceAll("-", "");	}}

@@ -1,0 +1,50 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    fwk-ui-deploy: fwk-ui
+  name: fwk-ui
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      fwk-ui-po: fwk-ui
+  template:
+    metadata:
+      labels:
+        fwk-ui-po: fwk-ui
+    spec:
+      containers:
+      - image: dev.docker.agthings.cn:8000/fwk-ui
+        imagePullPolicy: Always
+        name: fwk-ui
+        ports:
+        - containerPort: 80
+          name: ui
+          protocol: TCP
+        - containerPort: 5762
+          name: archives-proxy
+          protocol: TCP
+        - containerPort: 5763
+          name: farm-proxy
+          protocol: TCP
+        - containerPort: 5764
+          name: parcel-proxy
+          protocol: TCP
+        - containerPort: 5765
+          name: system-proxy
+          protocol: TCP
+        - containerPort: 5766
+          name: user-proxy
+          protocol: TCP
+        - containerPort: 9000
+          name: iss-proxy
+          protocol: TCP
+        - containerPort: 9300
+          name: oauth2-proxy
+          protocol: TCP
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        fwk-ui: "true"
+      restartPolicy: Always

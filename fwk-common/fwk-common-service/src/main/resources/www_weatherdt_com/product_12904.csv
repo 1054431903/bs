@@ -1,0 +1,10 @@
+天气要素,数据大类中文,数据大类英文,频次,预报时长
+降水量,实况,observe,-,-
+温度,实况,observe,-,-
+气压,实况,observe,-,-
+湿度,实况,observe,-,-
+风力风向,实况,observe,-,-
+风力风向,预报,forecast,12h,4d
+天气现象,预报,forecast,12h,4d
+温度,预报,forecast,12h,4d
+天气预警,天气预警,alarm,-,-

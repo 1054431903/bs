@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fwk.service.common.dao.CommonMapper">
+
+	<!--=================== 添加资源 =========================-->
+	<insert id="addResource" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.fwk.service.common.entity.ResourceEXT">
+
+		INSERT INTO t_c_resource (
+						resourcepath,
+						releatedtype,
+						releatedid,
+						type,
+						localpath,
+						resourcename,
+						timelength
+					)
+					VALUES
+						(
+							#{resourcepath}, 
+							#{releatedtype}, 
+							#{releatedid}, 
+							#{type}, 
+							#{localpath}, 
+							#{resourcename},
+							#{timelength}
+						)
+
+	</insert>
+	
+	<!--=================== 更新资源 =========================-->
+	<update id="updateResource" parameterType="com.fwk.service.common.entity.ResourceEXT">
+
+		UPDATE t_c_resource
+					SET resourcepath = #{resourcepath}, 
+						releatedtype = #{releatedtype}, 
+						releatedid = #{releatedid}, 
+						type = #{type}, 
+						localpath = #{localpath}, 
+						resourcename = #{resourcename}, 
+						delstate = #{delstate},
+						timelength = #{timelength} 
+					WHERE 
+						id = #{id}
+
+	</update>
+	
+	<!--=============== 添加上传资源历史 =========================-->
+	<insert id="addResourcehistory" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.fwk.service.common.entity.ResourcehistoryEXT">
+
+			INSERT INTO t_c_resource_history (
+								maname,
+								description,
+								orderno,
+								resourceid,
+								currentResource
+							)
+							VALUES
+								(
+									#{maname}, 
+									#{description}, 
+									#{orderno}, 
+									#{resourceid}, 
+									#{currentresource}
+								)
+
+	</insert>
+	
+	<!--======================= 更新上传资源历史 ========================-->
+	<update id="updateResourcehistory" parameterType="com.fwk.service.common.entity.ResourcehistoryEXT">
+		
+		UPDATE t_c_resource_history
+					SET maname = #{maname}, 
+						description = #{description}, 
+						orderno = #{orderno}, 
+						resourceid = #{resourceid}, 
+						currentResource = #{currentresource}, 
+						delstate = #{delstate} 
+					WHERE 
+						id = #{id}
+		
+	</update>
+	
+	<!--======================= 查询出指定ID的上传资源历史 =====================-->
+	<select id="quereyResourcehistoryEXTId" resultType="com.fwk.service.common.entity.ResourcehistoryEXT">
+		<if test="(null != resourcehistoryIdList) and (0 != resourcehistoryIdList.size())">
+			SELECT 
+				0_t_c_resource_history.*, 
+				t_c_resource.resourcepath AS resourcepath, 
+				t_c_resource.resourcename AS resourcename,
+				t_c_resource.timelength AS timelength
+			FROM (
+			SELECT * FROM t_c_resource_history WHERE id IN 
+			<foreach collection="resourcehistoryIdList" item="resourcehistoryId" index="index" open="(" separator="," close=")">
+				#{resourcehistoryId}
+			</foreach>
+			ORDER BY orderno
+			) 0_t_c_resource_history LEFT OUTER JOIN t_c_resource ON 0_t_c_resource_history.currentResource = t_c_resource.id
+		</if>
+	</select>
+	
+	<!--=================== 根据上传历史的ID查询出上传的资源 ========================-->
+	<select id="queryResourceByHistoryid" parameterType="java.lang.Integer" resultType="com.fwk.service.common.entity.ResourceEXT">
+		SELECT
+			t_c_resource.*
+		FROM
+			t_c_resource_history,
+			t_c_resource
+		WHERE
+			t_c_resource_history.id = #{resourcehistoryid}
+			AND t_c_resource.id = t_c_resource_history.currentResource
+	</select>
+	
+	<!--=================== 根据上传历史的资源的ID查询出所有资源 ========================-->
+	<select id="queryResourceByHistoryResourceid" parameterType="com.fwk.service.common.entity.ResourcehistoryEXT" resultType="com.fwk.service.common.entity.ResourceEXT">
+		SELECT
+			t_c_resource.*
+		FROM
+			t_c_resource
+		WHERE
+			t_c_resource.id IN (${resourceid})
+	</select>
+	
+	<!--=================== 根据资源的ID查询出资源 ========================-->
+	<select id="queryResourceById" parameterType="java.lang.Integer" resultType="com.fwk.service.common.entity.ResourceEXT">
+		SELECT
+			t_c_resource.*
+		FROM
+			t_c_resource
+		WHERE
+			t_c_resource.id = #{resourceId}
+	</select>
+	
+	<!--=============== 查询当前的时间 =============-->
+	<select id="queryCurrentDate" resultType="java.util.Date">
+		SELECT NOW() FROM DUAL
+	</select>
+	
+	<!--=============== 查询出当前月的第一天的日期 =============-->
+	<select id="queryCurrentMonthFirstDate" resultType="java.util.Date">
+		SELECT date_add(curdate(), interval - day(curdate()) + 1 day) FROM DUAL
+	</select>
+	
+	<!--=================== 根据资源的ID查询出资源列表 ========================-->
+	<select id="queryResourceByIds" parameterType="java.lang.String" resultType="com.fwk.service.common.entity.ResourceEXT">
+		SELECT
+			t_c_resource.*
+		FROM
+			t_c_resource
+		WHERE
+			t_c_resource.id IN (${resourceIds})
+	</select>
+	
+	<!--=================== 根据行政区划编号查询出行政区划的信息 ========================-->
+	<select id="queryPositionByCode" parameterType="java.lang.String" resultType="com.fwk.service.common.entity.PositionEXT">
+		SELECT
+			t_c_position.*,
+		IF (
+			t_c_position.`level` = '${@com.fwk.common.util.constants.EDict@position_level_nation.dict.getDictValue()}',
+			t_c_position.`name`,
+			NULL
+		) AS nationname,
+		
+		IF (
+			t_c_position.`level` = '${@com.fwk.common.util.constants.EDict@position_level_province.dict.getDictValue()}',
+			t_c_position.`name`,
+			NULL
+		) AS provincename,
+		
+		IF (
+			t_c_position.`level` = '${@com.fwk.common.util.constants.EDict@position_level_city.dict.getDictValue()}',
+			t_c_position.`name`,
+			NULL
+		) AS cityname,
+		
+		IF (
+			t_c_position.`level` = '${@com.fwk.common.util.constants.EDict@position_level_county.dict.getDictValue()}',
+			t_c_position.`name`,
+			NULL
+		) AS countyname,
+		
+		IF (
+			t_c_position.`level` = '${@com.fwk.common.util.constants.EDict@position_level_town.dict.getDictValue()}',
+			t_c_position.`name`,
+			NULL
+		) AS townname,
+		
+		IF (
+			t_c_position.`level` = '${@com.fwk.common.util.constants.EDict@position_level_village.dict.getDictValue()}',
+			t_c_position.`name`,
+			NULL
+		) AS villagename
+		FROM
+			t_c_position
+		WHERE
+			t_c_position.code = #{code}
+	</select>
+	
+	<!--=================== 根据行政区划编号查询出同一个级别的所有行政区划的信息 ========================-->
+	<select id="queryAllSameParentPositionByCode" parameterType="java.lang.String" resultType="com.fwk.service.common.entity.PositionCustomer">
+			SELECT
+				t_c_position.code AS code,
+				t_c_position.name AS name,
+				t_c_position.parentcode AS parentcode
+			FROM
+				t_c_position,
+				(
+					SELECT
+						t_c_position.parentcode
+					FROM
+						t_c_position
+					WHERE
+						t_c_position.`code` = #{code}
+				) 0_t_c_position
+			WHERE
+				t_c_position.parentcode = 0_t_c_position.parentcode
+	</select>
+	
+	<!-- 查询出用户自定义的字典 -->
+	<select id="queryUserDictEXTList" parameterType="com.fwk.service.common.entity.UserDictEXT" 
+		resultType="com.fwk.service.common.entity.UserDictEXT">
+		
+		SELECT * FROM t_s_dict WHERE 1 = 1
+		
+		<!-- 删除状态 -->
+		<choose>
+			<when test="(null != delstate)">
+				and delstate = #{delstate}
+			</when>
+		</choose>
+		
+		<!-- 字典名称 -->
+		<if test="(null != name) and ('' != name)">
+			and name LIKE CONCAT('%', #{name}, '%')
+		</if>
+		
+		<!-- 字典分类编号 -->
+		<if test="(null != parentcode) and ('' != parentcode)">
+			and parentcode = #{parentcode}
+		</if>
+		
+		<!-- 字典分类的ID -->
+		<if test="(null != parentid)">
+			and parentid = #{parentid}
+		</if>
+		
+		<!-- 根据ID查询 -->
+		<if test="(null != idlist) and (idlist.size() > 0)">
+			AND id IN 
+			<foreach collection="idlist" open="(" close=")" item="id" separator=",">
+				#{id}
+			</foreach>
+		</if>
+		
+	</select>
+	
+	<!--=============== 根据用户的ID查询出当前登录的用户信息 ==============-->
+	<select id="queryLoginUserInfo" parameterType="java.util.Map" resultType="com.fwk.service.common.entity.LoginUserInfo">
+		
+		SELECT t_u_users.* FROM t_u_users WHERE 
+			t_u_users.id = #{${@com.fwk.common.util.HTMLUtil@common_request_param_operateid}}
+		AND t_u_users.delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+		
+	</select>
+	
+	<!--================ 获取地块 ===============-->
+	<select id="queryParcelList" parameterType="com.fwk.service.common.entity.ParcelEXT" resultType="com.fwk.service.common.entity.ParcelEXT">
+		
+		SELECT * FROM t_p_parcel WHERE 1 = 1
+		
+		<!-- 根据地块的ID查询 -->
+		<if test="(null != id)">
+			AND id = id
+		</if>
+		<if test="(null != idlist) and (idlist.size() > 0)">
+			AND 
+			<foreach collection="idlist" open="(" separator=" OR " close=")" item="id">
+				id = id
+			</foreach>
+		</if>
+		
+		<!-- 在未指定删除状态时，默认为之查询未删除的 -->
+		<choose>
+			<when test="(null == delstate)">
+				AND delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+			</when>
+			<otherwise>
+				AND delstate = #{delstate}
+			</otherwise>
+		</choose>
+		
+		<!-- 根据支撑平台的ID查询 -->
+		<if test="(null != supportid) and ('' != supportid)">
+			AND supportid = supportid
+		</if>
+		
+		<!-- 地块所属的组织 -->
+		<if test="(null != orgid) and ('' != orgid)">
+			AND orgid = #{orgid}
+		</if>
+		
+		<!-- 地块所属的部门 -->
+		<if test="(null != departmentid) and ('' != departmentid)">
+			AND departmentid = #{departmentid}
+		</if>
+		<if test="(null != departmentidlist) and (departmentidlist.size() > 0)">
+			AND 
+			<foreach collection="departmentidlist" open="(" separator=" OR " close=")" item="departmentid">
+				departmentid = #{departmentid} 
+			</foreach>
+		</if>
+		
+		<!-- 根据地块名称查询 -->
+		<if test="(null != name) and ('' != name)">
+			AND `name` LIKE CONCAT('%', #{name}, '%')
+		</if>
+		
+		<!-- 排序 -->
+		<choose>
+			<!-- 使用自定义的排序方式排序 -->
+			<when test="(null != orderBySQL) and ('' != orderBySQL)">
+				ORDER BY ${orderBySQL}
+			</when>
+			<!-- 使用默认的排序方式：添加时间降序排序（id是自增长，所以与添加时间的先后顺序一致） -->
+			<otherwise>
+				ORDER BY id DESC
+			</otherwise>
+		</choose>
+		
+		<!-- 分页查询 -->
+		<if test="(null != page)">
+			LIMIT #{page.startRow}, #{page.pageSize}
+		</if>
+		
+	</select>
+	
+	<!--=============== 查询出农事平台的组织信息 ==================-->
+	<select id="querySupportOrgEXTList" parameterType="com.fwk.service.common.entity.SupportOrgEXT"
+				resultType="com.fwk.service.common.entity.SupportOrgEXT">
+		
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					t_u_org.*, t_c_resource.resourcepath AS logourl
+				FROM
+					t_u_org
+				LEFT OUTER JOIN t_c_resource_history ON t_u_org.logo = t_c_resource_history.currentResource
+				LEFT OUTER JOIN t_c_resource ON t_c_resource_history.currentResource = t_c_resource.id
+			) table_all
+		WHERE
+			1 = 1
+			
+			<!-- 删除状态（默认只查询未删除的） -->
+			<choose>
+				<when test="(null == delstate)">
+					AND delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+				</when>
+				<otherwise>
+					AND delstate = #{delstate}
+				</otherwise>
+			</choose>
+			
+			<!-- 支撑的组织编号 -->
+			<if test="(null != supportid) and ('' != supportid)">
+				AND supportid = #{supportid}
+			</if>
+			
+			<!-- 农事系统内的组织编号 -->
+			<if test="(null != id)">
+				AND id = #{id}
+			</if>
+			
+			<!-- 组织名称 -->
+			<if test="(null != name) and ('' != name)">
+				AND name = #{name}
+			</if>
+		
+	</select>
+	
+	<!--================ 获取农事系统内的用户信息 =================-->
+	<select id="querySupportUserEXTList" parameterType="com.fwk.service.common.entity.SupportUserEXT"
+		resultType="com.fwk.service.common.entity.SupportUserEXT">
+		
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					t_u_users.*, t_c_resource.resourcepath AS photourl
+				FROM
+					t_u_users
+				LEFT OUTER JOIN t_c_resource_history ON t_c_resource_history.id = t_u_users.photo
+				LEFT OUTER JOIN t_c_resource ON t_c_resource.id = t_c_resource_history.currentResource
+			) table_all
+		
+		WHERE 1 = 1
+		
+		<!-- 删除状态（默认只查询未删除的） -->
+		<choose>
+			<when test="(null == delstate)">
+				AND delstate = '${@com.fwk.common.util.constants.CommonConstantsUtil@IS_DELETE_FALSE}'
+			</when>
+			<otherwise>
+				AND delstate = #{delstate}
+			</otherwise>
+		</choose>
+		
+		<!-- 用户在农事系统内的编号 -->
+		<if test="(null != id)">
+			AND id = #{id}
+		</if>
+		
+		<if test="(null != idlist) and (idlist.size() > 0)">
+			AND id IN
+			<foreach collection="idlist" open="(" separator="," close=")" item="item_userid">
+				#{item_userid}
+			</foreach>
+		</if>
+		
+		<!-- 用户在支撑平台上的编号 -->
+		<if test="(null != supportid) and ('' != supportid)">
+			AND supportid = #{supportid}
+		</if>
+		
+		<!-- 用户的姓名 -->
+		<if test="(null != name) and ('' != name)">
+			AND name LIKE CONCAT('%', #{name}, '%')
+		</if>
+		
+		<!-- 用户的昵称 -->
+		<if test="(null != nickname) and ('' != nickname)">
+			AND nickname LIKE CONCAT('%', #{nickname}, '%')
+		</if>
+		
+	</select>
+	
+</mapper>

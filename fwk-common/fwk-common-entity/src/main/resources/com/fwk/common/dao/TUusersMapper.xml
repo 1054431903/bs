@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fwk.common.dao.TUusersMapper">
+  <resultMap id="BaseResultMap" type="com.fwk.common.entity.TUusers">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="lastLogin" jdbcType="TIMESTAMP" property="lastlogin" />
+    <result column="loginAddress" jdbcType="VARCHAR" property="loginaddress" />
+    <result column="latestidentifyingcode" jdbcType="VARCHAR" property="latestidentifyingcode" />
+    <result column="lastlogincode" jdbcType="VARCHAR" property="lastlogincode" />
+    <result column="creattime" jdbcType="TIMESTAMP" property="creattime" />
+    <result column="delstate" jdbcType="INTEGER" property="delstate" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="photo" jdbcType="INTEGER" property="photo" />
+    <result column="jobnumber" jdbcType="VARCHAR" property="jobnumber" />
+    <result column="loginorgid" jdbcType="VARCHAR" property="loginorgid" />
+    <result column="addresscode" jdbcType="VARCHAR" property="addresscode" />
+    <result column="addressdetail" jdbcType="VARCHAR" property="addressdetail" />
+    <result column="edittime" jdbcType="TIMESTAMP" property="edittime" />
+    <result column="supportid" jdbcType="VARCHAR" property="supportid" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, phone, password, status, name, email, lastLogin, loginAddress, latestidentifyingcode, 
+    lastlogincode, creattime, delstate, sex, birthday, nickname, photo, jobnumber, loginorgid, 
+    addresscode, addressdetail, edittime, supportid
+  </sql>
+  <select id="selectByExample" parameterType="com.fwk.common.entity.TUusersExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_u_users
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_u_users
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_u_users
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fwk.common.entity.TUusersExample">
+    delete from t_u_users
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fwk.common.entity.TUusers">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_u_users (phone, password, status, 
+      name, email, lastLogin, 
+      loginAddress, latestidentifyingcode, lastlogincode, 
+      creattime, delstate, sex, 
+      birthday, nickname, photo, 
+      jobnumber, loginorgid, addresscode, 
+      addressdetail, edittime, supportid
+      )
+    values (#{phone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{lastlogin,jdbcType=TIMESTAMP}, 
+      #{loginaddress,jdbcType=VARCHAR}, #{latestidentifyingcode,jdbcType=VARCHAR}, #{lastlogincode,jdbcType=VARCHAR}, 
+      #{creattime,jdbcType=TIMESTAMP}, #{delstate,jdbcType=INTEGER}, #{sex,jdbcType=VARCHAR}, 
+      #{birthday,jdbcType=DATE}, #{nickname,jdbcType=VARCHAR}, #{photo,jdbcType=INTEGER}, 
+      #{jobnumber,jdbcType=VARCHAR}, #{loginorgid,jdbcType=VARCHAR}, #{addresscode,jdbcType=VARCHAR}, 
+      #{addressdetail,jdbcType=VARCHAR}, #{edittime,jdbcType=TIMESTAMP}, #{supportid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fwk.common.entity.TUusers">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_u_users
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="lastlogin != null">
+        lastLogin,
+      </if>
+      <if test="loginaddress != null">
+        loginAddress,
+      </if>
+      <if test="latestidentifyingcode != null">
+        latestidentifyingcode,
+      </if>
+      <if test="lastlogincode != null">
+        lastlogincode,
+      </if>
+      <if test="creattime != null">
+        creattime,
+      </if>
+      <if test="delstate != null">
+        delstate,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="photo != null">
+        photo,
+      </if>
+      <if test="jobnumber != null">
+        jobnumber,
+      </if>
+      <if test="loginorgid != null">
+        loginorgid,
+      </if>
+      <if test="addresscode != null">
+        addresscode,
+      </if>
+      <if test="addressdetail != null">
+        addressdetail,
+      </if>
+      <if test="edittime != null">
+        edittime,
+      </if>
+      <if test="supportid != null">
+        supportid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="lastlogin != null">
+        #{lastlogin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginaddress != null">
+        #{loginaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="latestidentifyingcode != null">
+        #{latestidentifyingcode,jdbcType=VARCHAR},
+      </if>
+      <if test="lastlogincode != null">
+        #{lastlogincode,jdbcType=VARCHAR},
+      </if>
+      <if test="creattime != null">
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null">
+        #{photo,jdbcType=INTEGER},
+      </if>
+      <if test="jobnumber != null">
+        #{jobnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="loginorgid != null">
+        #{loginorgid,jdbcType=VARCHAR},
+      </if>
+      <if test="addresscode != null">
+        #{addresscode,jdbcType=VARCHAR},
+      </if>
+      <if test="addressdetail != null">
+        #{addressdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supportid != null">
+        #{supportid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fwk.common.entity.TUusersExample" resultType="java.lang.Integer">
+    select count(*) from t_u_users
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_u_users
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null">
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastlogin != null">
+        lastLogin = #{record.lastlogin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.loginaddress != null">
+        loginAddress = #{record.loginaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latestidentifyingcode != null">
+        latestidentifyingcode = #{record.latestidentifyingcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastlogincode != null">
+        lastlogincode = #{record.lastlogincode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creattime != null">
+        creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delstate != null">
+        delstate = #{record.delstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.sex != null">
+        sex = #{record.sex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.birthday != null">
+        birthday = #{record.birthday,jdbcType=DATE},
+      </if>
+      <if test="record.nickname != null">
+        nickname = #{record.nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.photo != null">
+        photo = #{record.photo,jdbcType=INTEGER},
+      </if>
+      <if test="record.jobnumber != null">
+        jobnumber = #{record.jobnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loginorgid != null">
+        loginorgid = #{record.loginorgid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addresscode != null">
+        addresscode = #{record.addresscode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addressdetail != null">
+        addressdetail = #{record.addressdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.edittime != null">
+        edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.supportid != null">
+        supportid = #{record.supportid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_u_users
+    set id = #{record.id,jdbcType=INTEGER},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      password = #{record.password,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      lastLogin = #{record.lastlogin,jdbcType=TIMESTAMP},
+      loginAddress = #{record.loginaddress,jdbcType=VARCHAR},
+      latestidentifyingcode = #{record.latestidentifyingcode,jdbcType=VARCHAR},
+      lastlogincode = #{record.lastlogincode,jdbcType=VARCHAR},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      sex = #{record.sex,jdbcType=VARCHAR},
+      birthday = #{record.birthday,jdbcType=DATE},
+      nickname = #{record.nickname,jdbcType=VARCHAR},
+      photo = #{record.photo,jdbcType=INTEGER},
+      jobnumber = #{record.jobnumber,jdbcType=VARCHAR},
+      loginorgid = #{record.loginorgid,jdbcType=VARCHAR},
+      addresscode = #{record.addresscode,jdbcType=VARCHAR},
+      addressdetail = #{record.addressdetail,jdbcType=VARCHAR},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      supportid = #{record.supportid,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fwk.common.entity.TUusers">
+    update t_u_users
+    <set>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="lastlogin != null">
+        lastLogin = #{lastlogin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginaddress != null">
+        loginAddress = #{loginaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="latestidentifyingcode != null">
+        latestidentifyingcode = #{latestidentifyingcode,jdbcType=VARCHAR},
+      </if>
+      <if test="lastlogincode != null">
+        lastlogincode = #{lastlogincode,jdbcType=VARCHAR},
+      </if>
+      <if test="creattime != null">
+        creattime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        delstate = #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null">
+        photo = #{photo,jdbcType=INTEGER},
+      </if>
+      <if test="jobnumber != null">
+        jobnumber = #{jobnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="loginorgid != null">
+        loginorgid = #{loginorgid,jdbcType=VARCHAR},
+      </if>
+      <if test="addresscode != null">
+        addresscode = #{addresscode,jdbcType=VARCHAR},
+      </if>
+      <if test="addressdetail != null">
+        addressdetail = #{addressdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        edittime = #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supportid != null">
+        supportid = #{supportid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fwk.common.entity.TUusers">
+    update t_u_users
+    set phone = #{phone,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      lastLogin = #{lastlogin,jdbcType=TIMESTAMP},
+      loginAddress = #{loginaddress,jdbcType=VARCHAR},
+      latestidentifyingcode = #{latestidentifyingcode,jdbcType=VARCHAR},
+      lastlogincode = #{lastlogincode,jdbcType=VARCHAR},
+      creattime = #{creattime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      sex = #{sex,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      photo = #{photo,jdbcType=INTEGER},
+      jobnumber = #{jobnumber,jdbcType=VARCHAR},
+      loginorgid = #{loginorgid,jdbcType=VARCHAR},
+      addresscode = #{addresscode,jdbcType=VARCHAR},
+      addressdetail = #{addressdetail,jdbcType=VARCHAR},
+      edittime = #{edittime,jdbcType=TIMESTAMP},
+      supportid = #{supportid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fwk.common.dao.TUorgMapper">
+  <resultMap id="BaseResultMap" type="com.fwk.common.entity.TUorg">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="creattime" jdbcType="TIMESTAMP" property="creattime" />
+    <result column="delstate" jdbcType="INTEGER" property="delstate" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="nature" jdbcType="VARCHAR" property="nature" />
+    <result column="legal" jdbcType="VARCHAR" property="legal" />
+    <result column="eastablishtime" jdbcType="DATE" property="eastablishtime" />
+    <result column="logo" jdbcType="INTEGER" property="logo" />
+    <result column="regisfund" jdbcType="DOUBLE" property="regisfund" />
+    <result column="scale" jdbcType="VARCHAR" property="scale" />
+    <result column="addresscode" jdbcType="VARCHAR" property="addresscode" />
+    <result column="addressdetail" jdbcType="VARCHAR" property="addressdetail" />
+    <result column="belonguserid" jdbcType="INTEGER" property="belonguserid" />
+    <result column="permit" jdbcType="INTEGER" property="permit" />
+    <result column="edittime" jdbcType="TIMESTAMP" property="edittime" />
+    <result column="supportid" jdbcType="VARCHAR" property="supportid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fwk.common.entity.TUorgWithBLOBs">
+    <result column="introduce" jdbcType="LONGVARCHAR" property="introduce" />
+    <result column="scope" jdbcType="LONGVARCHAR" property="scope" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, creattime, delstate, name, nature, legal, eastablishtime, logo, regisfund, scale, 
+    addresscode, addressdetail, belonguserid, permit, edittime, supportid
+  </sql>
+  <sql id="Blob_Column_List">
+    introduce, scope
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.fwk.common.entity.TUorgExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_u_org
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.fwk.common.entity.TUorgExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_u_org
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_u_org
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_u_org
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fwk.common.entity.TUorgExample">
+    delete from t_u_org
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fwk.common.entity.TUorgWithBLOBs">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_u_org (creattime, delstate, name, 
+      nature, legal, eastablishtime, 
+      logo, regisfund, scale, 
+      addresscode, addressdetail, belonguserid, 
+      permit, edittime, supportid, 
+      introduce, scope)
+    values (#{creattime,jdbcType=TIMESTAMP}, #{delstate,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{nature,jdbcType=VARCHAR}, #{legal,jdbcType=VARCHAR}, #{eastablishtime,jdbcType=DATE}, 
+      #{logo,jdbcType=INTEGER}, #{regisfund,jdbcType=DOUBLE}, #{scale,jdbcType=VARCHAR}, 
+      #{addresscode,jdbcType=VARCHAR}, #{addressdetail,jdbcType=VARCHAR}, #{belonguserid,jdbcType=INTEGER}, 
+      #{permit,jdbcType=INTEGER}, #{edittime,jdbcType=TIMESTAMP}, #{supportid,jdbcType=VARCHAR}, 
+      #{introduce,jdbcType=LONGVARCHAR}, #{scope,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fwk.common.entity.TUorgWithBLOBs">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_u_org
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        creattime,
+      </if>
+      <if test="delstate != null">
+        delstate,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="nature != null">
+        nature,
+      </if>
+      <if test="legal != null">
+        legal,
+      </if>
+      <if test="eastablishtime != null">
+        eastablishtime,
+      </if>
+      <if test="logo != null">
+        logo,
+      </if>
+      <if test="regisfund != null">
+        regisfund,
+      </if>
+      <if test="scale != null">
+        scale,
+      </if>
+      <if test="addresscode != null">
+        addresscode,
+      </if>
+      <if test="addressdetail != null">
+        addressdetail,
+      </if>
+      <if test="belonguserid != null">
+        belonguserid,
+      </if>
+      <if test="permit != null">
+        permit,
+      </if>
+      <if test="edittime != null">
+        edittime,
+      </if>
+      <if test="supportid != null">
+        supportid,
+      </if>
+      <if test="introduce != null">
+        introduce,
+      </if>
+      <if test="scope != null">
+        scope,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nature != null">
+        #{nature,jdbcType=VARCHAR},
+      </if>
+      <if test="legal != null">
+        #{legal,jdbcType=VARCHAR},
+      </if>
+      <if test="eastablishtime != null">
+        #{eastablishtime,jdbcType=DATE},
+      </if>
+      <if test="logo != null">
+        #{logo,jdbcType=INTEGER},
+      </if>
+      <if test="regisfund != null">
+        #{regisfund,jdbcType=DOUBLE},
+      </if>
+      <if test="scale != null">
+        #{scale,jdbcType=VARCHAR},
+      </if>
+      <if test="addresscode != null">
+        #{addresscode,jdbcType=VARCHAR},
+      </if>
+      <if test="addressdetail != null">
+        #{addressdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="belonguserid != null">
+        #{belonguserid,jdbcType=INTEGER},
+      </if>
+      <if test="permit != null">
+        #{permit,jdbcType=INTEGER},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supportid != null">
+        #{supportid,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        #{introduce,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="scope != null">
+        #{scope,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fwk.common.entity.TUorgExample" resultType="java.lang.Integer">
+    select count(*) from t_u_org
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_u_org
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.creattime != null">
+        creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delstate != null">
+        delstate = #{record.delstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nature != null">
+        nature = #{record.nature,jdbcType=VARCHAR},
+      </if>
+      <if test="record.legal != null">
+        legal = #{record.legal,jdbcType=VARCHAR},
+      </if>
+      <if test="record.eastablishtime != null">
+        eastablishtime = #{record.eastablishtime,jdbcType=DATE},
+      </if>
+      <if test="record.logo != null">
+        logo = #{record.logo,jdbcType=INTEGER},
+      </if>
+      <if test="record.regisfund != null">
+        regisfund = #{record.regisfund,jdbcType=DOUBLE},
+      </if>
+      <if test="record.scale != null">
+        scale = #{record.scale,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addresscode != null">
+        addresscode = #{record.addresscode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addressdetail != null">
+        addressdetail = #{record.addressdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.belonguserid != null">
+        belonguserid = #{record.belonguserid,jdbcType=INTEGER},
+      </if>
+      <if test="record.permit != null">
+        permit = #{record.permit,jdbcType=INTEGER},
+      </if>
+      <if test="record.edittime != null">
+        edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.supportid != null">
+        supportid = #{record.supportid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.introduce != null">
+        introduce = #{record.introduce,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.scope != null">
+        scope = #{record.scope,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update t_u_org
+    set id = #{record.id,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      nature = #{record.nature,jdbcType=VARCHAR},
+      legal = #{record.legal,jdbcType=VARCHAR},
+      eastablishtime = #{record.eastablishtime,jdbcType=DATE},
+      logo = #{record.logo,jdbcType=INTEGER},
+      regisfund = #{record.regisfund,jdbcType=DOUBLE},
+      scale = #{record.scale,jdbcType=VARCHAR},
+      addresscode = #{record.addresscode,jdbcType=VARCHAR},
+      addressdetail = #{record.addressdetail,jdbcType=VARCHAR},
+      belonguserid = #{record.belonguserid,jdbcType=INTEGER},
+      permit = #{record.permit,jdbcType=INTEGER},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      supportid = #{record.supportid,jdbcType=VARCHAR},
+      introduce = #{record.introduce,jdbcType=LONGVARCHAR},
+      scope = #{record.scope,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_u_org
+    set id = #{record.id,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      nature = #{record.nature,jdbcType=VARCHAR},
+      legal = #{record.legal,jdbcType=VARCHAR},
+      eastablishtime = #{record.eastablishtime,jdbcType=DATE},
+      logo = #{record.logo,jdbcType=INTEGER},
+      regisfund = #{record.regisfund,jdbcType=DOUBLE},
+      scale = #{record.scale,jdbcType=VARCHAR},
+      addresscode = #{record.addresscode,jdbcType=VARCHAR},
+      addressdetail = #{record.addressdetail,jdbcType=VARCHAR},
+      belonguserid = #{record.belonguserid,jdbcType=INTEGER},
+      permit = #{record.permit,jdbcType=INTEGER},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      supportid = #{record.supportid,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fwk.common.entity.TUorgWithBLOBs">
+    update t_u_org
+    <set>
+      <if test="creattime != null">
+        creattime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        delstate = #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nature != null">
+        nature = #{nature,jdbcType=VARCHAR},
+      </if>
+      <if test="legal != null">
+        legal = #{legal,jdbcType=VARCHAR},
+      </if>
+      <if test="eastablishtime != null">
+        eastablishtime = #{eastablishtime,jdbcType=DATE},
+      </if>
+      <if test="logo != null">
+        logo = #{logo,jdbcType=INTEGER},
+      </if>
+      <if test="regisfund != null">
+        regisfund = #{regisfund,jdbcType=DOUBLE},
+      </if>
+      <if test="scale != null">
+        scale = #{scale,jdbcType=VARCHAR},
+      </if>
+      <if test="addresscode != null">
+        addresscode = #{addresscode,jdbcType=VARCHAR},
+      </if>
+      <if test="addressdetail != null">
+        addressdetail = #{addressdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="belonguserid != null">
+        belonguserid = #{belonguserid,jdbcType=INTEGER},
+      </if>
+      <if test="permit != null">
+        permit = #{permit,jdbcType=INTEGER},
+      </if>
+      <if test="edittime != null">
+        edittime = #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supportid != null">
+        supportid = #{supportid,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        introduce = #{introduce,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="scope != null">
+        scope = #{scope,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.fwk.common.entity.TUorgWithBLOBs">
+    update t_u_org
+    set creattime = #{creattime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      nature = #{nature,jdbcType=VARCHAR},
+      legal = #{legal,jdbcType=VARCHAR},
+      eastablishtime = #{eastablishtime,jdbcType=DATE},
+      logo = #{logo,jdbcType=INTEGER},
+      regisfund = #{regisfund,jdbcType=DOUBLE},
+      scale = #{scale,jdbcType=VARCHAR},
+      addresscode = #{addresscode,jdbcType=VARCHAR},
+      addressdetail = #{addressdetail,jdbcType=VARCHAR},
+      belonguserid = #{belonguserid,jdbcType=INTEGER},
+      permit = #{permit,jdbcType=INTEGER},
+      edittime = #{edittime,jdbcType=TIMESTAMP},
+      supportid = #{supportid,jdbcType=VARCHAR},
+      introduce = #{introduce,jdbcType=LONGVARCHAR},
+      scope = #{scope,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fwk.common.entity.TUorg">
+    update t_u_org
+    set creattime = #{creattime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      nature = #{nature,jdbcType=VARCHAR},
+      legal = #{legal,jdbcType=VARCHAR},
+      eastablishtime = #{eastablishtime,jdbcType=DATE},
+      logo = #{logo,jdbcType=INTEGER},
+      regisfund = #{regisfund,jdbcType=DOUBLE},
+      scale = #{scale,jdbcType=VARCHAR},
+      addresscode = #{addresscode,jdbcType=VARCHAR},
+      addressdetail = #{addressdetail,jdbcType=VARCHAR},
+      belonguserid = #{belonguserid,jdbcType=INTEGER},
+      permit = #{permit,jdbcType=INTEGER},
+      edittime = #{edittime,jdbcType=TIMESTAMP},
+      supportid = #{supportid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

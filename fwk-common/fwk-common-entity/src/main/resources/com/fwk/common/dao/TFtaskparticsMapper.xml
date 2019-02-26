@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fwk.common.dao.TFtaskparticsMapper">
+  <resultMap id="BaseResultMap" type="com.fwk.common.entity.TFtaskpartics">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="creattime" jdbcType="TIMESTAMP" property="creattime" />
+    <result column="delstate" jdbcType="INTEGER" property="delstate" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="taskid" jdbcType="INTEGER" property="taskid" />
+    <result column="taskparticsstatus" jdbcType="VARCHAR" property="taskparticsstatus" />
+    <result column="taskstatus" jdbcType="VARCHAR" property="taskstatus" />
+    <result column="edittime" jdbcType="TIMESTAMP" property="edittime" />
+    <result column="issavedtorecord" jdbcType="INTEGER" property="issavedtorecord" />
+    <result column="hasreaded" jdbcType="TINYINT" property="hasreaded" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fwk.common.entity.TFtaskpartics">
+    <result column="recordeid" jdbcType="LONGVARCHAR" property="recordeid" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, creattime, delstate, userid, taskid, taskparticsstatus, taskstatus, edittime, 
+    issavedtorecord, hasreaded
+  </sql>
+  <sql id="Blob_Column_List">
+    recordeid
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.fwk.common.entity.TFtaskparticsExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_f_task_partics
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.fwk.common.entity.TFtaskparticsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_f_task_partics
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_f_task_partics
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_f_task_partics
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fwk.common.entity.TFtaskparticsExample">
+    delete from t_f_task_partics
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fwk.common.entity.TFtaskpartics">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_f_task_partics (creattime, delstate, userid, 
+      taskid, taskparticsstatus, taskstatus, 
+      edittime, issavedtorecord, hasreaded, 
+      recordeid)
+    values (#{creattime,jdbcType=TIMESTAMP}, #{delstate,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{taskid,jdbcType=INTEGER}, #{taskparticsstatus,jdbcType=VARCHAR}, #{taskstatus,jdbcType=VARCHAR}, 
+      #{edittime,jdbcType=TIMESTAMP}, #{issavedtorecord,jdbcType=INTEGER}, #{hasreaded,jdbcType=TINYINT}, 
+      #{recordeid,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fwk.common.entity.TFtaskpartics">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_f_task_partics
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        creattime,
+      </if>
+      <if test="delstate != null">
+        delstate,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="taskid != null">
+        taskid,
+      </if>
+      <if test="taskparticsstatus != null">
+        taskparticsstatus,
+      </if>
+      <if test="taskstatus != null">
+        taskstatus,
+      </if>
+      <if test="edittime != null">
+        edittime,
+      </if>
+      <if test="issavedtorecord != null">
+        issavedtorecord,
+      </if>
+      <if test="hasreaded != null">
+        hasreaded,
+      </if>
+      <if test="recordeid != null">
+        recordeid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="taskid != null">
+        #{taskid,jdbcType=INTEGER},
+      </if>
+      <if test="taskparticsstatus != null">
+        #{taskparticsstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="taskstatus != null">
+        #{taskstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="issavedtorecord != null">
+        #{issavedtorecord,jdbcType=INTEGER},
+      </if>
+      <if test="hasreaded != null">
+        #{hasreaded,jdbcType=TINYINT},
+      </if>
+      <if test="recordeid != null">
+        #{recordeid,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fwk.common.entity.TFtaskparticsExample" resultType="java.lang.Integer">
+    select count(*) from t_f_task_partics
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_f_task_partics
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.creattime != null">
+        creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delstate != null">
+        delstate = #{record.delstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.userid != null">
+        userid = #{record.userid,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskid != null">
+        taskid = #{record.taskid,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskparticsstatus != null">
+        taskparticsstatus = #{record.taskparticsstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskstatus != null">
+        taskstatus = #{record.taskstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.edittime != null">
+        edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.issavedtorecord != null">
+        issavedtorecord = #{record.issavedtorecord,jdbcType=INTEGER},
+      </if>
+      <if test="record.hasreaded != null">
+        hasreaded = #{record.hasreaded,jdbcType=TINYINT},
+      </if>
+      <if test="record.recordeid != null">
+        recordeid = #{record.recordeid,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update t_f_task_partics
+    set id = #{record.id,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      userid = #{record.userid,jdbcType=INTEGER},
+      taskid = #{record.taskid,jdbcType=INTEGER},
+      taskparticsstatus = #{record.taskparticsstatus,jdbcType=VARCHAR},
+      taskstatus = #{record.taskstatus,jdbcType=VARCHAR},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      issavedtorecord = #{record.issavedtorecord,jdbcType=INTEGER},
+      hasreaded = #{record.hasreaded,jdbcType=TINYINT},
+      recordeid = #{record.recordeid,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_f_task_partics
+    set id = #{record.id,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      userid = #{record.userid,jdbcType=INTEGER},
+      taskid = #{record.taskid,jdbcType=INTEGER},
+      taskparticsstatus = #{record.taskparticsstatus,jdbcType=VARCHAR},
+      taskstatus = #{record.taskstatus,jdbcType=VARCHAR},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      issavedtorecord = #{record.issavedtorecord,jdbcType=INTEGER},
+      hasreaded = #{record.hasreaded,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fwk.common.entity.TFtaskpartics">
+    update t_f_task_partics
+    <set>
+      <if test="creattime != null">
+        creattime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        delstate = #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="taskid != null">
+        taskid = #{taskid,jdbcType=INTEGER},
+      </if>
+      <if test="taskparticsstatus != null">
+        taskparticsstatus = #{taskparticsstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="taskstatus != null">
+        taskstatus = #{taskstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        edittime = #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="issavedtorecord != null">
+        issavedtorecord = #{issavedtorecord,jdbcType=INTEGER},
+      </if>
+      <if test="hasreaded != null">
+        hasreaded = #{hasreaded,jdbcType=TINYINT},
+      </if>
+      <if test="recordeid != null">
+        recordeid = #{recordeid,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.fwk.common.entity.TFtaskpartics">
+    update t_f_task_partics
+    set creattime = #{creattime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      userid = #{userid,jdbcType=INTEGER},
+      taskid = #{taskid,jdbcType=INTEGER},
+      taskparticsstatus = #{taskparticsstatus,jdbcType=VARCHAR},
+      taskstatus = #{taskstatus,jdbcType=VARCHAR},
+      edittime = #{edittime,jdbcType=TIMESTAMP},
+      issavedtorecord = #{issavedtorecord,jdbcType=INTEGER},
+      hasreaded = #{hasreaded,jdbcType=TINYINT},
+      recordeid = #{recordeid,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fwk.common.entity.TFtaskpartics">
+    update t_f_task_partics
+    set creattime = #{creattime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      userid = #{userid,jdbcType=INTEGER},
+      taskid = #{taskid,jdbcType=INTEGER},
+      taskparticsstatus = #{taskparticsstatus,jdbcType=VARCHAR},
+      taskstatus = #{taskstatus,jdbcType=VARCHAR},
+      edittime = #{edittime,jdbcType=TIMESTAMP},
+      issavedtorecord = #{issavedtorecord,jdbcType=INTEGER},
+      hasreaded = #{hasreaded,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

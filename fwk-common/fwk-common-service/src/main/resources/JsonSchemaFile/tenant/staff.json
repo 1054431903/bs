@@ -1,0 +1,74 @@
+{
+  "title": "用户",
+  "type": "object",
+  "properties": {
+    "tenants": {
+      "type": "array",
+      "title": "组织",
+      "items": {
+        "type": "string",
+        "$id": "#sys.tenant"
+      }
+    },
+    "mobile": {
+      "type": "string",
+      "title": "手机号",
+      "minLength": 11,
+      "pattern": "^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$"
+    },
+    "gender": {
+      "type": "integer",
+      "title": "性别",
+      "enum": [
+        1,
+        2
+      ],
+      "enumNames": [
+        "男",
+        "女"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "title": "姓名"
+    },
+    "password": {
+      "type": "string",
+      "title": "密码",
+      "minLength": 5,
+      "format": "password"
+    },
+    "status": {
+      "$ref": "common/definitions/status"
+    },
+    "birthday": {
+      "type": "number",
+      "title": "出生日期",
+      "format": "date"
+    },
+    "nickname": {
+      "type": "string",
+      "title": "昵称"
+    },
+    "avatar": {
+      "type": "string",
+      "title": "头像",
+      "format": "img"
+    },
+    "address": {
+      "$ref": "common/definitions/address"
+    },
+    "loginOn": {
+      "type": "number",
+      "title": "最近登录时间",
+      "format": "datetime",
+      "readOnly": true,
+      "description": "统一鉴权登录时间"
+    }
+  },
+  "required": [
+    "mobile",
+    "password",
+    "status"
+  ]
+}

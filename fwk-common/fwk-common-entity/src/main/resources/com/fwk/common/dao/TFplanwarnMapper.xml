@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fwk.common.dao.TFplanwarnMapper">
+  <resultMap id="BaseResultMap" type="com.fwk.common.entity.TFplanwarn">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="creattime" jdbcType="TIMESTAMP" property="creattime" />
+    <result column="delstate" jdbcType="INTEGER" property="delstate" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="warntime" jdbcType="TIMESTAMP" property="warntime" />
+    <result column="planid" jdbcType="INTEGER" property="planid" />
+    <result column="warncreat" jdbcType="INTEGER" property="warncreat" />
+    <result column="warnpart" jdbcType="INTEGER" property="warnpart" />
+    <result column="edittime" jdbcType="TIMESTAMP" property="edittime" />
+    <result column="warntimes" jdbcType="INTEGER" property="warntimes" />
+    <result column="timeunit" jdbcType="VARCHAR" property="timeunit" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, creattime, delstate, type, warntime, planid, warncreat, warnpart, edittime, warntimes, 
+    timeunit
+  </sql>
+  <select id="selectByExample" parameterType="com.fwk.common.entity.TFplanwarnExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_f_plan_warn
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_f_plan_warn
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_f_plan_warn
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fwk.common.entity.TFplanwarnExample">
+    delete from t_f_plan_warn
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fwk.common.entity.TFplanwarn">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_f_plan_warn (creattime, delstate, type, 
+      warntime, planid, warncreat, 
+      warnpart, edittime, warntimes, 
+      timeunit)
+    values (#{creattime,jdbcType=TIMESTAMP}, #{delstate,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, 
+      #{warntime,jdbcType=TIMESTAMP}, #{planid,jdbcType=INTEGER}, #{warncreat,jdbcType=INTEGER}, 
+      #{warnpart,jdbcType=INTEGER}, #{edittime,jdbcType=TIMESTAMP}, #{warntimes,jdbcType=INTEGER}, 
+      #{timeunit,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fwk.common.entity.TFplanwarn">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_f_plan_warn
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        creattime,
+      </if>
+      <if test="delstate != null">
+        delstate,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="warntime != null">
+        warntime,
+      </if>
+      <if test="planid != null">
+        planid,
+      </if>
+      <if test="warncreat != null">
+        warncreat,
+      </if>
+      <if test="warnpart != null">
+        warnpart,
+      </if>
+      <if test="edittime != null">
+        edittime,
+      </if>
+      <if test="warntimes != null">
+        warntimes,
+      </if>
+      <if test="timeunit != null">
+        timeunit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="warntime != null">
+        #{warntime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planid != null">
+        #{planid,jdbcType=INTEGER},
+      </if>
+      <if test="warncreat != null">
+        #{warncreat,jdbcType=INTEGER},
+      </if>
+      <if test="warnpart != null">
+        #{warnpart,jdbcType=INTEGER},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="warntimes != null">
+        #{warntimes,jdbcType=INTEGER},
+      </if>
+      <if test="timeunit != null">
+        #{timeunit,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fwk.common.entity.TFplanwarnExample" resultType="java.lang.Integer">
+    select count(*) from t_f_plan_warn
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_f_plan_warn
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.creattime != null">
+        creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delstate != null">
+        delstate = #{record.delstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warntime != null">
+        warntime = #{record.warntime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.planid != null">
+        planid = #{record.planid,jdbcType=INTEGER},
+      </if>
+      <if test="record.warncreat != null">
+        warncreat = #{record.warncreat,jdbcType=INTEGER},
+      </if>
+      <if test="record.warnpart != null">
+        warnpart = #{record.warnpart,jdbcType=INTEGER},
+      </if>
+      <if test="record.edittime != null">
+        edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.warntimes != null">
+        warntimes = #{record.warntimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.timeunit != null">
+        timeunit = #{record.timeunit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_f_plan_warn
+    set id = #{record.id,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=VARCHAR},
+      warntime = #{record.warntime,jdbcType=TIMESTAMP},
+      planid = #{record.planid,jdbcType=INTEGER},
+      warncreat = #{record.warncreat,jdbcType=INTEGER},
+      warnpart = #{record.warnpart,jdbcType=INTEGER},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      warntimes = #{record.warntimes,jdbcType=INTEGER},
+      timeunit = #{record.timeunit,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fwk.common.entity.TFplanwarn">
+    update t_f_plan_warn
+    <set>
+      <if test="creattime != null">
+        creattime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        delstate = #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="warntime != null">
+        warntime = #{warntime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planid != null">
+        planid = #{planid,jdbcType=INTEGER},
+      </if>
+      <if test="warncreat != null">
+        warncreat = #{warncreat,jdbcType=INTEGER},
+      </if>
+      <if test="warnpart != null">
+        warnpart = #{warnpart,jdbcType=INTEGER},
+      </if>
+      <if test="edittime != null">
+        edittime = #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="warntimes != null">
+        warntimes = #{warntimes,jdbcType=INTEGER},
+      </if>
+      <if test="timeunit != null">
+        timeunit = #{timeunit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fwk.common.entity.TFplanwarn">
+    update t_f_plan_warn
+    set creattime = #{creattime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      type = #{type,jdbcType=VARCHAR},
+      warntime = #{warntime,jdbcType=TIMESTAMP},
+      planid = #{planid,jdbcType=INTEGER},
+      warncreat = #{warncreat,jdbcType=INTEGER},
+      warnpart = #{warnpart,jdbcType=INTEGER},
+      edittime = #{edittime,jdbcType=TIMESTAMP},
+      warntimes = #{warntimes,jdbcType=INTEGER},
+      timeunit = #{timeunit,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

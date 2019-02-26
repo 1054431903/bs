@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>【档案管理】</title>
+</head>
+<body>
+	<a href="http://10.88.20.34:5762/fwk-service-archives/peasant/downloadpeasanttemplate?loginorgid=5ac2f31246e0fb00013b7164&operateid=128">下载模板</a>
+	<br>
+	<br>
+	<br>
+	<form id="import_peasant"
+		action="http://10.88.20.34:5762/fwk-service-archives/peasant/importpeasant?loginorgid=5ac2f31246e0fb00013b7164&operateid=128"
+		method="post" enctype="multipart/form-data">
+		<table>
+			<tr>
+				<th colspan="2">导入合作农户</th>
+			</tr>
+			<tr>
+				<td>请选择文件：</td>
+				<td><input type="file" name="peasantdata"></td>
+			</tr>
+			<tr>
+				<td colspan="2"><button>导入</button></td>
+			</tr>
+		</table>
+	</form>
+</body>
+<!-- <script type="text/javascript">
+	alert("第 52 行的【身份证号】无效。\r\n第 80 行的【身份证号】无效。");
+</script> -->
+</html>

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    fwk-service-svc: fwk-service-parcel
+  name: fwk-service-parcel
+  namespace: default
+spec:
+  ports:
+  - name: service
+    port: 5764
+    protocol: TCP
+    targetPort: 5764
+  selector:
+    fwk-service-po: fwk-service-parcel
+  sessionAffinity: None
+  type: ClusterIP

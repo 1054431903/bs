@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fwk.common.dao.TFcommunioncommentreversionMapper">
+  <resultMap id="BaseResultMap" type="com.fwk.common.entity.TFcommunioncommentreversion">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="creattime" jdbcType="TIMESTAMP" property="creattime" />
+    <result column="edittime" jdbcType="TIMESTAMP" property="edittime" />
+    <result column="delstate" jdbcType="INTEGER" property="delstate" />
+    <result column="communionid" jdbcType="INTEGER" property="communionid" />
+    <result column="communioncommentid" jdbcType="INTEGER" property="communioncommentid" />
+    <result column="reversionuserid" jdbcType="INTEGER" property="reversionuserid" />
+    <result column="parentid" jdbcType="INTEGER" property="parentid" />
+    <result column="toreversionuserid" jdbcType="INTEGER" property="toreversionuserid" />
+    <result column="reversioncount" jdbcType="INTEGER" property="reversioncount" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fwk.common.entity.TFcommunioncommentreversion">
+    <result column="reversioncontent" jdbcType="LONGVARCHAR" property="reversioncontent" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, creattime, edittime, delstate, communionid, communioncommentid, reversionuserid, 
+    parentid, toreversionuserid, reversioncount
+  </sql>
+  <sql id="Blob_Column_List">
+    reversioncontent
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.fwk.common.entity.TFcommunioncommentreversionExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_f_communion_comment_reversion
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.fwk.common.entity.TFcommunioncommentreversionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_f_communion_comment_reversion
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_f_communion_comment_reversion
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_f_communion_comment_reversion
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fwk.common.entity.TFcommunioncommentreversionExample">
+    delete from t_f_communion_comment_reversion
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fwk.common.entity.TFcommunioncommentreversion">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_f_communion_comment_reversion (creattime, edittime, delstate, 
+      communionid, communioncommentid, reversionuserid, 
+      parentid, toreversionuserid, reversioncount, 
+      reversioncontent)
+    values (#{creattime,jdbcType=TIMESTAMP}, #{edittime,jdbcType=TIMESTAMP}, #{delstate,jdbcType=INTEGER}, 
+      #{communionid,jdbcType=INTEGER}, #{communioncommentid,jdbcType=INTEGER}, #{reversionuserid,jdbcType=INTEGER}, 
+      #{parentid,jdbcType=INTEGER}, #{toreversionuserid,jdbcType=INTEGER}, #{reversioncount,jdbcType=INTEGER}, 
+      #{reversioncontent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fwk.common.entity.TFcommunioncommentreversion">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_f_communion_comment_reversion
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        creattime,
+      </if>
+      <if test="edittime != null">
+        edittime,
+      </if>
+      <if test="delstate != null">
+        delstate,
+      </if>
+      <if test="communionid != null">
+        communionid,
+      </if>
+      <if test="communioncommentid != null">
+        communioncommentid,
+      </if>
+      <if test="reversionuserid != null">
+        reversionuserid,
+      </if>
+      <if test="parentid != null">
+        parentid,
+      </if>
+      <if test="toreversionuserid != null">
+        toreversionuserid,
+      </if>
+      <if test="reversioncount != null">
+        reversioncount,
+      </if>
+      <if test="reversioncontent != null">
+        reversioncontent,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="creattime != null">
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="communionid != null">
+        #{communionid,jdbcType=INTEGER},
+      </if>
+      <if test="communioncommentid != null">
+        #{communioncommentid,jdbcType=INTEGER},
+      </if>
+      <if test="reversionuserid != null">
+        #{reversionuserid,jdbcType=INTEGER},
+      </if>
+      <if test="parentid != null">
+        #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="toreversionuserid != null">
+        #{toreversionuserid,jdbcType=INTEGER},
+      </if>
+      <if test="reversioncount != null">
+        #{reversioncount,jdbcType=INTEGER},
+      </if>
+      <if test="reversioncontent != null">
+        #{reversioncontent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fwk.common.entity.TFcommunioncommentreversionExample" resultType="java.lang.Integer">
+    select count(*) from t_f_communion_comment_reversion
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_f_communion_comment_reversion
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.creattime != null">
+        creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.edittime != null">
+        edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delstate != null">
+        delstate = #{record.delstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.communionid != null">
+        communionid = #{record.communionid,jdbcType=INTEGER},
+      </if>
+      <if test="record.communioncommentid != null">
+        communioncommentid = #{record.communioncommentid,jdbcType=INTEGER},
+      </if>
+      <if test="record.reversionuserid != null">
+        reversionuserid = #{record.reversionuserid,jdbcType=INTEGER},
+      </if>
+      <if test="record.parentid != null">
+        parentid = #{record.parentid,jdbcType=INTEGER},
+      </if>
+      <if test="record.toreversionuserid != null">
+        toreversionuserid = #{record.toreversionuserid,jdbcType=INTEGER},
+      </if>
+      <if test="record.reversioncount != null">
+        reversioncount = #{record.reversioncount,jdbcType=INTEGER},
+      </if>
+      <if test="record.reversioncontent != null">
+        reversioncontent = #{record.reversioncontent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update t_f_communion_comment_reversion
+    set id = #{record.id,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      communionid = #{record.communionid,jdbcType=INTEGER},
+      communioncommentid = #{record.communioncommentid,jdbcType=INTEGER},
+      reversionuserid = #{record.reversionuserid,jdbcType=INTEGER},
+      parentid = #{record.parentid,jdbcType=INTEGER},
+      toreversionuserid = #{record.toreversionuserid,jdbcType=INTEGER},
+      reversioncount = #{record.reversioncount,jdbcType=INTEGER},
+      reversioncontent = #{record.reversioncontent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_f_communion_comment_reversion
+    set id = #{record.id,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      edittime = #{record.edittime,jdbcType=TIMESTAMP},
+      delstate = #{record.delstate,jdbcType=INTEGER},
+      communionid = #{record.communionid,jdbcType=INTEGER},
+      communioncommentid = #{record.communioncommentid,jdbcType=INTEGER},
+      reversionuserid = #{record.reversionuserid,jdbcType=INTEGER},
+      parentid = #{record.parentid,jdbcType=INTEGER},
+      toreversionuserid = #{record.toreversionuserid,jdbcType=INTEGER},
+      reversioncount = #{record.reversioncount,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fwk.common.entity.TFcommunioncommentreversion">
+    update t_f_communion_comment_reversion
+    <set>
+      <if test="creattime != null">
+        creattime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="edittime != null">
+        edittime = #{edittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delstate != null">
+        delstate = #{delstate,jdbcType=INTEGER},
+      </if>
+      <if test="communionid != null">
+        communionid = #{communionid,jdbcType=INTEGER},
+      </if>
+      <if test="communioncommentid != null">
+        communioncommentid = #{communioncommentid,jdbcType=INTEGER},
+      </if>
+      <if test="reversionuserid != null">
+        reversionuserid = #{reversionuserid,jdbcType=INTEGER},
+      </if>
+      <if test="parentid != null">
+        parentid = #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="toreversionuserid != null">
+        toreversionuserid = #{toreversionuserid,jdbcType=INTEGER},
+      </if>
+      <if test="reversioncount != null">
+        reversioncount = #{reversioncount,jdbcType=INTEGER},
+      </if>
+      <if test="reversioncontent != null">
+        reversioncontent = #{reversioncontent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.fwk.common.entity.TFcommunioncommentreversion">
+    update t_f_communion_comment_reversion
+    set creattime = #{creattime,jdbcType=TIMESTAMP},
+      edittime = #{edittime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      communionid = #{communionid,jdbcType=INTEGER},
+      communioncommentid = #{communioncommentid,jdbcType=INTEGER},
+      reversionuserid = #{reversionuserid,jdbcType=INTEGER},
+      parentid = #{parentid,jdbcType=INTEGER},
+      toreversionuserid = #{toreversionuserid,jdbcType=INTEGER},
+      reversioncount = #{reversioncount,jdbcType=INTEGER},
+      reversioncontent = #{reversioncontent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fwk.common.entity.TFcommunioncommentreversion">
+    update t_f_communion_comment_reversion
+    set creattime = #{creattime,jdbcType=TIMESTAMP},
+      edittime = #{edittime,jdbcType=TIMESTAMP},
+      delstate = #{delstate,jdbcType=INTEGER},
+      communionid = #{communionid,jdbcType=INTEGER},
+      communioncommentid = #{communioncommentid,jdbcType=INTEGER},
+      reversionuserid = #{reversionuserid,jdbcType=INTEGER},
+      parentid = #{parentid,jdbcType=INTEGER},
+      toreversionuserid = #{toreversionuserid,jdbcType=INTEGER},
+      reversioncount = #{reversioncount,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
